@@ -7,4 +7,6 @@ $UNBALANCED = 400; // +-centipawns for a position to be considered greatly advan
 
 //-----engine settings
 $STOCKFISH_PATH = "/Users/clarkey/Documents/workspace/lichess/problem-creator/resources/stockfish-3-mac/Mac/stockfish-3-32"; //location of stockfish engine
-$MOVETIME = 10000; //milliseconds to think for each position.
+$FIRST_PASS_TIME = 10000; //milliseconds to think for each position.
+$SECOND_PASS_TIME = 5000;
+$ALT_THRESHOLD = 20; //Amount of centipawns for an alternative line to be valid.

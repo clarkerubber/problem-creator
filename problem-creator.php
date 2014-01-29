@@ -13,7 +13,10 @@ function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/analysis"
 
 		foreach ( $games['list'] as $gameKey => $game ) {
 			echo "URL: ".$game['game']['url']."\n";
-			$problems[] = createProblems( $game );
+			if ( !isset( $game['game']['initialFen'] ) ) {
+				$problems[] = createProblems( $game );
+				//testParser( $game );
+			}
 		}
 
 	}
