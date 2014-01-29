@@ -12,7 +12,7 @@ function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/analysis"
 		$problems = array();
 
 		foreach ( $games['list'] as $gameKey => $game ) {
-			print_r( $game['game'] );
+			echo "URL: ".$game['game']['url']."\n";
 			$problems[] = createProblems( $game );
 		}
 

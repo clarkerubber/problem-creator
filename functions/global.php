@@ -17,7 +17,7 @@ function createProblems ( $game ) {
 
 				//pass the moves list and position of change of advantage to a subprocess
 
-				$lines[] = findCaptureLine( $game['analysis'], $moveKey );
+				$lines[] = findCaptureLine( $game['uci'], $moveKey );
 
 
 				echo " Change of advantage detected: ".$move['eval']." -> ".$game['analysis'][$moveKey + 1]['eval'];
@@ -30,8 +30,8 @@ function createProblems ( $game ) {
 }
 
 function findCaptureLine ( $moves, $ply ) {
-	//Input: A list of moves and the starting move for the tactical line
-	//Output: The actualy tactical line
+	//Input: A string of moves and the starting move for the tactical line
+	//Output: The actual tactical line
 
 	//The ply played is the starting position. The ply after that is the blunder, 
 	//and the ply after that is what the user has to find.
@@ -42,9 +42,10 @@ function findCaptureLine ( $moves, $ply ) {
 	$first player move <= next successive move
 
 	*/
+	$moves = explode( ' ', $moves );
 	$startMoveString = '';
 	for ( $x = 0; $x <= $ply + 1; $x++ ){
-		$startMoveString .= $moves[$x]['move'].' ';
+		$startMoveString .= $moves[$x].' ';
 	}
 
 	//now parse this string to stockfish!
@@ -199,5 +200,5 @@ function captureArray ( $moves ) {
 		}
 		$oldPieceCount = $pieceCount;
 	}
-	return $captureArray[];
+	return $captureArray;
 }
