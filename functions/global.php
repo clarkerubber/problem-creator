@@ -93,7 +93,8 @@ function getMovesListFromPosition ( $moveString, $maxLines, $allowForcedInclusio
 		&& $key < $maxLines
 		&& gmp_sign( $topEval ) == gmp_sign( $candidateMovesEval[$key] ) )
 		|| ( gmp_sign( $topEval ) * $candidateMovesEval[$key] >= $FORCED_INCLUSION
-		&& $key < $maxLines ) ) {
+		&& $key < $maxLines
+		&& $allowForcedInclusion == TRUE ) ) {
 			echo "SELECTED!\n";
 		}
 		echo $candidateMovesEval[$key]." - ".$move."\n";
