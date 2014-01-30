@@ -22,4 +22,4 @@ function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/analysis"
 	}
 }
 
-problemGenerator(5);
+problemGenerator(10);

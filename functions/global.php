@@ -59,13 +59,30 @@ function findCaptureLine ( $movesUci, $ply ) {
 function buildCaptureTree( $moveString ) {
 	//Input: List of moves in UCI format
 	//Output: Map of the correct tactical line
-	global $MAX_CAPTURE_LINES;
+	global $MAX_CAPTURE_LINES, $MAJOR_MOVE_THRESHOLD;
 
-	$movesList = getMovesListFromPosition( $moveString, $MAX_CAPTURE_LINES, TRUE );
+	$movesList = getMovesListFromPosition( $moveString, $MAX_CAPTURE_LINES, TRUE, TRUE, $MAJOR_MOVE_THRESHOLD );
+	$output = FALSE;
+
+	foreach ( $movesList as $key => $moveArray ) {
+		if ( $moveArray !== 'end' ) {
+			$empty = FALSE;
+		} else {
+			unset( $movesList[$key] );
+		}
+	}
+	if ( !empty( $movesList ) ) {
+		print_r($movesList);
+		$output = $movesList;
+	} else {
+		echo "nothing to see here!\n";
+	}
+	return $output;
 }
 
-function getMovesListFromPosition ( $moveString, $maxLines, $allowForcedInclusion ) {
-	global $FIRST_PASS_TIME, $SECOND_PASS_TIME, $ALT_THRESHOLD, $FORCED_INCLUSION;
+function getMovesListFromPosition ( $moveString, $maxLines, $allowForcedInclusion, $player, $timeSinceMajorMove ) {
+	global $FIRST_PASS_TIME, $SECOND_PASS_TIME, $ALT_THRESHOLD, $FORCED_INCLUSION, $MAJOR_MOVE_THRESHOLD;
+	global $MINOR_MOVE_THRESHOLD, $MAX_CAPTURE_LINES;
 
 	$uciOutput = getUci( $moveString, $FIRST_PASS_TIME );
 
@@ -79,15 +96,23 @@ function getMovesListFromPosition ( $moveString, $maxLines, $allowForcedInclusio
 			$candidateMoves[] = $match;
 		}
 	}
-	print_r( $candidateMoves );
+	//print_r( $candidateMoves );
 	foreach ( $candidateMoves as $key => $move ) {
-		echo "$SECOND_PASS_TIME - $moveString$move \n";
+		//echo "$SECOND_PASS_TIME - $moveString$move \n";
 		$candidateMovesEval[] = getPositionEval( "$moveString$move ", $SECOND_PASS_TIME );
 	}
 
-	array_multisort($candidateMovesEval, SORT_DESC, SORT_NUMERIC, $candidateMovesEval);
+	array_multisort($candidateMovesEval, SORT_ASC, SORT_NUMERIC, $candidateMovesEval);
+	
+	if ( isset( $candidateMovesEval[0] ) ) {
+		$topEval = $candidateMovesEval[0];
+	} else {
+		$candidateMovesEval[0] = 0;
+		$topEval = 0;
+	}
+	
+	$moveArray = array();
 
-	$topEval = $candidateMovesEval[0];
 	foreach ( $candidateMoves as $key => $move ) {
 		if ( ( abs( $topEval - $candidateMovesEval[$key] ) <= $ALT_THRESHOLD
 		&& $key < $maxLines
@@ -95,10 +120,71 @@ function getMovesListFromPosition ( $moveString, $maxLines, $allowForcedInclusio
 		|| ( gmp_sign( $topEval ) * $candidateMovesEval[$key] >= $FORCED_INCLUSION
 		&& $key < $maxLines
 		&& $allowForcedInclusion == TRUE ) ) {
-			echo "SELECTED!\n";
+			if ( $player == TRUE ) {
+				echo "P: selected - $move: ".$candidateMovesEval[$key];
+			} else {
+				echo "C: selected - $move: ".$candidateMovesEval[$key];
+			}
+
+			$captureThisTurn = FALSE;
+			if( significantMove( $moveString.$move ) === TRUE ) {
+				$parsedTimeSinceMajorMove = $MINOR_MOVE_THRESHOLD;
+				$captureThisTurn = TRUE;
+				echo " - capture\n";
+			} else {
+				$parsedTimeSinceMajorMove = $timeSinceMajorMove - 1;
+				echo " - $parsedTimeSinceMajorMove \n";
+			}
+			
+			if ( $player === TRUE && $parsedTimeSinceMajorMove > 0 ) {
+				$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', 1, FALSE, FALSE, $parsedTimeSinceMajorMove );
+			} else if ( $parsedTimeSinceMajorMove > 0 ) {
+				$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', $MAX_CAPTURE_LINES, TRUE, TRUE, $parsedTimeSinceMajorMove );
+			} else {
+				$moveArray[$move] = 'end';
+			}
+
+			if ( $moveArray[$move] !== 'end' && ( $captureThisTurn === FALSE || $player === FALSE ) ) {
+				$empty = TRUE;
+				foreach ( $moveArray[$move] as $moveArrayValue ) {
+					if ( $moveArrayValue !== 'end' ) {
+						$empty = FALSE;
+					}
+				}
+				if ( $empty == TRUE ) {
+					$moveArray[$move] = 'end';
+				}
+			}
+			//getMovesListFromPosition ( $moveString.$move.' ', )
+			//echo "SELECTED!\n";
 		}
-		echo $candidateMovesEval[$key]." - ".$move."\n";
+		//echo $candidateMovesEval[$key]." - ".$move."\n";
 	}
+
+	if ( count( $moveArray ) > 1 ) {
+		foreach ($moveArray as $key => $value) {
+			if ( $value === 'end' ) {
+				unset( $moveArray[$key] );
+			}
+		}
+	}
+
+	return $moveArray;
+}
+
+function significantMove ( $moveString ) {
+	//Input: a list of moves in e2e4
+	//Output: If the last move is a capture or promotion
+	$output = FALSE;
+
+	$moveList = explode( ' ', $moveString );
+
+	if ( strlen( array_pop( $moveList ) ) == 5 ) {
+		$output = TRUE;
+	} else if ( isCapture( $moveString, TRUE ) ) {
+		$output = TRUE;
+	}
+	return $output;
 }
 
 function getPositionEval( $moveString, $moveTime ) {
@@ -149,11 +235,12 @@ function testParser ( $game ) {
 	}
 }
 
-function captureArray ( $moves ) {
-	//Input: A list of moves in coordinate notation (e2e4)
-	//Output: A list of when captures occur
+function isCapture ( $moveString, $major = FALSE ) {
+	//Input: A string of moves in coordinate notation (e2e4)
+	//	And if to limit results to major cpatures (i.e. not pawn captures)
+	//Output: If the last move is a capture
 
-	$moves = explode( ' ', $moves );
+	$moves = explode( ' ', $moveString );
 
 	$position = 
 		array(
@@ -187,7 +274,7 @@ function captureArray ( $moves ) {
 			'8' => 0
 		);
 	$captureArray = array();
-	$oldPieceCount = 32;
+	$oldPieceCount = 48;
 
 	foreach ( $moves as $key => $move ) {
 
@@ -271,9 +358,11 @@ function captureArray ( $moves ) {
 
 		foreach ( $position as $rowKey => $row ) {
 			foreach ( $row as $squareKey => $square ) {
-				if ( $square !== 0 ) {
-					$pieceCount++;
+				if ( $square === 'p' || $square === 'P' ) {
+					$pieceCount += 1;
 					//echo $square." ";
+				} else if ( $square !== 0 ) {
+					$pieceCount += 2;
 				}// else {
 					//echo "- ";
 				//}
@@ -281,14 +370,20 @@ function captureArray ( $moves ) {
 			//echo "\n";
 		}
 
-		if ( $pieceCount !== $oldPieceCount ) {
-		//	echo "CAPTURE OCCURED!\n\n";
-			$captureArray[] = 1;
+		if ( $oldPieceCount - $pieceCount >= 1 ) {
+			if ( $major == TRUE ) {
+				if ( $oldPieceCount - $pieceCount == 1 ) {
+					$output = FALSE;
+				} else if ( $oldPieceCount - $pieceCount == 2 ) {
+					$output = TRUE;
+				}
+			} else {
+				$output = TRUE;
+			}
 		} else {
-		//	echo "NO CAPTURE\n\n";
-			$captureArray[] = 0;
+			$output = FALSE;
 		}
 		$oldPieceCount = $pieceCount;
 	}
-	return $captureArray;
+	return $output;
 }
