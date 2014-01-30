@@ -10,3 +10,4 @@ $STOCKFISH_PATH = "/Users/clarkey/Documents/workspace/lichess/problem-creator/re
 $FIRST_PASS_TIME = 10000; //milliseconds to think for each position.
 $SECOND_PASS_TIME = 5000;
 $ALT_THRESHOLD = 20; //Amount of centipawns for an alternative line to be valid.
+$FORCED_INCLUSION = 800; //If an alt capture line has an advantage over 8 pawns, it's included

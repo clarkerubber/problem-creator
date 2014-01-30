@@ -59,12 +59,13 @@ function findCaptureLine ( $movesUci, $ply ) {
 function buildCaptureTree( $moveString ) {
 	//Input: List of moves in UCI format
 	//Output: Map of the correct tactical line
+	global $MAX_CAPTURE_LINES;
 
-	$movesList = getMovesListFromPosition( $moveString );
+	$movesList = getMovesListFromPosition( $moveString, $MAX_CAPTURE_LINES, TRUE );
 }
 
-function getMovesListFromPosition ( $moveString ) {
-	global $FIRST_PASS_TIME, $SECOND_PASS_TIME, $ALT_THRESHOLD;
+function getMovesListFromPosition ( $moveString, $maxLines, $allowForcedInclusion ) {
+	global $FIRST_PASS_TIME, $SECOND_PASS_TIME, $ALT_THRESHOLD, $FORCED_INCLUSION;
 
 	$uciOutput = getUci( $moveString, $FIRST_PASS_TIME );
 
@@ -88,7 +89,11 @@ function getMovesListFromPosition ( $moveString ) {
 
 	$topEval = $candidateMovesEval[0];
 	foreach ( $candidateMoves as $key => $move ) {
-		if ( $candidateMovesEval[$key] >= $topEval - $ALT_THRESHOLD ) {
+		if ( ( abs( $topEval - $candidateMovesEval[$key] ) <= $ALT_THRESHOLD
+		&& $key < $maxLines
+		&& gmp_sign( $topEval ) == gmp_sign( $candidateMovesEval[$key] ) )
+		|| ( gmp_sign( $topEval ) * $candidateMovesEval[$key] >= $FORCED_INCLUSION
+		&& $key < $maxLines ) ) {
 			echo "SELECTED!\n";
 		}
 		echo $candidateMovesEval[$key]." - ".$move."\n";
@@ -99,7 +104,7 @@ function getPositionEval( $moveString, $moveTime ) {
 	$uciOutput = getUci( $moveString, $moveTime );
 	//print_r($uciOutput);
 	preg_match_all( "/cp (-?[0-9].*?) /", $uciOutput, $matches );
-	return abs ( end( $matches[1] ) );
+	return end( $matches[1] );
 }
 
 function getUci ( $moveSequence, $moveTime ) {
