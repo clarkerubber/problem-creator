@@ -28,7 +28,7 @@ function createProblems ( $game ) {
 			//$lines[] = findMateLine( $game['uci'], $moveKey );
 		} else if ( isset( $move['mate'] ) && isset( $game['analysis'][$moveKey + 1]['mate'] ) ) {
 
-			if ( gmp_sign( $move['mate'] ) !== gmp_sign( $game['analysis'][$moveKey + 1]['mate'] ) ) {
+			if ( sign( $move['mate'] ) !== sign( $game['analysis'][$moveKey + 1]['mate'] ) ) {
 
 				echo " Mate sequence given to opponent ".$move['mate']." -> ".$game['analysis'][$moveKey + 1]['mate'];
 				$lines[] = findMateLine( $game['uci'], $moveKey, $game['analysis'][$moveKey + 1]['mate'] );
@@ -89,8 +89,8 @@ function getMovesListFromPosition ( $moveString, $maxLines, $allowForcedInclusio
 	foreach ( $candidateMoves as $key => $move ) {
 		if ( ( abs( $topEval - $candidateMovesEval[$key] ) <= $ALT_THRESHOLD
 		&& $key < $maxLines
-		&& gmp_sign( $topEval ) == gmp_sign( $candidateMovesEval[$key] ) )
-		|| ( gmp_sign( $topEval ) * $candidateMovesEval[$key] >= $FORCED_INCLUSION
+		&& sign( $topEval ) == sign( $candidateMovesEval[$key] ) )
+		|| ( sign( $topEval ) * $candidateMovesEval[$key] >= $FORCED_INCLUSION
 		&& $key < $maxLines
 		&& $allowForcedInclusion == TRUE ) ) {
 			if ( $player == TRUE ) {
@@ -225,3 +225,7 @@ function getUci ( $moveSequence, $moveTime ) {
 	}
 	return $output;
 }
+
+function sign ( $number ) { 
+    return ( $number > 0 ) ? 1 : ( ( $number < 0 ) ? -1 : 0 ); 
+} 
