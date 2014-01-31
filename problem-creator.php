@@ -2,6 +2,8 @@
 
 include( "config.php" );
 include( "functions/global.php" );
+include( "functions/captureAndPromotion.php" );
+include( "functions/mateSequence.php" );
 
 function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/analysis" ) {
 	/*
@@ -22,4 +24,4 @@ function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/analysis"
 	}
 }
 
-problemGenerator(10);
+problemGenerator(100);
