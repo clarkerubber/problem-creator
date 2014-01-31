@@ -17,20 +17,22 @@ function createProblems ( $game ) {
 
 				//pass the moves list and position of change of advantage to a subprocess
 
-				//$lines[] = findCaptureLine( $game['uci'], $moveKey );
-
-
 				echo " Change of advantage detected: ".$move['eval']." -> ".$game['analysis'][$moveKey + 1]['eval'];
+				$lines[] = findCaptureLine( $game['uci'], $moveKey );
 			} 
 		} else if( isset( $move['eval'] ) && isset( $game['analysis'][$moveKey + 1]['mate'] ) ) {
 
 			echo " Forced mate detected: ".$move['eval']." -> ".$game['analysis'][$moveKey + 1]['mate'];
+			$lines[] = findMateLine( $game['uci'], $moveKey, $game['analysis'][$moveKey + 1]['mate'] );
 
 			//$lines[] = findMateLine( $game['uci'], $moveKey );
 		} else if ( isset( $move['mate'] ) && isset( $game['analysis'][$moveKey + 1]['mate'] ) ) {
 
 			if ( gmp_sign( $move['mate'] ) !== gmp_sign( $game['analysis'][$moveKey + 1]['mate'] ) ) {
+
 				echo " Mate sequence given to opponent ".$move['mate']." -> ".$game['analysis'][$moveKey + 1]['mate'];
+				$lines[] = findMateLine( $game['uci'], $moveKey, $game['analysis'][$moveKey + 1]['mate'] );
+
 			}
 
 		}
@@ -47,7 +49,7 @@ function getMovesListFromPosition ( $moveString, $maxLines, $allowForcedInclusio
 
 	$uciOutput = getUci( $moveString, $FIRST_PASS_TIME );
 
-	preg_match_all( "/info.*?cp (-?[0-9]*).*?([a-h][1-8][a-h][1-8][qrnb]?)/", $uciOutput, $matches );
+	preg_match_all( "/info.*?cp (-?[0-9]+).*?([a-h][1-8][a-h][1-8][qrnb]?)/", $uciOutput, $matches );
 
 	$candidateMoves = array();
 	$candidateMovesEval = array();
@@ -67,13 +69,19 @@ function getMovesListFromPosition ( $moveString, $maxLines, $allowForcedInclusio
 		$candidateMovesEval[] = getPositionEval( "$moveString$move ", $SECOND_PASS_TIME );
 	}
 
-	array_multisort($candidateMovesEval, SORT_ASC, SORT_NUMERIC, $candidateMovesEval);
+	array_multisort( $candidateMovesEval, SORT_ASC, SORT_NUMERIC, $candidateMoves );
 	
+	while ( $candidateMovesEval[0] === FALSE ) {
+		echo "FALSE!\n";
+		array_shift( $candidateMovesEval );
+		array_shift( $candidateMoves );
+		if ( empty( $candidateMovesEval ) ) {
+			break;
+		}
+	}
+
 	if ( isset( $candidateMovesEval[0] ) ) {
 		$topEval = $candidateMovesEval[0];
-	} else {
-		$candidateMovesEval[0] = 0;
-		$topEval = 0;
 	}
 	
 	$moveArray = array();
@@ -155,8 +163,35 @@ function significantMove ( $moveString ) {
 function getPositionEval ( $moveString, $moveTime ) {
 	$uciOutput = getUci( $moveString, $moveTime );
 	//print_r($uciOutput);
-	preg_match_all( "/cp (-?[0-9].*?) /", $uciOutput, $matches );
-	return end( $matches[1] );
+	$output = FALSE;
+
+	preg_match_all( "/cp (-?[0-9]+) /", $uciOutput, $matches );
+
+	$end = end( $matches[1] );
+
+	if ( isset( $end ) ) {
+		$output = $end;
+	}
+
+	return $output;
+}
+
+function getPositionMate ( $moveString, $moveTime ) {
+	$uciOutput = getUci( $moveString, $moveTime );
+	//print_r($uciOutput);
+	$output = FALSE;
+	preg_match_all( "/mate (-?[0-9]+) /", $uciOutput, $matches );
+	//print_r($uciOutput);
+
+	//print_r( $matches );
+
+	$end = end( $matches[1] );
+	//echo "getPositionMate: $end\n";
+	if ( isset( $end ) ) {
+		$output = $end;
+	}
+
+	return $output;
 }
 
 function getUci ( $moveSequence, $moveTime ) {

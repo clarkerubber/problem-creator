@@ -16,3 +16,5 @@ $FORCED_INCLUSION = 700; //If an alt capture line has an advantage over 8 pawns,
 $MAX_CAPTURE_LINES = 5; // maximum amonut of lines that can be used in capture lines
 $MAJOR_MOVE_THRESHOLD = 6;
 $MINOR_MOVE_THRESHOLD = 2;
+
+$MAX_MATE_LINES = 10;
