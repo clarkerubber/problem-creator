@@ -71,14 +71,17 @@ function getMovesListFromPosition ( $moveString, $maxLines, $allowForcedInclusio
 
 	array_multisort( $candidateMovesEval, SORT_ASC, SORT_NUMERIC, $candidateMoves );
 	
-	while ( $candidateMovesEval[0] === FALSE ) {
-		echo "FALSE!\n";
-		array_shift( $candidateMovesEval );
-		array_shift( $candidateMoves );
-		if ( empty( $candidateMovesEval ) ) {
-			break;
+	if ( !empty( $candidateMovesEval ) ) {
+		while ( $candidateMovesEval[0] === FALSE ) {
+			echo "FALSE!\n";
+			array_shift( $candidateMovesEval );
+			array_shift( $candidateMoves );
+			if ( empty( $candidateMovesEval ) ) {
+				break;
+			}
 		}
 	}
+	
 
 	if ( isset( $candidateMovesEval[0] ) ) {
 		$topEval = $candidateMovesEval[0];
