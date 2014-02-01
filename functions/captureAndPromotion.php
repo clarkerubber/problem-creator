@@ -8,32 +8,33 @@ function findCaptureLine ( $movesUci, $ply ) {
 	//The ply played is the starting position. The ply after that is the blunder, 
 	//and the ply after that is what the user has to find.
 
-	/*
-	
-	$start position <= FEN position from ply count
-	$first player move <= next successive move
-
-	*/
 	$movesUci = explode( ' ', $movesUci );
 	$startMoveString = '';
+
 	for ( $x = 0; $x <= $ply + 1; $x++ ){
+
 		$startMoveString .= $movesUci[$x].' ';
+
 	}
 
-	//now parse this string to stockfish!
-	//echo "\n".$startMoveString."\n";
-	//$uciOutput = getLines( $startMoveString );
 	$solutionMap = buildCaptureTree( $startMoveString );
 
 	if ( count( explode( ' ', $startMoveString ) ) % 2 == 0 ) {
+
 		$color = 'black';
+
 	} else {
+
 		$color = 'white';
+
 	}
 
 	$output = FALSE;
+
 	if ( $solutionMap !== FALSE ) {
+
 		$output = array( 'tags' => array('material advantage'), 'color' => $color, 'position' => $startMoveString, 'solution' => $solutionMap );
+
 	}
 
 	return $output;
@@ -42,25 +43,205 @@ function findCaptureLine ( $movesUci, $ply ) {
 function buildCaptureTree ( $moveString ) {
 	//Input: List of moves in UCI format
 	//Output: Map of the correct tactical line
+
 	global $MAX_CAPTURE_LINES, $MAJOR_MOVE_THRESHOLD;
 
 	$movesList = getMovesListFromPosition( $moveString, $MAX_CAPTURE_LINES, TRUE, TRUE, $MAJOR_MOVE_THRESHOLD );
 	$output = FALSE;
 
 	foreach ( $movesList as $key => $moveArray ) {
+
 		if ( $moveArray !== 'end' ) {
+
 			$empty = FALSE;
+
 		} else {
+
 			unset( $movesList[$key] );
+
 		}
+
 	}
+
 	if ( !empty( $movesList ) ) {
-		//print_r($movesList);
+
 		$output = $movesList;
+
 	}
+
 	return $output;
 }
 
+
+function getMovesListFromPosition ( $moveString, $maxLines, $allowForcedInclusion, $player, $timeSinceMajorMove ) {
+	global $FIRST_PASS_TIME, $SECOND_PASS_TIME, $ALT_THRESHOLD, $FORCED_INCLUSION, $MAJOR_MOVE_THRESHOLD;
+	global $MINOR_MOVE_THRESHOLD, $MAX_CAPTURE_LINES;
+
+	$uciOutput = getUci( $moveString, $FIRST_PASS_TIME );
+
+	preg_match_all( "/info.*?cp (-?[0-9]+).*?([a-h][1-8][a-h][1-8][qrnb]?)/", $uciOutput, $matches );
+
+	$candidateMoves = array();
+	$candidateMovesEval = array();
+
+	$lastMove = explode( ' ', $moveString );
+	array_pop( $lastMove );
+	$lastMove = array_pop( $lastMove );
+
+	foreach ( $matches[2] as $key => $match ) {
+
+		if ( !in_array( $match , $candidateMoves) ) {
+
+			$candidateMoves[] = $match;
+
+		}
+
+	}
+
+	foreach ( $candidateMoves as $key => $move ) {
+
+		$candidateMovesEval[] = getPositionEval( "$moveString$move ", $SECOND_PASS_TIME );
+
+	}
+
+	array_multisort( $candidateMovesEval, SORT_ASC, SORT_NUMERIC, $candidateMoves );
+	
+	if ( !empty( $candidateMovesEval ) ) {
+
+		while ( $candidateMovesEval[0] === FALSE ) {
+
+			array_shift( $candidateMovesEval );
+			array_shift( $candidateMoves );
+
+			if ( empty( $candidateMovesEval ) ) {
+				break;
+			}
+
+		}
+
+	}
+	
+
+	if ( isset( $candidateMovesEval[0] ) ) {
+		$topEval = $candidateMovesEval[0];
+	}
+	
+	$moveArray = array();
+
+	foreach ( $candidateMoves as $key => $move ) {
+
+		if ( ( abs( $topEval - $candidateMovesEval[$key] ) <= $ALT_THRESHOLD
+				&& $key < $maxLines
+				&& sign( $topEval ) == sign( $candidateMovesEval[$key] ) )
+			|| ( sign( $topEval ) * $candidateMovesEval[$key] >= $FORCED_INCLUSION
+				&& $key < $maxLines
+				&& $allowForcedInclusion == TRUE ) 
+			) {
+
+			$captureThisTurn = FALSE;
+
+			if( significantMove( $moveString.$move ) === TRUE ) {
+
+				$parsedTimeSinceMajorMove = $MINOR_MOVE_THRESHOLD;
+				$captureThisTurn = TRUE;
+
+			} else {
+
+				$parsedTimeSinceMajorMove = $timeSinceMajorMove - 1;
+
+			}
+			
+			if ( $player === TRUE && $parsedTimeSinceMajorMove > 0 ) {
+
+				$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', 1, FALSE, FALSE, $parsedTimeSinceMajorMove );
+
+			} else if ( $parsedTimeSinceMajorMove > 0 ) {
+
+				$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', $MAX_CAPTURE_LINES, TRUE, TRUE, $parsedTimeSinceMajorMove );
+
+			} else {
+
+				$moveArray[$move] = 'end';
+
+			}
+
+			if ( $moveArray[$move] !== 'end' && ( $captureThisTurn === FALSE || $player === FALSE ) ) {
+
+				$empty = TRUE;
+
+				foreach ( $moveArray[$move] as $moveArrayValue ) {
+
+					if ( $moveArrayValue !== 'end' ) {
+
+						$empty = FALSE;
+
+					}
+
+				}
+
+				if ( $empty == TRUE ) {
+
+					$moveArray[$move] = 'end';
+
+				}
+			}
+		}
+	}
+
+	if ( count( $moveArray ) > 1 ) {
+
+		foreach ($moveArray as $key => $value) {
+
+			if ( $value === 'end' ) {
+
+				unset( $moveArray[$key] );
+
+			}
+
+		}
+
+	}
+
+	return $moveArray;
+}
+
+function significantMove ( $moveString ) {
+	//Input: a list of moves in e2e4
+	//Output: If the last move is a capture or promotion
+
+	$output = FALSE;
+
+	$moveList = explode( ' ', $moveString );
+
+	if ( strlen( array_pop( $moveList ) ) == 5 ) {
+
+		$output = TRUE;
+
+	} else if ( isCapture( $moveString, TRUE ) ) {
+
+		$output = TRUE;
+
+	}
+
+	return $output;
+}
+
+function getPositionEval ( $moveString, $moveTime ) {
+	$uciOutput = getUci( $moveString, $moveTime );
+	$output = FALSE;
+
+	preg_match_all( "/cp (-?[0-9]+) /", $uciOutput, $matches );
+
+	$end = end( $matches[1] );
+
+	if ( isset( $end ) ) {
+
+		$output = $end;
+		
+	}
+
+	return $output;
+}
 
 function isCapture ( $moveString, $major = FALSE ) {
 	//Input: A string of moves in coordinate notation (e2e4)
@@ -107,13 +288,9 @@ function isCapture ( $moveString, $major = FALSE ) {
 
 		$moveSplit = str_split( $move );
 
-		//if ( $gameMoves !== NULL ) {
-		//	echo $gameMoves[$key]['move']." - ";
-		//}
-
 		if ( $move == 'e8c8' && $position[$reference['8']][$reference['e']] === 'k' ) {
 			//black long castle
-		//	echo "Black Long Castle - ";
+
 			$position[$reference['8']][$reference['c']] = 'k';
 			$position[$reference['8']][$reference['d']] = 'r';
 			$position[$reference['8']][$reference['e']] = 0;
@@ -121,7 +298,7 @@ function isCapture ( $moveString, $major = FALSE ) {
 
 		} else if ( $move == 'e8g8' &&  $position[$reference['8']][$reference['e']] === 'k' ) {
 			//black short castle
-		//	echo "Black Short Castle - ";
+
 			$position[$reference['8']][$reference['g']] = 'k';
 			$position[$reference['8']][$reference['f']] = 'r';
 			$position[$reference['8']][$reference['e']] = 0;
@@ -129,7 +306,7 @@ function isCapture ( $moveString, $major = FALSE ) {
 
 		} else if ( $move == 'e1c1' &&  $position[$reference['1']][$reference['e']] === 'K' ) {
 			//white long castle
-		//	echo "White Long Castle - ";
+
 			$position[$reference['1']][$reference['c']] = 'K';
 			$position[$reference['1']][$reference['d']] = 'R';
 			$position[$reference['1']][$reference['e']] = 0;
@@ -137,7 +314,7 @@ function isCapture ( $moveString, $major = FALSE ) {
 
 		} else if ( $move == 'e1g1' &&  $position[$reference['1']][$reference['e']] === 'K' ) {
 			//white short castle
-		//	echo "White Short Castle - ";
+
 			$position[$reference['1']][$reference['g']] = 'K';
 			$position[$reference['1']][$reference['f']] = 'R';
 			$position[$reference['1']][$reference['e']] = 0;
@@ -147,7 +324,7 @@ function isCapture ( $moveString, $major = FALSE ) {
 			&& $moveSplit[0] !== $moveSplit[2]
 			&& $position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] === 0 ) {
 			//White en passant
-		//	echo "White En Passant - ";
+
 			$position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] = 'P';
 			$position[$reference[$moveSplit[3]]+1][$reference[$moveSplit[2]]] = 0;
 			$position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] = 0;
@@ -156,7 +333,7 @@ function isCapture ( $moveString, $major = FALSE ) {
 			&& $moveSplit[0] !== $moveSplit[2]
 			&& $position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] === 0 ) {
 			//Black en passant
-			//echo "Black En Passant - ";
+
 			$position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] = 'p';
 			$position[$reference[$moveSplit[3]]-1][$reference[$moveSplit[2]]] = 0;
 			$position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] = 0;
@@ -164,11 +341,13 @@ function isCapture ( $moveString, $major = FALSE ) {
 		} else if ( count( $moveSplit ) == 5 ) {
 			//promotion
 			if ( $position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] === 'P' ) {
-				//echo "Promotion To ".strtoupper( $moveSplit[4] )." - ";
+
 				$position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] = strtoupper( $moveSplit[4] );
+
 			} else {
-				//echo "Promotion To ".strtolower( $moveSplit[4] )." - ";
+
 				$position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] = strtolower( $moveSplit[4] );
+
 			}
 
 			$position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] = 0;
@@ -181,45 +360,53 @@ function isCapture ( $moveString, $major = FALSE ) {
 
 		$pieceCount = 0;
 
-		//echo "$move\n";
-
 		foreach ( $position as $rowKey => $row ) {
+
 			foreach ( $row as $squareKey => $square ) {
+
 				if ( $square === 'p' || $square === 'P' ) {
+
 					$pieceCount += 1;
-					//echo $square." ";
+
 				} else if ( $square !== 0 ) {
+
 					$pieceCount += 2;
-				}// else {
-					//echo "- ";
-				//}
+
+				}
+
 			}
-			//echo "\n";
+
 		}
 
 		if ( $oldPieceCount - $pieceCount >= 1 ) {
-			if ( $major == TRUE ) {
-				if ( $oldPieceCount - $pieceCount == 1 ) {
-					$output = FALSE;
-				} else if ( $oldPieceCount - $pieceCount == 2 ) {
-					$output = TRUE;
-				}
-			} else {
-				$output = TRUE;
-			}
-		} else {
-			$output = FALSE;
-		}
-		$oldPieceCount = $pieceCount;
-	}
-	return $output;
-}
 
-function testParser ( $game ) {
-	//Input: a game from the API
-	//Output: the game played out.
-	$captureArray = captureArray ( explode( ' ', $game['uci'] ), $game['analysis'] );
-	foreach ( $game['analysis'] as $key => $move ) {
-		echo $move['move'].( ( $captureArray[$key] == 1 )? ' - CAPTURE' : '' )."\n";
+			if ( $major == TRUE ) {
+
+				if ( $oldPieceCount - $pieceCount == 1 ) {
+
+					$output = FALSE;
+
+				} else if ( $oldPieceCount - $pieceCount == 2 ) {
+
+					$output = TRUE;
+
+				}
+
+			} else {
+
+				$output = TRUE;
+
+			}
+
+		} else {
+
+			$output = FALSE;
+
+		}
+
+		$oldPieceCount = $pieceCount;
+
 	}
+
+	return $output;
 }

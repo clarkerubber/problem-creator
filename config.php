@@ -1,8 +1,8 @@
 <?php
 
 //-----thresholds
-$BALANCED = 200; // +-centipawns for a position to be considered even
-$UNBALANCED = 400; // +-centipawns for a position to be considered greatly advantageous
+$BALANCED = 150; // +-centipawns for a position to be considered even
+$UNBALANCED = 350; // +-centipawns for a position to be considered greatly advantageous
 
 
 //-----engine settings
