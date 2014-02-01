@@ -27,10 +27,18 @@ function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/analysis"
 	}
 
 	if ( !empty( $problems ) ) {
-		echo json_encode($problems);
+		return json_encode($problems);
 	} else {
 		exit(1);
 	}
 }
 
-problemGenerator( 1 );
+$output = '';
+
+if ( isset( $argv[1] ) ) {
+	$output = problemGenerator( intval( $argv[1] ) );
+} else {
+	$output = problemGenerator();
+}
+
+echo $output;
