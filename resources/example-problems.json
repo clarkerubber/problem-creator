@@ -1,0 +1,107 @@
+[
+	{
+		"tags":["material advantage"],
+		"color":"white",
+		"position":"e2e4 e7e5 g1f3 b8c6 f1b5 a7a6 b5c6 d7c6 d2d4 e5d4 d1d4 c8e6 c1g5 f8e7 g5e7 g8e7 e1g1 e8g8 f1d1 b7b6 b1c3 c6c5 d4d3 e7c6 d1d2 c6b4 d3e2 d8g5 ",
+		"solution":{
+			"f3g5":{
+				"a8e8":{
+					"g5e6":{
+						"e8e6":"end"
+						}
+					}
+				}
+			},
+		"id":"a1t3z4u5"
+	},
+	{
+		"tags":["material advantage"],
+		"color":"black",
+		"position":"e2e4 e7e5 g1f3 b8c6 f1b5 a7a6 b5c6 d7c6 d2d4 e5d4 d1d4 c8e6 c1g5 f8e7 g5e7 g8e7 e1g1 e8g8 f1d1 b7b6 b1c3 c6c5 d4d3 e7c6 d1d2 c6b4 d3e2 d8g5 a1d1 g5g6 a2a3 b4c6 d2d3 e6g4 e2d2 g4f3 d3f3 a8d8 d2e2 c6e5 f3g3 g6f6 d1d8 f8d8 c3d1 e5c4 b2b3 d8d2 e2e1 ",
+		"solution":{
+			"f6a1":{
+				"g3d3":{
+					"d2d3":{
+						"c2d3":"end"
+						}
+					}
+				}
+			},
+		"id":"a1t3z4u5"
+	},
+	{
+		"tags":["forced mate"],
+		"color":"black",
+		"position":"e2e4 e7e5 g1f3 b8c6 f1b5 a7a6 b5c6 d7c6 d2d4 e5d4 d1d4 c8e6 c1g5 f8e7 g5e7 g8e7 e1g1 e8g8 f1d1 b7b6 b1c3 c6c5 d4d3 e7c6 d1d2 c6b4 d3e2 d8g5 a1d1 g5g6 a2a3 b4c6 d2d3 e6g4 e2d2 g4f3 d3f3 a8d8 d2e2 c6e5 f3g3 g6f6 d1d8 f8d8 c3d1 e5c4 b2b3 d8d2 e2e1 f6a1 b3c4 d2d1 g1f1 ",
+		"solution":{
+			"d1e1":"end"
+			},
+		"id":"a1t3z4u5"
+	},
+	{
+		"tags":["material advantage"],
+		"color":"black",
+		"position":"e2e4 e7e5 d2d4 e5d4 d1d4 b8c6 d4e3 g8f6 b1c3 f8b4 c1d2 e8g8 e1c1 f8e8 f1c4 d7d6 h2h3 c8e6 c4b5 a7a6 b5a4 b7b5 a4b3 c6e5 a2a3 b4c5 e3g3 e6b3 c2b3 b5b4 a3b4 c5b4 f2f4 e5g6 e4e5 d6e5 f4f5 g6f4 d2f4 e5f4 g3f4 b4d6 f4a4 d8e7 g1f3 e7e3 f3d2 d6g3 c1b1 e3d3 b1a2 d3f5 h1f1 f5g6 d2f3 f6e4 d1d4 ",
+		"solution":{
+			"e4c3":{
+				"b2c3":"end"
+				}
+			},
+		"id":"dvz729iw"
+	},
+	{
+		"tags":["forced mate"],
+		"color":"black",
+		"position":"e2e4 e7e5 d2d4 e5d4 d1d4 b8c6 d4e3 g8f6 b1c3 f8b4 c1d2 e8g8 e1c1 f8e8 f1c4 d7d6 h2h3 c8e6 c4b5 a7a6 b5a4 b7b5 a4b3 c6e5 a2a3 b4c5 e3g3 e6b3 c2b3 b5b4 a3b4 c5b4 f2f4 e5g6 e4e5 d6e5 f4f5 g6f4 d2f4 e5f4 g3f4 b4d6 f4a4 d8e7 g1f3 e7e3 f3d2 d6g3 c1b1 e3d3 b1a2 d3f5 h1f1 f5g6 d2f3 f6e4 d1d4 e4c3 b2c3 g6c2 a2a3 e8e2 a4c4 ",
+		"solution":{
+			"c2a2":{
+				"a3b4":{
+					"a8b8":{
+						"b4c5":{
+							"a2a5":{
+								"c5c6":{
+									"b8b6":{
+										"c6d7":{
+											"a5f5":{
+												"c4e6":{
+													"f5e6":{
+														"d7d8":{
+															"b6b8":"end"
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+		"id":"dvz729iw"
+	},
+	{
+		"tags":["material advantage"],
+		"color":"white",
+		"position":"e2e4 e7e5 d2d4 e5d4 d1d4 b8c6 d4e3 g8f6 b1c3 f8b4 c1d2 e8g8 e1c1 f8e8 f1c4 d7d6 h2h3 c8e6 c4b5 a7a6 b5a4 b7b5 a4b3 c6e5 a2a3 b4c5 e3g3 e6b3 c2b3 b5b4 a3b4 c5b4 f2f4 e5g6 e4e5 d6e5 f4f5 g6f4 d2f4 e5f4 g3f4 b4d6 f4a4 d8e7 g1f3 e7e3 f3d2 d6g3 c1b1 e3d3 b1a2 d3f5 h1f1 f5g6 d2f3 f6e4 d1d4 e4c3 b2c3 g6c2 a2a3 e8e2 a4c4 g3d6 d4d6 c7d6 f3d2 c2a2 ",
+		"solution":{
+			"a3a2":{
+				"e2d2":"end"
+				}
+			},
+		"id":"dvz729iw"
+	},
+	{
+		"tags":["material advantage"],
+		"color":"black",
+		"position":"g1f3 b7b6 e2e4 c8b7 b1c3 e7e6 d2d4 d7d5 e4e5 c7c5 b2b3 b8c6 c1b2 c5d4 f3d4 f8b4 f1b5 g8e7 d1d3 a7a6 b5c6 e7c6 d4c6 b7c6 e1c1 e8g8 f2f4 a6a5 h2h4 b4c3 d3c3 a8c8 c3d4 d8c7 h1g1 c6b5 c2c3 b5e2 d1d2 e2h5 a2a4 h5g6 g2g4 h7h6 h4h5 g6h7 d2f2 c7c5 d4c5 b6c5 f4f5 c5c4 b3b4 a5b4 c3b4 c4c3 b2a3 e6f5 g4f5 f8e8 b4b5 e8e5 b5b6 c8b8 a4a5 d5d4 a3c5 ",
+		"solution":{
+			"e5c5":{
+				"c1c2":"end"
+				}
+			},
+		"id":"onico0b8"
+	}
+]

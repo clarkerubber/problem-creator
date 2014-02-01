@@ -5,7 +5,7 @@ include( "functions/global.php" );
 include( "functions/captureAndPromotion.php" );
 include( "functions/mateSequence.php" );
 
-function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/analysis" ) {
+function problemGenerator ( $nb = 5, $url = "http://en.lichess.org/api/analysis" ) {
 	/*
 	Input: Amount of games to scan for tactical lines
 	Output: Problems that can be played
