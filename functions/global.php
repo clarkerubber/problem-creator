@@ -38,6 +38,7 @@ function createProblems ( $game ) {
 
 					$temp['id'] = $game['game']['id'];
 					$lines[] = $temp;
+					print_r($temp);
 
 				}
 
@@ -51,6 +52,7 @@ function createProblems ( $game ) {
 
 				$temp['id'] = $game['game']['id'];
 				$lines[] = $temp;
+				print_r($temp);
 
 			}
 
@@ -64,6 +66,7 @@ function createProblems ( $game ) {
 
 					$temp['id'] = $game['game']['id'];
 					$lines[] = $temp;
+					print_r($temp);
 
 				}
 			}
@@ -73,7 +76,7 @@ function createProblems ( $game ) {
 	return $lines;
 }
 
-function getUci ( $moveSequence, $moveTime ) {
+function getUci ( $moveSequence, $moveTime, $multiPv = 1 ) {
 	global $STOCKFISH_PATH;
 
 	$descriptorspec = array(
@@ -92,6 +95,7 @@ function getUci ( $moveSequence, $moveTime ) {
 		fwrite( $pipes[0], "uci\n" );
 		fwrite( $pipes[0], "ucinewgame\n" );
 		fwrite( $pipes[0], "isready\n" );
+		fwrite( $pipes[0], "setoption name MultiPV value $multiPv\n" );
 		fwrite( $pipes[0], "position startpos moves $moveSequence\n" );
 		fwrite( $pipes[0], "go movetime $moveTime\n" );
 		usleep( 1000 * $moveTime + 100 );
@@ -102,6 +106,7 @@ function getUci ( $moveSequence, $moveTime ) {
 
 		fclose( $pipes[1] );
 	}
+	//print_r($output);
 	return $output;
 }
 

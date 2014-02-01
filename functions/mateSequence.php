@@ -50,7 +50,20 @@ function buildMateTree ( $moveString, $isMate ) {
 	$movesList = getMateMovesFromPosition( $moveString, $MAX_MATE_LINES, TRUE, $isMate );
 	$output = FALSE;
 
-	if ( !empty( $movesList ) ) {
+	$empty = TRUE;
+
+	if ( is_array( $movesList ) ) {
+		foreach ( $movesList as $key => $value ) {
+
+			if ( $value !== FALSE ) {
+				$empty = FALSE;
+			}
+
+		}
+	}
+	
+
+	if ( $empty == FALSE ) {
 
 		$output = $movesList;
 
@@ -62,7 +75,7 @@ function buildMateTree ( $moveString, $isMate ) {
 function getMateMovesFromPosition ( $moveString, $maxLines, $player, $findMate ) {
 	global $FIRST_PASS_TIME, $SECOND_PASS_TIME, $MAX_MATE_LINES;
 
-	$uciOutput = getUci( $moveString, $FIRST_PASS_TIME );
+	$uciOutput = getUci( $moveString, $FIRST_PASS_TIME, $maxLines );
 
 	preg_match_all( "/info.*?mate (-?[0-9]+).*?([a-h][1-8][a-h][1-8][qrnb]?)/", $uciOutput, $matches );
 
@@ -75,9 +88,21 @@ function getMateMovesFromPosition ( $moveString, $maxLines, $player, $findMate )
 
 	foreach ( $matches[2] as $key => $match ) {
 
-		if ( !in_array( $match , $candidateMoves ) ) {
+		if ( $findMate == TRUE ) {
 
-			$candidateMoves[] = $match;
+			if ( $matches[1][$key] == 1 && !in_array( $match, $candidateMoves ) ) {
+
+				$candidateMoves[] = $match;
+
+			}
+
+		} else if ( !in_array( $match, $candidateMoves ) ) {
+
+			if ( ( $player == TRUE && $matches[1][$key] > 0 ) || $player == FALSE ) {
+
+				$candidateMoves[] = $match;
+
+			}
 
 		}
 
@@ -129,7 +154,9 @@ function getMateMovesFromPosition ( $moveString, $maxLines, $player, $findMate )
 
 	foreach ( $candidateMoves as $key => $move ) {
 
-		if ( $key < $maxLines ) {
+		if ( $key < $maxLines && $candidateMovesEval[$key] == $topEval ) {
+
+			echo "$lastMove -> $move: Mate In ".$candidateMovesEval[$key]."\n";
 
 			if ( $candidateMovesEval[$key] == 1 ) {
 
@@ -157,7 +184,23 @@ function getMateMovesFromPosition ( $moveString, $maxLines, $player, $findMate )
 		}
 	}
 
-	return $moveArray;
+	$empty = TRUE;
+
+	foreach ($moveArray as $key => $value) {
+
+		if ( $value !== FALSE ) {
+			$empty = FALSE;
+		}
+
+	}
+
+	if ( $empty == TRUE ) {
+		$output = FALSE;
+	} else {
+		$output = $moveArray;
+	}
+
+	return $output;
 }
 
 function getPositionMate ( $moveString, $moveTime ) {
@@ -171,7 +214,7 @@ function getPositionMate ( $moveString, $moveTime ) {
 	if ( isset( $end ) ) {
 
 		$output = $end;
-		
+
 	}
 
 	return $output;

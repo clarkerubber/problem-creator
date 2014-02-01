@@ -74,10 +74,11 @@ function buildCaptureTree ( $moveString ) {
 
 
 function getMovesListFromPosition ( $moveString, $maxLines, $allowForcedInclusion, $player, $timeSinceMajorMove ) {
+
 	global $FIRST_PASS_TIME, $SECOND_PASS_TIME, $ALT_THRESHOLD, $FORCED_INCLUSION, $MAJOR_MOVE_THRESHOLD;
 	global $MINOR_MOVE_THRESHOLD, $MAX_CAPTURE_LINES;
 
-	$uciOutput = getUci( $moveString, $FIRST_PASS_TIME );
+	$uciOutput = getUci( $moveString, $FIRST_PASS_TIME, $maxLines );
 
 	preg_match_all( "/info.*?cp (-?[0-9]+).*?([a-h][1-8][a-h][1-8][qrnb]?)/", $uciOutput, $matches );
 
@@ -138,9 +139,11 @@ function getMovesListFromPosition ( $moveString, $maxLines, $allowForcedInclusio
 				&& $allowForcedInclusion == TRUE ) 
 			) {
 
+			echo "$lastMove -> $move: Adv ".$candidateMovesEval[$key]." $timeSinceMajorMove\n";
+
 			$captureThisTurn = FALSE;
 
-			if( significantMove( $moveString.$move ) === TRUE ) {
+			if( significantMove( $moveString.$move ) == TRUE ) {
 
 				$parsedTimeSinceMajorMove = $MINOR_MOVE_THRESHOLD;
 				$captureThisTurn = TRUE;
@@ -151,7 +154,7 @@ function getMovesListFromPosition ( $moveString, $maxLines, $allowForcedInclusio
 
 			}
 			
-			if ( $player === TRUE && $parsedTimeSinceMajorMove > 0 ) {
+			if ( $player == TRUE && $parsedTimeSinceMajorMove > 0 ) {
 
 				$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', 1, FALSE, FALSE, $parsedTimeSinceMajorMove );
 
@@ -237,7 +240,7 @@ function getPositionEval ( $moveString, $moveTime ) {
 	if ( isset( $end ) ) {
 
 		$output = $end;
-		
+
 	}
 
 	return $output;
