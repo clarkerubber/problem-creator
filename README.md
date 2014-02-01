@@ -3,7 +3,7 @@ problem-creator
 
 create chess problems for lichess
 
-### Interfacing with problem-creator.php from the commandline:
+### problem-creator Command Line Interface:
 `user$ problem-creator.php [number of games to request = 1]`
 
 Note: The amount of games requested is not the amount of problems returned
@@ -26,4 +26,3 @@ Note: The amount of games requested is not the amount of problems returned
             // ... More problems
         }
     ]
-
