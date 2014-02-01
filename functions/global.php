@@ -20,7 +20,7 @@ function createProblems ( $game ) {
 				$temp = findCaptureLine( $game['uci'], $moveKey );
 
 				if ( $temp !== FALSE ) {
-					$temp['url'] = $game['game']['url'];
+					$temp['id'] = $game['game']['id'];
 					$lines[] = $temp;
 				}
 
@@ -31,7 +31,7 @@ function createProblems ( $game ) {
 			$temp = findMateLine( $game['uci'], $moveKey, $game['analysis'][$moveKey + 1]['mate'] );
 
 			if ( $temp !== FALSE ) {
-				$temp['url'] = $game['game']['url'];
+				$temp['id'] = $game['game']['id'];
 				$lines[] = $temp;
 			}
 
@@ -44,7 +44,7 @@ function createProblems ( $game ) {
 				$temp = findMateLine( $game['uci'], $moveKey, $game['analysis'][$moveKey + 1]['mate'] );
 
 				if ( $temp !== FALSE ) {
-					$temp['url'] = $game['game']['url'];
+					$temp['id'] = $game['game']['id'];
 					$lines[] = $temp;
 				}
 			}
