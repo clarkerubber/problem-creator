@@ -193,5 +193,107 @@
 				}
 			},
 		"id":"5m2gsfzp"
+	},
+	{
+		"tags":["material advantage"],
+		"color":"black",
+		"position":"e2e4 g7g6 d2d4 f8g7 g1f3 e7e6 f1b5 c7c6 b5a4 g8e7 e1g1 e8g8 c1g5 h7h6 g5f4 g8h7 c2c3 d7d6 b1d2 f7f5 e4f5 e6f5 d2c4 b7b5 c4d6 b5a4 d1a4 e7d5 d6c8 ",
+		"solution":{"d5f4":{"c8a7":"end"}},
+		"id":"815xhg2w"
+	},
+	{
+		"tags":["forced mate"],
+		"color":"black",
+		"position":"e2e4 g7g6 d2d4 f8g7 g1f3 e7e6 f1b5 c7c6 b5a4 g8e7 e1g1 e8g8 c1g5 h7h6 g5f4 g8h7 c2c3 d7d6 b1d2 f7f5 e4f5 e6f5 d2c4 b7b5 c4d6 b5a4 d1a4 e7d5 d6c8 d5f4 c8b6 d8b6 d4d5 f4e2 g1h1 c6d5 a1e1 b6b2 a4h4 e2c3 e1e7 c3e4 e7c7 b8a6 c7d7 a8c8 h4e7 a6c5 d7a7 e4f2 h1g1 c5e4 h2h3 f8g8 f3e5 ",
+		"solution":{"c8c1":{"e7d6":{"c1f1":{"g1f1":{"b2a1":{"f1e2":{"a1d1":{"e2e3":{"d1e1":{"e3f3":{"e4g5":{"f3f4":{"f2h3":{"g2h3":{"g5h3":{"f4f3":{"e1f2":"end"}}}}}}}}}}}},"e4g3":{"f1g1":{"b2a1":{"g1h2":{"a1h1":{"h2g3":{"f2e4":{"g3f4":{"h1f1":{"e5f3":{"f1c1":{"f3d2":{"c1d2":{"f4f3":{"d2f2":"end"}}}}}}}}}}}}}}}}}}},
+		"id":"815xhg2w"
+	},
+	{
+		"tags":["forced mate"],
+		"color":"black",
+		"position":"e2e4 g7g6 d2d4 f8g7 g1f3 e7e6 f1b5 c7c6 b5a4 g8e7 e1g1 e8g8 c1g5 h7h6 g5f4 g8h7 c2c3 d7d6 b1d2 f7f5 e4f5 e6f5 d2c4 b7b5 c4d6 b5a4 d1a4 e7d5 d6c8 d5f4 c8b6 d8b6 d4d5 f4e2 g1h1 c6d5 a1e1 b6b2 a4h4 e2c3 e1e7 c3e4 e7c7 b8a6 c7d7 a8c8 h4e7 a6c5 d7a7 e4f2 h1g1 c5e4 h2h3 f8g8 f3e5 b2b6 g1h2 h7h8 e7f7 ",
+		"solution":{"g7e5":{"g2g3":{"f2g4":{"h2h1":{"e4g3":{"h1g2":{"c8c2":{"f1f2":{"b6f2":"end"}}}}}}}}},
+		"id":"815xhg2w"
+	},
+	{
+		"tags":["forced mate"],
+		"color":"black",
+		"position":"e2e4 g7g6 d2d4 f8g7 g1f3 e7e6 f1b5 c7c6 b5a4 g8e7 e1g1 e8g8 c1g5 h7h6 g5f4 g8h7 c2c3 d7d6 b1d2 f7f5 e4f5 e6f5 d2c4 b7b5 c4d6 b5a4 d1a4 e7d5 d6c8 d5f4 c8b6 d8b6 d4d5 f4e2 g1h1 c6d5 a1e1 b6b2 a4h4 e2c3 e1e7 c3e4 e7c7 b8a6 c7d7 a8c8 h4e7 a6c5 d7a7 e4f2 h1g1 c5e4 h2h3 f8g8 f3e5 b2b6 g1h2 h7h8 e7f7 b6d6 g2g3 ",
+		"solution":{"d6e5":{"f7g6":{"c8c2":{"g6g7":{"g8g7":{"a7a8":{"h8h7":{"a8h8":{"h7h8":{"f1g1":{"f2g4":{"h2h1":{"c2h2":"end"}}}}}}}}}}}}},
+		"id":"815xhg2w"
+	},
+	{
+		"tags":["forced mate"],
+		"color":"black",
+		"position":"e2e4 g7g6 d2d4 f8g7 g1f3 e7e6 f1b5 c7c6 b5a4 g8e7 e1g1 e8g8 c1g5 h7h6 g5f4 g8h7 c2c3 d7d6 b1d2 f7f5 e4f5 e6f5 d2c4 b7b5 c4d6 b5a4 d1a4 e7d5 d6c8 d5f4 c8b6 d8b6 d4d5 f4e2 g1h1 c6d5 a1e1 b6b2 a4h4 e2c3 e1e7 c3e4 e7c7 b8a6 c7d7 a8c8 h4e7 a6c5 d7a7 e4f2 h1g1 c5e4 h2h3 f8g8 f3e5 b2b6 g1h2 h7h8 e7f7 b6d6 g2g3 c8c2 e5g6 ",
+		"solution":{"d6g6":{"f7g6":{"f2g4":{"h2g1":{"g7d4":{"f1f2":{"d4f2":{"g1h1":{"f2a7":{"g6g8":{"h8g8":{"a2a3":{"e4g3":"end"}}}}}}}}}}}}},
+		"id":"815xhg2w"
+	},
+	{	"tags":["material advantage"],
+		"color":"black","position":"e2e4 e7e5 f2f4 e5f4 g1f3 f8e7 f1c4 e7h4 e1f1 d7d6 d2d3 c8g4 c1f4 g4f3 d1f3 d8f6 b1c3 g8e7 e4e5 d6e5 a1e1 ",
+		"solution":{"f6f4":{"f3f4":{"e5f4":{"g2g3":"end"}}}},
+		"id":"im1wvs00"
+	},
+	{
+		"tags":["forced mate"],
+		"color":"white",
+		"position":"e2e4 d7d5 d2d3 d5e4 d3e4 d8d1 e1d1 c8e6 f1d3 b8c6 g1f3 g8f6 d1e2 e6d7 c1e3 e7e6 b1c3 f8b4 h1d1 e8g8 a2a3 b4c3 b2c3 a7a6 c3c4 c6a7 c2c3 d7c6 d3c2 c6e4 c2e4 f6e4 d1d3 f8d8 a1d1 d8d3 d1d3 h7h6 e3a7 a8a7 e2e3 e4f6 d3d8 g8h7 f3e5 b7b5 e5f7 b5c4 d8h8 h7g6 f7e5 g6f5 f2f4 f6d5 e3f3 d5c3 ",
+		"solution":{"h8f8":"end"},
+		"id":"yxtn7ejj"
+	},
+	{
+		"tags":["material advantage"],
+		"color":"black",
+		"position":"e2e4 d7d5 d2d3 d5e4 d3e4 d8d1 e1d1 c8e6 f1d3 b8c6 g1f3 g8f6 d1e2 e6d7 c1e3 e7e6 b1c3 f8b4 h1d1 e8g8 a2a3 b4c3 b2c3 a7a6 c3c4 c6a7 c2c3 d7c6 d3c2 c6e4 c2e4 f6e4 d1d3 f8d8 a1d1 d8d3 d1d3 h7h6 e3a7 a8a7 e2e3 e4f6 d3d8 g8h7 f3e5 b7b5 e5f7 b5c4 d8h8 h7g6 f7e5 g6f5 f2f4 f6d5 e3f3 d5c3 g2g4 f5f6 h8f8 f6e7 f8f7 e7d6 f7g7 a7b7 e5c4 d6d5 c4e3 d5d6 f4f5 e6f5 g4f5 b7b3 g7g6 d6e5 g6e6 e5d4 e3c2 d4d5 c2b4 d5c5 e6e5 c5d4 e5e4 ",
+		"solution":{"c3e4":{"f3f4":"end"}},
+		"id":"yxtn7ejj"
+	},
+	{
+		"tags":["forced mate"],
+		"color":"black",
+		"position":"d2d4 e7e6 e2e3 g8f6 c2c4 d7d5 g1f3 c7c5 b2b3 c5d4 f3d4 b8c6 c1b2 f8e7 f1e2 e8g8 e1g1 c8d7 b1c3 d7e8 e2d3 a8c8 e3e4 d5e4 d4c6 e8c6 d3c2 d8d1 f1d1 e7c5 c3e2 f6g4 b2d4 c5d4 e2d4 g4f6 d4c6 c8c6 d1e1 f8d8 c2e4 f6e4 e1e4 d8d2 g2g3 h7h6 g1g2 f7f6 g2f3 g8f7 f3e3 d2c2 e4d4 f7e7 a2a3 c2c3 d4d3 c3d3 e3d3 c6b6 b3b4 b6d6 d3e3 e6e5 c4c5 d6d5 a1a2 e7d7 f2f4 e5f4 e3f4 d7c6 f4e4 d5h5 h2h4 h5e5 e4f4 c6b5 g3g4 a7a5 h4h5 a5b4 a3a4 b5c5 a4a5 b4b3 a2b2 c5b4 a5a6 b7a6 g4g5 h6g5 f4g4 a6a5 b2c2 ",
+		"solution":{"b3c2":{"h5h6":{"g7g6":{"g4h3":{"c2c1q":{"h3g2":{"e5e2":{"g2g3":{"c1g1":{"g3h3":{"e2h2":"end"}}}}}}}}}}},
+		"id":"s65y6xvx"
+	},
+	{
+		"tags":["forced mate"],
+		"color":"black",
+		"position":"e2e3 g7g6 b2b3 f8g7 b1c3 c7c5 c1b2 d7d5 a1b1 b8c6 g1e2 g8f6 g2g3 d5d4 e3d4 c5d4 c3a4 d8d5 h1g1 e7e5 b2a1 e8g8 f1g2 d5d6 d2d3 f6d5 e1d2 g7h6 f2f4 e5f4 g3f4 d5f4 d2e1 f8e8 g2f3 e8e3 f3c6 b7c6 a1d4 e3e2 d1e2 f4e2 e1e2 d6d4 c2c3 ",
+		"solution":{"d4e3":{"e2f1":{"c8h3":{"g1g2":{"e3f3":{"f1e1":{"a8e8":{"g2e2":{"f3e2":"end"}}}}}}}}},
+		"id":"p94sh8fg"
+	},
+	{
+		"tags":["forced mate"],
+		"color":"white",
+		"position":"d2d4 e7e5 d4e5 d7d6 e2e4 b8c6 f1b5 c8d7 g1f3 c6e5 f3e5 d7b5 e5f7 d8e7 f7h8 e7e4 c1e3 e8c8 b1c3 e4g2 d1d5 g2d5 c3d5 b5c6 e1c1 g8f6 c2c4 b7b5 b2b3 b5c4 b3c4 c6a4 d1d2 f6e4 d2b2 c7c5 h8f7 d8d7 f7g5 e4g5 e3g5 h7h6 g5f4 g7g5 f4g3 f8g7 b2d2 a4c6 h1e1 a7a5 d5b6 c8d8 b6d7 d8d7 d2d6 d7c7 d6g6 c7b6 ",
+		"solution":{"e1e6":{"a5a4":{"e6c6":{"b6a5":{"a2a3":{"g7b2":{"c1b2":{"g5g4":{"c6c5":"end"}}}}}}}}},
+		"id":"hmsr9x2x"
+	},
+	{
+		"tags":["forced mate"],
+		"color":"white",
+		"position":"d2d4 e7e5 d4e5 d7d6 e2e4 b8c6 f1b5 c8d7 g1f3 c6e5 f3e5 d7b5 e5f7 d8e7 f7h8 e7e4 c1e3 e8c8 b1c3 e4g2 d1d5 g2d5 c3d5 b5c6 e1c1 g8f6 c2c4 b7b5 b2b3 b5c4 b3c4 c6a4 d1d2 f6e4 d2b2 c7c5 h8f7 d8d7 f7g5 e4g5 e3g5 h7h6 g5f4 g7g5 f4g3 f8g7 b2d2 a4c6 h1e1 a7a5 d5b6 c8d8 b6d7 d8d7 d2d6 d7c7 d6g6 c7b6 g6g7 a5a4 ",
+		"solution":{"g3c7":{"b6b7":{"e1e6":{"g5g4":{"c7a5":{"b7a8":{"e6c6":{"a8b8":{"c6h6":{"a4a3":{"h6h8":"end"}}}}}}}},"e1e7":{"h6h5":{"c7a5":{"c6d7":{"e7d7":{"b7c6":{"d7d1":{"a4a3":{"g7c7":"end"}}}}}}}}}}},
+		"id":"hmsr9x2x"
+	},
+	{
+		"tags":["material advantage"],
+		"color":"white",
+		"position":"d2d4 d7d5 c2c4 e7e6 e2e3 b8c6 g1f3 g8f6 b1c3 f8b4 c1d2 a7a6 a2a3 b4c3 d2c3 d5c4 f1c4 b7b5 c4a2 e8g8 e1g1 c6e7 c3b4 f8e8 f3e5 c8b7 a1c1 e7d5 b4c5 f6d7 d1f3 f7f6 e5d7 d8d7 f1d1 b7c6 ",
+		"solution":{"e3e4":{"a6a5":{"e4d5":{"c6d5":{"a2d5":{"e6d5":"end"}}}}}},"id":"l9xwq2d7"
+	},
+	{
+		"tags":["forced mate"],
+		"color":"white",
+		"position":"d2d4 d7d5 c2c4 e7e6 e2e3 b8c6 g1f3 g8f6 b1c3 f8b4 c1d2 a7a6 a2a3 b4c3 d2c3 d5c4 f1c4 b7b5 c4a2 e8g8 e1g1 c6e7 c3b4 f8e8 f3e5 c8b7 a1c1 e7d5 b4c5 f6d7 d1f3 f7f6 e5d7 d8d7 f1d1 b7c6 e3e4 d5e7 d4d5 e6d5 c5e7 g8h8 e7b4 d5d4 a2d5 c6d5 e4d5 a6a5 b4c5 b5b4 c5d4 a8b8 d4c5 e8e5 d5d6 b8c8 d6c7 d7c7 c5e3 c7b8 e3f4 c8c1 d1c1 b4a3 f4e5 f6e5 f3a3 h7h6 g2g3 b8b5 ",
+		"solution":{"a3f8":{"h8h7":{"f8f5":{"g7g6":{"f5f7":{"h7h8":{"c1c8":{"b5e8":{"c8e8":"end"}}}}}}}}},
+		"id":"l9xwq2d7"
+	},
+	{
+		"tags":["forced mate"],
+		"color":"white",
+		"position":"d2d4 d7d5 c2c4 e7e6 e2e3 b8c6 g1f3 g8f6 b1c3 f8b4 c1d2 a7a6 a2a3 b4c3 d2c3 d5c4 f1c4 b7b5 c4a2 e8g8 e1g1 c6e7 c3b4 f8e8 f3e5 c8b7 a1c1 e7d5 b4c5 f6d7 d1f3 f7f6 e5d7 d8d7 f1d1 b7c6 e3e4 d5e7 d4d5 e6d5 c5e7 g8h8 e7b4 d5d4 a2d5 c6d5 e4d5 a6a5 b4c5 b5b4 c5d4 a8b8 d4c5 e8e5 d5d6 b8c8 d6c7 d7c7 c5e3 c7b8 e3f4 c8c1 d1c1 b4a3 f4e5 f6e5 f3a3 h7h6 g2g3 b8b5 c1c5 b5e2 g1g2 e2e4 a3f3 e4b1 c5e5 b1g6 f3f8 h8h7 f8f5 a5a4 f5g6 h7g6 e5a5 a4a3 a5a3 g6f7 b2b4 f7e7 a3d3 g7g5 ",
+		"solution":{"b4b5":{"h6h5":{"b5b6":{"h5h4":{"b6b7":{"e7f6":{"b7b8q":{"h4h3":{"g2f3":{"g5g4":{"f3g4":{"f6e6":{"b8f8":{"e6e5":{"f8f5":"end"}}}}}},"g2h3":{"f6f7":{"f2f4":{"g5f4":{"d3d6":{"f4g3":{"b8c7":{"f7g8":{"d6d8":"end"}}}}}}}}}}}}}}}}},
+		"id":"l9xwq2d7"
 	}
 ]
