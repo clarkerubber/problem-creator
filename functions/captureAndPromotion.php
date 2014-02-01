@@ -33,7 +33,7 @@ function findCaptureLine ( $movesUci, $ply ) {
 
 	$output = FALSE;
 	if ( $solutionMap !== FALSE ) {
-		$output = array( 'tags' => array('hanging piece'), 'color' => $color, 'position' => $startMoveString, 'solution' => $solutionMap );
+		$output = array( 'tags' => array('material advantage'), 'color' => $color, 'position' => $startMoveString, 'solution' => $solutionMap );
 	}
 
 	return $output;
