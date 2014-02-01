@@ -39,7 +39,7 @@ function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/analysis"
 	} else {
 
 		exit( 1 );
-		
+
 	}
 }
 

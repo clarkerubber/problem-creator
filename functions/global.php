@@ -94,7 +94,8 @@ function getUci ( $moveSequence, $moveTime ) {
 		fwrite( $pipes[0], "isready\n" );
 		fwrite( $pipes[0], "position startpos moves $moveSequence\n" );
 		fwrite( $pipes[0], "go movetime $moveTime\n" );
-		usleep( 1000 * $moveTime );
+		usleep( 1000 * $moveTime + 100 );
+		fwrite( $pipes[0], "quit\n" );
 		fclose( $pipes[0] );
 
 		$output = stream_get_contents( $pipes[1] );

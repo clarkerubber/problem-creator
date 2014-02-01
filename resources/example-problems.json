@@ -103,5 +103,95 @@
 				}
 			},
 		"id":"onico0b8"
+	},
+	{
+		"tags":["material advantage"],
+		"color":"white",
+		"position":"e2e4 c7c5 c2c4 b8c6 g1f3 e7e5 b1c3 d7d6 h2h3 c6d4 f1e2 g8f6 d2d3 g7g6 c1g5 f8g7 c3d5 d8a5 f3d2 c8d7 ",
+		"solution":{
+			"g5f6":{
+				"g7f6":{
+					"d5f6":{
+						"e8e7":"end"
+						}
+					}
+				},
+			"d5f6":{
+				"g7f6":{
+					"g5f6":{
+						"e8g8":"end"
+						}
+					}
+				}
+			},
+		"id":"qs516xa9"
+	},
+	{
+		"tags":["material advantage"],
+		"color":"black",
+		"position":"d2d4 d7d5 c2c4 e7e6 b1c3 f8b4 e2e3 g8f6 g1f3 c7c5 c1d2 b4c3 d2c3 c5d4 f3d4 b8c6 a1c1 e8g8 f1e2 f8e8 e1g1 f6e4 e2d3 e4c3 c1c3 c6d4 e3d4 d8b6 f1e1 c8d7 b2b3 b6a5 d1c1 a5a2 d3b1 a2a5 c3h3 h7h6 e1d1 e6e5 h3g3 g8f8 c4d5 e5d4 h2h3 a7a6 d5d6 ",
+		"solution":{
+			"a8c8":{
+				"c1f4":{
+					"e8e1":{
+						"d1e1":{
+							"a5e1":{
+								"g1h2":"end"
+								}
+							}
+						}
+					}
+				}
+			},
+		"id":"5m2gsfzp"
+	},
+	{
+		"tags":["material advantage"],
+		"color":"white",
+		"position":"d2d4 d7d5 c2c4 e7e6 b1c3 f8b4 e2e3 g8f6 g1f3 c7c5 c1d2 b4c3 d2c3 c5d4 f3d4 b8c6 a1c1 e8g8 f1e2 f8e8 e1g1 f6e4 e2d3 e4c3 c1c3 c6d4 e3d4 d8b6 f1e1 c8d7 b2b3 b6a5 d1c1 a5a2 d3b1 a2a5 c3h3 h7h6 e1d1 e6e5 h3g3 g8f8 c4d5 e5d4 h2h3 a7a6 d5d6 d7c6 b1h7 a8d8 c1h6 e8e1 d1e1 a5e1 g1h2 e1e5 h6h4 e5d6 h7d3 c6b5 h4h8 f8e7 h8h4 e7f8 h4h8 f8e7 h8h4 f7f6 h4e4 d6e6 e4b7 d8d7 b7f3 e6b3 ",
+		"solution":{
+			"g3g7":{
+				"e7f8":{
+					"g7d7":{
+						"b5d7":"end"
+						}
+					}
+				}
+			},
+		"id":"5m2gsfzp"
+	},
+	{
+		"tags":["forced mate"],
+		"color":"white",
+		"position":"d2d4 d7d5 c2c4 e7e6 b1c3 f8b4 e2e3 g8f6 g1f3 c7c5 c1d2 b4c3 d2c3 c5d4 f3d4 b8c6 a1c1 e8g8 f1e2 f8e8 e1g1 f6e4 e2d3 e4c3 c1c3 c6d4 e3d4 d8b6 f1e1 c8d7 b2b3 b6a5 d1c1 a5a2 d3b1 a2a5 c3h3 h7h6 e1d1 e6e5 h3g3 g8f8 c4d5 e5d4 h2h3 a7a6 d5d6 d7c6 b1h7 a8d8 c1h6 e8e1 d1e1 a5e1 g1h2 e1e5 h6h4 e5d6 h7d3 c6b5 h4h8 f8e7 h8h4 e7f8 h4h8 f8e7 h8h4 f7f6 h4e4 d6e6 e4b7 d8d7 b7f3 e6b3 g3g7 e7f8 f3f6 f8e8 ",
+		"solution":{
+			"d3g6":{
+				"d7f7":{
+					"f6d6":{
+						"b3h3":{
+							"g2h3":{
+								"d4d3":{
+									"g6f7":"end"
+									}
+								}
+							}
+						},
+					"g6f7":{
+						"e8d7":{
+							"f7b3":{
+								"d7c8":{
+									"f6f8":{
+										"b5e8":{
+											"f8e8":"end"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+		"id":"5m2gsfzp"
 	}
 ]
