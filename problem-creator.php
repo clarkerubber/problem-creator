@@ -14,14 +14,23 @@ function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/analysis"
 		$problems = array();
 
 		foreach ( $games['list'] as $gameKey => $game ) {
-			echo "URL: ".$game['game']['url']."\n";
+			//echo "\nURL: ".$game['game']['url']."\n";
 			if ( !isset( $game['game']['initialFen'] ) ) {
-				$problems[] = createProblems( $game );
-				//testParser( $game );
+				$temp = createProblems( $game );
+				if ( !empty( $temp ) ) {
+					foreach ( $temp as $problem ) {
+						$problems[] = $problem;
+					}
+				}
 			}
 		}
+	}
 
+	if ( !empty( $problems ) ) {
+		echo json_encode($problems);
+	} else {
+		exit(1);
 	}
 }
 
-problemGenerator( 6 );
+problemGenerator( 1 );

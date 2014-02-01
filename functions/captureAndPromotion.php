@@ -25,7 +25,18 @@ function findCaptureLine ( $movesUci, $ply ) {
 	//$uciOutput = getLines( $startMoveString );
 	$solutionMap = buildCaptureTree( $startMoveString );
 
-	//$captureArray = captureArray( $movesUci );
+	if ( count( explode( ' ', $startMoveString ) ) % 2 == 0 ) {
+		$color = 'black';
+	} else {
+		$color = 'white';
+	}
+
+	$output = FALSE;
+	if ( $solutionMap !== FALSE ) {
+		$output = array( 'tags' => array('hanging piece'), 'color' => $color, 'position' => $startMoveString, 'solution' => $solutionMap );
+	}
+
+	return $output;
 }
 
 function buildCaptureTree ( $moveString ) {
@@ -44,10 +55,8 @@ function buildCaptureTree ( $moveString ) {
 		}
 	}
 	if ( !empty( $movesList ) ) {
-		print_r($movesList);
+		//print_r($movesList);
 		$output = $movesList;
-	} else {
-		echo "nothing to see here!\n";
 	}
 	return $output;
 }

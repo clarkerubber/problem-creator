@@ -18,6 +18,19 @@ function findMateLine ( $movesUci, $ply, $adv ) {
 	}
 
 	$solutionMap = buildMateTree( $startMoveString, $isMate );
+
+	if ( count( explode( ' ', $startMoveString ) ) % 2 == 0 ) {
+		$color = 'black';
+	} else {
+		$color = 'white';
+	}
+
+	$output = FALSE;
+	if ( $solutionMap !== FALSE ) {
+		$output = array( 'tags' => array('forced mate'), 'color' => $color, 'position' => $startMoveString, 'solution' => $solutionMap );
+	}
+
+	return $output;
 }
 
 function buildMateTree ( $moveString, $isMate ) {
@@ -26,7 +39,11 @@ function buildMateTree ( $moveString, $isMate ) {
 	$movesList = getMateMovesFromPosition( $moveString, $MAX_MATE_LINES, TRUE, $isMate );
 	$output = FALSE;
 	
-	print_r($movesList);
+	//print_r($movesList);
+
+	if ( !empty( $movesList ) ) {
+		$output = $movesList;
+	}
 
 	return $output;
 }
@@ -76,7 +93,7 @@ function getMateMovesFromPosition ( $moveString, $maxLines, $player, $findMate )
 			$candidateMovesEval[] = getPositionMate( "$moveString$move ", $SECOND_PASS_TIME );
 		}
 
-		array_multisort( $candidateMovesEval, SORT_ASC, SORT_NUMERIC, $candidateMoves );
+		array_multisort( $candidateMovesEval, SORT_DESC, SORT_NUMERIC, $candidateMoves );
 		
 		if ( !empty( $candidateMovesEval ) ) {
 			while ( $candidateMovesEval[0] === FALSE ) {
@@ -94,19 +111,19 @@ function getMateMovesFromPosition ( $moveString, $maxLines, $player, $findMate )
 
 	if ( isset( $candidateMovesEval[0] ) ) {
 		$topEval = $candidateMovesEval[0];
-	} else {
-		echo "no top move\n";
 	}
 	
 	$moveArray = array();
 
 	foreach ( $candidateMoves as $key => $move ) {
 		if ( $key < $maxLines ) {
+			/*
 			if ( $player === TRUE ) {
 				echo "P: $lastMove -> $move: ".$candidateMovesEval[$key]."\n";
 			} else {
 				echo "C: $lastMove -> $move: ".$candidateMovesEval[$key]."\n";
 			}
+			*/
 
 			if ( $candidateMovesEval[$key] == 1 ) {
 				$mateInOne = TRUE;

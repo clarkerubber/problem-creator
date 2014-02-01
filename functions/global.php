@@ -4,11 +4,10 @@ function createProblems ( $game ) {
 	//Input: A game that consists of a list of moves.
 	//Output: A list of problems
 	global $BALANCED, $UNBALANCED;
+	$lines = array();
 
 	foreach ( $game['analysis'] as $moveKey => $move ) {
-		echo ceil( $move['ply'] / 2 ).( ($move['ply']%2 == 0)? "... " : ". " ).$move['move'];
-
-		$lines = array();
+		//echo ceil( $move['ply'] / 2 ).( ($move['ply']%2 == 0)? ' ' : '. ' ).$move['move'].' ';
 
 		if ( isset( $move['eval'] ) && isset( $game['analysis'][$moveKey + 1]['eval'] ) ){
 
@@ -17,29 +16,42 @@ function createProblems ( $game ) {
 
 				//pass the moves list and position of change of advantage to a subprocess
 
-				echo " Change of advantage detected: ".$move['eval']." -> ".$game['analysis'][$moveKey + 1]['eval'];
-				$lines[] = findCaptureLine( $game['uci'], $moveKey );
+				//echo " Change of advantage detected: ".$move['eval']." -> ".$game['analysis'][$moveKey + 1]['eval']."\n";
+				$temp = findCaptureLine( $game['uci'], $moveKey );
+
+				if ( $temp !== FALSE ) {
+					$temp['url'] = $game['game']['url'];
+					$lines[] = $temp;
+				}
+
 			} 
 		} else if( isset( $move['eval'] ) && isset( $game['analysis'][$moveKey + 1]['mate'] ) ) {
 
-			echo " Forced mate detected: ".$move['eval']." -> ".$game['analysis'][$moveKey + 1]['mate'];
-			$lines[] = findMateLine( $game['uci'], $moveKey, $game['analysis'][$moveKey + 1]['mate'] );
+			//echo " Forced mate detected: ".$move['eval']." -> ".$game['analysis'][$moveKey + 1]['mate']."\n";
+			$temp = findMateLine( $game['uci'], $moveKey, $game['analysis'][$moveKey + 1]['mate'] );
+
+			if ( $temp !== FALSE ) {
+				$temp['url'] = $game['game']['url'];
+				$lines[] = $temp;
+			}
 
 			//$lines[] = findMateLine( $game['uci'], $moveKey );
 		} else if ( isset( $move['mate'] ) && isset( $game['analysis'][$moveKey + 1]['mate'] ) ) {
 
 			if ( sign( $move['mate'] ) !== sign( $game['analysis'][$moveKey + 1]['mate'] ) ) {
 
-				echo " Mate sequence given to opponent ".$move['mate']." -> ".$game['analysis'][$moveKey + 1]['mate'];
-				$lines[] = findMateLine( $game['uci'], $moveKey, $game['analysis'][$moveKey + 1]['mate'] );
+				//echo " Mate sequence given to opponent ".$move['mate']." -> ".$game['analysis'][$moveKey + 1]['mate']."\n";
+				$temp = findMateLine( $game['uci'], $moveKey, $game['analysis'][$moveKey + 1]['mate'] );
 
+				if ( $temp !== FALSE ) {
+					$temp['url'] = $game['game']['url'];
+					$lines[] = $temp;
+				}
 			}
 
 		}
-		echo "\n";
-		
-		//var_dump($move);
 	}
+	return $lines;
 }
 
 
@@ -73,7 +85,7 @@ function getMovesListFromPosition ( $moveString, $maxLines, $allowForcedInclusio
 	
 	if ( !empty( $candidateMovesEval ) ) {
 		while ( $candidateMovesEval[0] === FALSE ) {
-			echo "FALSE!\n";
+			//echo "FALSE!\n";
 			array_shift( $candidateMovesEval );
 			array_shift( $candidateMoves );
 			if ( empty( $candidateMovesEval ) ) {
@@ -96,20 +108,22 @@ function getMovesListFromPosition ( $moveString, $maxLines, $allowForcedInclusio
 		|| ( sign( $topEval ) * $candidateMovesEval[$key] >= $FORCED_INCLUSION
 		&& $key < $maxLines
 		&& $allowForcedInclusion == TRUE ) ) {
+			/*
 			if ( $player == TRUE ) {
 				echo "P: $lastMove -> $move: ".$candidateMovesEval[$key];
 			} else {
 				echo "C: $lastMove -> $move: ".$candidateMovesEval[$key];
 			}
+			*/
 
 			$captureThisTurn = FALSE;
 			if( significantMove( $moveString.$move ) === TRUE ) {
 				$parsedTimeSinceMajorMove = $MINOR_MOVE_THRESHOLD;
 				$captureThisTurn = TRUE;
-				echo " - capture\n";
+				//echo " - capture\n";
 			} else {
 				$parsedTimeSinceMajorMove = $timeSinceMajorMove - 1;
-				echo " - $parsedTimeSinceMajorMove \n";
+				//echo " - $parsedTimeSinceMajorMove \n";
 			}
 			
 			if ( $player === TRUE && $parsedTimeSinceMajorMove > 0 ) {

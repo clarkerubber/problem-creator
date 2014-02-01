@@ -7,9 +7,9 @@ $UNBALANCED = 400; // +-centipawns for a position to be considered greatly advan
 
 //-----engine settings
 $STOCKFISH_PATH = "/Users/clarkey/Documents/workspace/lichess/problem-creator/resources/stockfish-dd-mac/Mac/stockfish-dd-32"; //location of stockfish engine
-$FIRST_PASS_TIME = 2000; //milliseconds to think for each position.
-$SECOND_PASS_TIME = 1000;
-$ALT_THRESHOLD = 50; //Amount of centipawns for an alternative line to be valid.
+$FIRST_PASS_TIME = 5000; //milliseconds to think for each position.
+$SECOND_PASS_TIME = 5000;
+$ALT_THRESHOLD = 30; //Amount of centipawns for an alternative line to be valid.
 $FORCED_INCLUSION = 700; //If an alt capture line has an advantage over 8 pawns, it's included
 
 //-----Problem Settings
