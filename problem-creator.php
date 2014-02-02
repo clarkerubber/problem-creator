@@ -38,7 +38,7 @@ function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/analysis"
 
 		$json = json_encode( $problems );
 
-		$post = file_get_contents('http://en.lichess.org/api/problem?token=$LICHESS_API_TOKEN',null,stream_context_create(array(
+		$post = file_get_contents("http://en.lichess.org/api/problem?token=$LICHESS_API_TOKEN",null,stream_context_create(array(
 		    	'http' => array(
 			        'protocol_version' => 1.1,
 			        'user_agent'       => 'PHPExample',
@@ -69,7 +69,9 @@ $output = '';
 
 if ( isset( $argv[2] ) ) {
 
-	$output = problemGenerator( intval( $argv[1] ), $argv[2] );
+	for ( $x = 0; $x < intval( $argv[2] ); $x++ ) {
+		echo problemGenerator( intval( $argv[1] ) );
+	}
 
 } else if ( isset( $argv[1] ) ) {
 
