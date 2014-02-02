@@ -4,12 +4,14 @@ include( "config.php" );
 include( "functions/global.php" );
 include( "functions/captureAndPromotion.php" );
 include( "functions/mateSequence.php" );
+include( "resources/keys.php" );
 
 function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/analysis" ) {
 	/*
 	Input: Amount of games to scan for tactical lines
 	Output: Problems that can be played
 	*/
+	global $LICHESS_API_TOKEN;
 
 	if ( ( $games = json_decode( file_get_contents( "$url?nb=$nb" ), TRUE ) ) !== FALSE ) {
 		$problems = array();
@@ -34,7 +36,27 @@ function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/analysis"
 
 	if ( !empty( $problems ) ) {
 
-		return json_encode( $problems );
+		$json = json_encode( $problems );
+
+		$post = file_get_contents('http://en.lichess.org/api/problem?token=$LICHESS_API_TOKEN',null,stream_context_create(array(
+		    	'http' => array(
+			        'protocol_version' => 1.1,
+			        'user_agent'       => 'PHPExample',
+			        'method'           => 'POST',
+			        'header'           => "Content-type: application/json\r\n".
+			                              "Connection: close\r\n" .
+			                              "Content-length: " . strlen($json) . "\r\n",
+			        'content'          => $json,
+			    ),
+			)));
+		 
+		if ($post) {
+		    echo $post;
+		} else {
+		    echo "POST failed";
+		}
+
+		return $json;
 
 	} else {
 
@@ -59,4 +81,4 @@ if ( isset( $argv[2] ) ) {
 
 }
 
-echo $output;
+echo "\n".$output;
