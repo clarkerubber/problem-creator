@@ -134,7 +134,7 @@ function getMovesListFromPosition ( $moveString, $maxLines, $allowForcedInclusio
 		if ( abs( $candidateMovesEval[$key] - $topEval ) <= abs( $topEval * $ALT_THRESHOLD )
 			&& $key < $maxLines ) {
 
-			echo "$lastMove -> $move: Adv ".$candidateMovesEval[$key]." $timeSinceMajorMove\n";
+			printf(" %5s -> %5s | %+6d | %2d \n", $lastMove, $move, -1 * $candidateMovesEval[$key], $timeSinceMajorMove );
 
 			$captureThisTurn = FALSE;
 
@@ -225,7 +225,7 @@ function significantMove ( $moveString ) {
 }
 
 function getPositionEval ( $moveString, $moveTime ) {
-	
+
 	$uciOutput = getUci( $moveString, $moveTime );
 	$output = FALSE;
 

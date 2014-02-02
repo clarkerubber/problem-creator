@@ -158,7 +158,7 @@ function getMateMovesFromPosition ( $moveString, $maxLines, $player, $findMate )
 
 		if ( $key < $maxLines && $candidateMovesEval[$key] == $topEval ) {
 
-			echo "$lastMove -> $move: Mate In ".$candidateMovesEval[$key]."\n";
+			printf(" %5s -> %5s | %+3d \n", $lastMove, $move, -1 * $candidateMovesEval[$key] );
 
 			if ( $candidateMovesEval[$key] == 1 ) {
 
@@ -206,7 +206,7 @@ function getMateMovesFromPosition ( $moveString, $maxLines, $player, $findMate )
 }
 
 function getPositionMate ( $moveString, $moveTime ) {
-	
+
 	$uciOutput = getUci( $moveString, $moveTime );
 	$output = FALSE;
 

@@ -51,9 +51,9 @@ function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/analysis"
 			)));
 		 
 		if ($post) {
-		    echo $post;
+		    echo "$post\n";
 		} else {
-		    echo "POST failed";
+		    echo "POST failed\n";
 		}
 
 		return $json;
@@ -65,22 +65,18 @@ function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/analysis"
 	}
 }
 
-$output = '';
-
 if ( isset( $argv[2] ) ) {
 
 	for ( $x = 0; $x < intval( $argv[2] ); $x++ ) {
-		echo problemGenerator( intval( $argv[1] ) );
+		echo problemGenerator( intval( $argv[1] ) )."\n";
 	}
 
 } else if ( isset( $argv[1] ) ) {
 
-	$output = problemGenerator( intval( $argv[1] ) );
+	echo problemGenerator( intval( $argv[1] ) );
 
 } else {
 
-	$output = problemGenerator();
+	echo problemGenerator();
 
 }
-
-echo "\n".$output;

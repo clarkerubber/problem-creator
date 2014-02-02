@@ -32,6 +32,9 @@ function createProblems ( $game ) {
 			if ( ( $move['eval'] <= $BALANCED && $nextMoveEval >= $UNBALANCED ) 
 				|| ( $move['eval'] >= -$BALANCED && $nextMoveEval <= -$UNBALANCED ) ) {
 
+				//printf(" %5s -> %5s | Mate In %+6d \n", $lastMove, $move, -1 * $candidateMovesEval[$key] );
+				echo "Parent -> Child | CP Adv | Plies Left \n";
+				echo "======================================\n";
 				$temp = findCaptureLine( $game['uci'], $moveKey );
 
 				if ( $temp !== FALSE ) {
@@ -46,6 +49,8 @@ function createProblems ( $game ) {
 
 		} else if( isset( $move['eval'] ) && isset( $nextMoveMate ) ) {
 
+			echo "Parent -> Child | Mate In \n";
+			echo "==========================\n";
 			$temp = findMateLine( $game['uci'], $moveKey, $nextMoveMate );
 
 			if ( $temp !== FALSE ) {
@@ -60,6 +65,8 @@ function createProblems ( $game ) {
 
 			if ( sign( $move['mate'] ) !== sign( $nextMoveMate ) ) {
 
+				echo "Parent -> Child | Mate In \n";
+				echo "==========================\n";
 				$temp = findMateLine( $game['uci'], $moveKey, $nextMoveMate );
 
 				if ( $temp !== FALSE ) {
