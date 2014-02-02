@@ -58,16 +58,13 @@ function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/analysis"
 
 		return $json;
 
-	} else {
-
-		exit( 1 );
-
 	}
 }
 
 if ( isset( $argv[2] ) ) {
 
 	for ( $x = 0; $x < intval( $argv[2] ); $x++ ) {
+		printf( "Batch %10d of %10d\n", $x + 1, intval( $argv[2] ) );
 		echo problemGenerator( intval( $argv[1] ) )."\n";
 	}
 
