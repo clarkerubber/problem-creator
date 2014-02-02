@@ -75,7 +75,7 @@ function buildCaptureTree ( $moveString ) {
 
 function getMovesListFromPosition ( $moveString, $maxLines, $allowForcedInclusion, $player, $timeSinceMajorMove ) {
 
-	global $FIRST_PASS_TIME, $SECOND_PASS_TIME, $ALT_THRESHOLD, $FORCED_INCLUSION, $MAJOR_MOVE_THRESHOLD;
+	global $FIRST_PASS_TIME, $SECOND_PASS_TIME, $ALT_THRESHOLD, $MAJOR_MOVE_THRESHOLD;
 	global $MINOR_MOVE_THRESHOLD, $MAX_CAPTURE_LINES;
 
 	$uciOutput = getUci( $moveString, $FIRST_PASS_TIME, $maxLines );
@@ -131,13 +131,8 @@ function getMovesListFromPosition ( $moveString, $maxLines, $allowForcedInclusio
 
 	foreach ( $candidateMoves as $key => $move ) {
 
-		if ( ( abs( $topEval - $candidateMovesEval[$key] ) <= $ALT_THRESHOLD
-				&& $key < $maxLines
-				&& sign( $topEval ) == sign( $candidateMovesEval[$key] ) )
-			|| ( sign( $topEval ) * $candidateMovesEval[$key] >= $FORCED_INCLUSION
-				&& $key < $maxLines
-				&& $allowForcedInclusion == TRUE ) 
-			) {
+		if ( abs( $candidateMovesEval[$key] - $topEval ) <= abs( $topEval * $ALT_THRESHOLD )
+			&& $key < $maxLines ) {
 
 			echo "$lastMove -> $move: Adv ".$candidateMovesEval[$key]." $timeSinceMajorMove\n";
 
@@ -230,6 +225,7 @@ function significantMove ( $moveString ) {
 }
 
 function getPositionEval ( $moveString, $moveTime ) {
+	
 	$uciOutput = getUci( $moveString, $moveTime );
 	$output = FALSE;
 

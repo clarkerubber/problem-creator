@@ -45,6 +45,7 @@ function findMateLine ( $movesUci, $ply, $adv ) {
 }
 
 function buildMateTree ( $moveString, $isMate ) {
+
 	global $MAX_MATE_LINES, $MAJOR_MOVE_THRESHOLD;
 
 	$movesList = getMateMovesFromPosition( $moveString, $MAX_MATE_LINES, TRUE, $isMate );
@@ -73,6 +74,7 @@ function buildMateTree ( $moveString, $isMate ) {
 }
 
 function getMateMovesFromPosition ( $moveString, $maxLines, $player, $findMate ) {
+
 	global $FIRST_PASS_TIME, $SECOND_PASS_TIME, $MAX_MATE_LINES;
 
 	$uciOutput = getUci( $moveString, $FIRST_PASS_TIME, $maxLines );
@@ -204,6 +206,7 @@ function getMateMovesFromPosition ( $moveString, $maxLines, $player, $findMate )
 }
 
 function getPositionMate ( $moveString, $moveTime ) {
+	
 	$uciOutput = getUci( $moveString, $moveTime );
 	$output = FALSE;
 

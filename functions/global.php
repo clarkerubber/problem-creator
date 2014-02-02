@@ -77,6 +77,7 @@ function createProblems ( $game ) {
 }
 
 function getUci ( $moveSequence, $moveTime, $multiPv = 1 ) {
+
 	global $STOCKFISH_PATH;
 
 	$descriptorspec = array(
@@ -110,7 +111,8 @@ function getUci ( $moveSequence, $moveTime, $multiPv = 1 ) {
 	return $output;
 }
 
-function sign ( $number ) { 
+function sign ( $number ) {
+
     return ( $number > 0 ) ? 1 : ( ( $number < 0 ) ? -1 : 0 ); 
 } 
 
