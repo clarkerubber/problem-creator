@@ -191,14 +191,14 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 			if ( $player == TRUE ) {
 				printf("P: %5s -> %5s | %+6d | %10d | %+8d | %+2d\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn );
 			} else {
-				printf("P: %5s -> %5s | %+6d | %10d | %+8d | %+2d\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn );
+				printf("C: %5s -> %5s | %+6d | %10d | %+8d | %+2d\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn );
 			}
 			
 			if ( $player == TRUE && $parsedPliesLeft > 0 && $parsedCompleteable == FALSE ) {
 
 				$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', FALSE, $parsedTally, $parsedPliesLeft );
 
-			} else if ( $parsedPliesLeft > 0 ) {
+			} else if ( $player == FALSE && $parsedPliesLeft > 0 ) {
 
 				$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $parsedPliesLeft );
 
