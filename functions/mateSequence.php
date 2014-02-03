@@ -188,7 +188,7 @@ function getMateMovesFromPosition ( $moveString, $player, $findMate ) {
 
 			}
 
-		} else if ( $key < $maxLines && $candidateMovesEval = $topEval - 1 && $player == TRUE ) {
+		} else if ( $key < $maxLines && $candidateMovesEval[$key] = $topEval - 1 && $player == TRUE ) {
 			$moveArray[$move] = 'retry';
 		}
 	}
