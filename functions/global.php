@@ -36,7 +36,8 @@ function createProblems ( $game ) {
 				echo "  Parent -> Child | CP Adv | Plies Left | Material | Change\n";
 				echo "===========================================================\n";
 				//$temp = findCaptureLine( $game['uci'], $moveKey );
-
+				$temp = FALSE;
+				
 				if ( $temp !== FALSE ) {
 
 					$temp['id'] = $game['game']['id'];
