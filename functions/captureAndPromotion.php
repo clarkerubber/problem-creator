@@ -143,10 +143,12 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 
 			$parsedTally = $tally;
 
-			$changeThisTurn = materialChange( $moveString.$move );
+			$changeThisTurn = abs( materialChange( $moveString.$move ) );
 
-			if ( $player == FALSE ) {
-				$changeThisTurn = - abs( $changeThisTurn );
+			if ( $player == TRUE ) {
+				$changeThisTurn = $changeThisTurn;
+			} else {
+				$changeThisTurn = - $changeThisTurn;
 			}
 
 			$parsedPliesLeft = $pliesLeft;
@@ -154,7 +156,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 			if ( $player == TRUE ) {
 
 				if ( $changeThisTurn != 0 ) {
-					$parsedTally += abs( $changeThisTurn );
+					$parsedTally += $changeThisTurn;
 					if ( $parsedTally > 0 ) {
 						$parsedCompleteable = TRUE;
 					} else {
@@ -173,7 +175,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 			} else {
 
 				if ( $changeThisTurn != 0 ) {
-					$parsedTally -= abs( $changeThisTurn );
+					$parsedTally += $changeThisTurn;
 					if ( $parsedTally > 0 ) {
 						$parsedCompleteable = TRUE;
 					} else {
@@ -186,7 +188,11 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 				}
 			}
 
-			printf(" %5s -> %5s | %+6d | %10d | %+8d | %+2d\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn );
+			if ( $player == TRUE ) {
+				printf("P: %5s -> %5s | %+6d | %10d | %+8d | %+2d\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn );
+			} else {
+				printf("P: %5s -> %5s | %+6d | %10d | %+8d | %+2d\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn );
+			}
 			
 			if ( $player == TRUE && $parsedPliesLeft > 0 && $parsedCompleteable == FALSE ) {
 
@@ -202,7 +208,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 
 			}
 
-			if ( $moveArray[$move] !== 'end' && ( abs( $changeThisTurn ) > 1 || $player === FALSE ) ) {
+			if ( $moveArray[$move] !== 'end' && ( $changeThisTurn < 1 || $player === FALSE ) ) {
 
 				$empty = TRUE;
 
