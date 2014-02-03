@@ -146,7 +146,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 			$changeThisTurn = materialChange( $moveString.$move );
 
 			if ( $player == FALSE ) {
-				$changeThisTurn = -$changeThisTurn;
+				$changeThisTurn = - abs( $changeThisTurn );
 			}
 
 			$parsedPliesLeft = $pliesLeft;
