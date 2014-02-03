@@ -46,9 +46,7 @@ function findMateLine ( $movesUci, $ply, $adv ) {
 
 function buildMateTree ( $moveString, $isMate ) {
 
-	global $MAX_MATE_LINES, $MAJOR_MOVE_THRESHOLD;
-
-	$movesList = getMateMovesFromPosition( $moveString, $MAX_MATE_LINES, TRUE, $isMate );
+	$movesList = getMateMovesFromPosition( $moveString, TRUE, $isMate );
 	$output = FALSE;
 
 	$empty = TRUE;
@@ -73,9 +71,15 @@ function buildMateTree ( $moveString, $isMate ) {
 	return $output;
 }
 
-function getMateMovesFromPosition ( $moveString, $maxLines, $player, $findMate ) {
+function getMateMovesFromPosition ( $moveString, $player, $findMate ) {
 
 	global $FIRST_PASS_TIME, $SECOND_PASS_TIME, $MAX_MATE_LINES;
+
+	if ( $player == TRUE ) {
+		$maxLines = $MAX_MATE_LINES;
+	} else {
+		$maxLines = 1;
+	}
 
 	$uciOutput = getUci( $moveString, $FIRST_PASS_TIME, $maxLines );
 
@@ -158,7 +162,7 @@ function getMateMovesFromPosition ( $moveString, $maxLines, $player, $findMate )
 
 		if ( $key < $maxLines && $candidateMovesEval[$key] == $topEval ) {
 
-			printf(" %5s -> %5s | %+3d \n", $lastMove, $move, -1 * $candidateMovesEval[$key] );
+			printf(" %5s -> %5s | %+3d \n", $lastMove, $move, - $candidateMovesEval[$key] );
 
 			if ( $candidateMovesEval[$key] == 1 ) {
 
@@ -172,17 +176,20 @@ function getMateMovesFromPosition ( $moveString, $maxLines, $player, $findMate )
 			
 			if ( $player === TRUE && $checkmate === FALSE ) {
 
-				$moveArray[$move] = getMateMovesFromPosition ( $moveString.$move.' ', 1, FALSE, FALSE );
+				$moveArray[$move] = getMateMovesFromPosition ( $moveString.$move.' ', FALSE, FALSE );
 
 			} else if ( $player === FALSE ) {
 
-				$moveArray[$move] = getMateMovesFromPosition ( $moveString.$move.' ', $MAX_MATE_LINES, TRUE, $mateInOne );
+				$moveArray[$move] = getMateMovesFromPosition ( $moveString.$move.' ', TRUE, $mateInOne );
 
 			} else {
 
-				$moveArray[$move] = 'end';
+				$moveArray[$move] = 'win';
 
 			}
+
+		} else if ( $key < $maxLines && $candidateMovesEval = $topEval - 1 && $player == TRUE ) {
+			$moveArray[$move] = 'retry';
 		}
 	}
 

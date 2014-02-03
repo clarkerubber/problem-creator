@@ -208,7 +208,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 
 			}
 
-			if ( $moveArray[$move] !== 'end' && ( $changeThisTurn < 1 || $player === FALSE ) ) {
+			if ( $moveArray[$move] !== 'end' && $changeThisTurn < 1 && $parsedTally < 1 ) {
 
 				$empty = TRUE;
 
