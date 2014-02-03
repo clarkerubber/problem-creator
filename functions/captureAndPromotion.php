@@ -153,13 +153,14 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 
 			if ( $player == TRUE ) {
 
-				if ( $changeThisTurn > 0 ) {
-					$parsedTally += $changeThisTurn;
+				if ( $changeThisTurn != 0 ) {
+					$parsedTally += abs( $changeThisTurn );
 					if ( $parsedTally > 0 ) {
 						$parsedCompleteable = TRUE;
 					} else {
 						$parsedCompleteable = FALSE;
 					}
+					$parsedPliesLeft += 1;
 				} else {
 					if ( $parsedTally > 0 ) {
 						$parsedCompleteable = TRUE;
@@ -171,13 +172,14 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 
 			} else {
 
-				if ( $changeThisTurn > 0 ) {
-					$parsedTally += $changeThisTurn;
+				if ( $changeThisTurn != 0 ) {
+					$parsedTally -= abs( $changeThisTurn );
 					if ( $parsedTally > 0 ) {
 						$parsedCompleteable = TRUE;
 					} else {
 						$parsedCompleteable = FALSE;
 					}
+					$parsedPliesLeft += 1;
 				} else {
 					$parsedPliesLeft -= 1;
 					$parsedCompleteable = TRUE;
@@ -403,7 +405,7 @@ function materialChange ( $moveString ) {
 
 		if ( $oldPieceCount - $pieceCount !== 0 ) {
 
-			$output = abs( $oldPieceCount - $pieceCount );
+			$output = $pieceCount - $oldPieceCount;
 
 		} else {
 

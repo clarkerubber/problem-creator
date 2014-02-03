@@ -38,7 +38,7 @@ function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/analysis"
 
 		$json = json_encode( $problems );
 
-		$post = file_get_contents("http://en.lichess.org/api/problem?token=$LICHESS_API_TOKEN",null,stream_context_create(array(
+		$post = file_get_contents("http://en.lichess.org/api/puzzle?token=$LICHESS_API_TOKEN",null,stream_context_create(array(
 		    	'http' => array(
 			        'protocol_version' => 1.1,
 			        'user_agent'       => 'PHPExample',
