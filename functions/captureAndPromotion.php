@@ -202,7 +202,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 
 			}
 
-			if ( $moveArray[$move] !== 'end' && ( $changeThisTurn == 0 || $player === FALSE ) ) {
+			if ( $moveArray[$move] !== 'end' && ( abs( $changeThisTurn ) > 1 || $player === FALSE ) ) {
 
 				$empty = TRUE;
 
