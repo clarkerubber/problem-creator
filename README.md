@@ -86,7 +86,7 @@ $MAX_MATE_LINES = 10; // Maximum amount of ways to checkmate from each node in t
 * It is important to change the path to Stockfish to your own executable version.
 * Time settings can be adjusted as per the performance of your computer. Larger times means higher quality puzzles
 
-resources/key.php
+resources/keys.php
 ```php
 <?php
 
