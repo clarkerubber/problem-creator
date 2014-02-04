@@ -132,11 +132,10 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 			$changeThisTurn = abs( materialChange( $moveString.$move ) );
 
 			if ( $player == TRUE ) {
-				$changeThisTurn = $changeThisTurn;
 				$parsedTally += $changeThisTurn;
 			} else {
 				$changeThisTurn = - $changeThisTurn;
-				$parsedTally -= $changeThisTurn;
+				$parsedTally += $changeThisTurn;
 			}
 
 			if ( $player == TRUE ) {
