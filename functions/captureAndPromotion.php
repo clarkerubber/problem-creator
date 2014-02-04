@@ -1,7 +1,7 @@
 <?php
 
 
-function findCaptureLine ( $movesUci, $ply ) {
+function findCaptureLine ( $movesUci, $ply, $targetAdv ) {
 	//Input: A string of moves and the starting move for the tactical line
 	//Output: The actual tactical line
 
@@ -17,7 +17,7 @@ function findCaptureLine ( $movesUci, $ply ) {
 
 	}
 
-	$solutionMap = buildCaptureTree( $startMoveString );
+	$solutionMap = buildCaptureTree( $startMoveString, $targetAdv );
 
 	if ( count( explode( ' ', $startMoveString ) ) % 2 == 0 ) {
 
@@ -40,14 +40,14 @@ function findCaptureLine ( $movesUci, $ply ) {
 	return $output;
 }
 
-function buildCaptureTree ( $moveString ) {
+function buildCaptureTree ( $moveString, $targetAdv ) {
 	//Input: List of moves in UCI format
 	//Output: Map of the correct tactical line
 
 	global $MAX_CAPTURE_LINES, $MAJOR_MOVE_THRESHOLD;
 
 	//function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
-	$movesList = getMovesListFromPosition( $moveString, TRUE, 0, $MAJOR_MOVE_THRESHOLD );
+	$movesList = getMovesListFromPosition( $moveString, TRUE, 0, $MAJOR_MOVE_THRESHOLD, $targetAdv );
 	$output = FALSE;
 
 	if ( !empty( $movesList ) && $movesList !== 'retry' ) {
@@ -60,7 +60,7 @@ function buildCaptureTree ( $moveString ) {
 }
 
 
-function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
+function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft, $targetAdv ) {
 
 	global $FIRST_PASS_TIME, $SECOND_PASS_TIME, $ALT_THRESHOLD, $RETRY_THRESHOLD, $MAJOR_MOVE_THRESHOLD;
 	global $MAX_CAPTURE_LINES;
@@ -156,12 +156,14 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 					echo "$move -> WIN\n";
 				} else {
 					if ( $changeThisTurn > 0 ) {
-						$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', FALSE, $parsedTally, $pliesLeft + 1 );
+						//Something happened
+						$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', FALSE, $parsedTally, $pliesLeft + 1, $targetAdv );
 						if ( $moveArray[$move] === 'retry' && $parsedTally > 0 ) {
 							$moveArray[$move] = 'win';
 						}
 					} else if ( $pliesLeft - 1 > 0 ) {
-						$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', FALSE, $parsedTally, $pliesLeft - 1 );
+						//Nothing happened
+						$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', FALSE, $parsedTally, $pliesLeft - 1, $targetAdv );
 					} else {
 						$moveArray[$move] = 'retry';
 						echo "$move -> RETRY\n";
@@ -170,10 +172,12 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 
 			} else {
 
-				if ( ( $parsedTally <= 2 && $changeThisTurn === 0 || $isCheck === TRUE ) && $pliesLeft - 1 > 0 ) {
-					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $pliesLeft - 1 );
-				} else if ( $parsedTally <= 2 && $pliesLeft - 1 > 0 && $changeThisTurn > 0 ) {
-					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $pliesLeft + 1 );
+				if ( $parsedTally <= 2 && $changeThisTurn === 0 && $pliesLeft - 1 > 0 ) {
+					//Nothing has happened
+					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $pliesLeft - 1, $targetAdv );
+				} else if ( ( $parsedTally <= 2 && $changeThisTurn < 0 || $isCheck === TRUE ) &&  $pliesLeft - 1 > 0 ) {
+					//Somthing has happened
+					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $pliesLeft + 1, $targetAdv );
 				} else if ( $parsedTally > 2 ) {
 					$moveArray[$move] = 'win';
 					echo "$move -> WIN\n";
