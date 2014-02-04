@@ -805,7 +805,7 @@ function isCheck ( $moveString ) {
 
 						// +y +x
 						if ( $letter + 1 < 8 && $number + 1 < 8 ) {
-							if ( $position[$number + 1][$letter - 1] === 'K' ) {
+							if ( $position[$number + 1][$letter + 1] === 'K' ) {
 								$isCheck = TRUE;
 							}
 						}
@@ -1095,7 +1095,7 @@ function isCheck ( $moveString ) {
 
 						// -y +x
 						if ( $letter + 1 < 8 && $number - 1 >= 0 ) {
-							if ( $position[$number - 1][$letter - 1] === 'k' ) {
+							if ( $position[$number - 1][$letter + 1] === 'k' ) {
 								$isCheck = TRUE;
 							}
 						}
