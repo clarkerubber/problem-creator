@@ -146,7 +146,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 
 			if ( $player == TRUE ) {
 
-				if ( $parsedTally > 2 && $pliesLeft < $MAJOR_MOVE_THRESHOLD ) {
+				if ( $parsedTally > 2 && $pliesLeft == 1 ) {
 					$moveArray[$move] = 'win';
 					echo "$move -> WIN\n";
 				} else {
@@ -181,9 +181,9 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 
 	$empty = TRUE;
 
-	foreach ($moveArray as $key => $value) {
+	foreach ( $moveArray as $key => $value ) {
 
-		if ( $value == 'win' ) {
+		if ( $value !== 'retry' ) {
 
 			$empty = FALSE;
 
