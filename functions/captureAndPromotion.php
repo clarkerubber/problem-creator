@@ -170,7 +170,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 
 			} else {
 
-				if ( $parsedTally <= 2 && $pliesLeft - 1 > 0 && $changeThisTurn === 0 ) {
+				if ( ( $parsedTally <= 2 && $changeThisTurn === 0 || $isCheck === TRUE ) && $pliesLeft - 1 > 0 ) {
 					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $pliesLeft - 1 );
 				} else if ( $parsedTally <= 2 && $pliesLeft - 1 > 0 && $changeThisTurn > 0 ) {
 					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $pliesLeft + 1 );
