@@ -63,7 +63,7 @@ function buildCaptureTree ( $moveString ) {
 function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 
 	global $FIRST_PASS_TIME, $SECOND_PASS_TIME, $ALT_THRESHOLD, $RETRY_THRESHOLD, $MAJOR_MOVE_THRESHOLD;
-	global $MINOR_MOVE_THRESHOLD, $MAX_CAPTURE_LINES;
+	global $MAX_CAPTURE_LINES;
 
 	if ( $player == TRUE ) {
 		$maxLines = $MAX_CAPTURE_LINES;
@@ -151,7 +151,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 					echo "$move -> WIN\n";
 				} else {
 					if ( $changeThisTurn > 0 ) {
-						$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', FALSE, $parsedTally, $pliesLeft );
+						$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', FALSE, $parsedTally, $pliesLeft + 1 );
 					} else if ( $pliesLeft - 1 > 0 ) {
 						$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', FALSE, $parsedTally, $pliesLeft - 1 );
 					} else {
@@ -162,8 +162,10 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 
 			} else {
 
-				if ( $parsedTally <= 2 && $pliesLeft - 1 > 0 ) {
+				if ( $parsedTally <= 2 && $pliesLeft - 1 > 0 && $changeThisTurn == FALSE ) {
 					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $pliesLeft - 1 );
+				} else if ( $parsedTally <= 2 && $pliesLeft - 1 > 0 && $changeThisTurn == TRUE ) {
+					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $pliesLeft + 1 );
 				} else if ( $parsedTally > 2 ) {
 					$moveArray[$move] = 'win';
 					echo "$move -> WIN\n";
@@ -193,7 +195,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 
 	if ( $empty == TRUE ) {
 		$moveArray = 'retry';
-		echo "NO WIN\n";
+		echo "$lastMove -> NO WIN\n";
 	}
 
 
