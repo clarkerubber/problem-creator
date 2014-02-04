@@ -140,14 +140,14 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 			}
 
 			if ( $player == TRUE ) {
-				printf("P: %5s -> %5s | %+6d | %10d | %+8d | %+2d\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn );
+				printf("P: %5s -> %5s | %+6d | %5d | %+8d | %+2d\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn );
 			} else {
-				printf("C: %5s -> %5s | %+6d | %10d | %+8d | %+2d\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn );
+				printf("C: %5s -> %5s | %+6d | %5d | %+8d | %+2d\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn );
 			}
 
 			if ( $player == TRUE ) {
 
-				if ( $parsedTally > 2 ) {
+				if ( $parsedTally > 2 && $pliesLeft < $MAJOR_MOVE_THRESHOLD ) {
 					$moveArray[$move] = 'win';
 				} else {
 					if ( $changeThisTurn > 0 ) {
@@ -163,6 +163,8 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 
 				if ( $parsedTally <= 2 && $pliesLeft - 1 > 0 ) {
 					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $pliesLeft - 1 );
+				} else if ( $parsedTally > 2 ) {
+					$moveArray[$move] = 'win';
 				} else {
 					$moveArray[$move] = 'retry';
 				}
