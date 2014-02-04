@@ -148,7 +148,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 
 				if ( $parsedTally > 2 && $pliesLeft < $MAJOR_MOVE_THRESHOLD ) {
 					$moveArray[$move] = 'win';
-					echo "$move->WIN\n";
+					echo "$move -> WIN\n";
 				} else {
 					if ( $changeThisTurn > 0 ) {
 						$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', FALSE, $parsedTally, $pliesLeft );
@@ -156,7 +156,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 						$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', FALSE, $parsedTally, $pliesLeft - 1 );
 					} else {
 						$moveArray[$move] = 'retry';
-						echo "$move->RETRY\n";
+						echo "$move -> RETRY\n";
 					}
 				}
 
@@ -166,16 +166,16 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $pliesLeft - 1 );
 				} else if ( $parsedTally > 2 ) {
 					$moveArray[$move] = 'win';
-					echo "$move->WIN\n";
+					echo "$move -> WIN\n";
 				} else {
 					$moveArray[$move] = 'retry';
-					echo "$move->RETRY\n";
+					echo "$move -> RETRY\n";
 				}
 			}
 		} else if ( abs( $candidateMovesEval[$key] - $topEval ) <= abs( $topEval * $RETRY_THRESHOLD ) && 
 			abs( $candidateMovesEval[$key] - $topEval ) > abs( $topEval * $ALT_THRESHOLD ) ) {
 			$moveArray[$move] = 'retry';
-			echo "$move->RETRY\n";
+			echo "$move -> RETRY\n";
 		}
 	}
 
