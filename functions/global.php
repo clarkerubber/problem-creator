@@ -34,8 +34,8 @@ function createProblems ( $game ) {
 				&& abs( $move['eval'] - $nextMoveEval ) >= $DIFFERENCE  ) {
 
 				//printf(" %5s -> %5s | Mate In %+6d \n", $lastMove, $move, -1 * $candidateMovesEval[$key] );
-				echo "  Parent -> Child | CP Adv | Plies | Material | Change\n";
-				echo "======================================================\n";
+				echo "  Parent -> Child | CP Adv | Plies | Material | Change | +\n";
+				echo "========================================================== \n";
 				$temp = findCaptureLine( $game['uci'], $moveKey );
 				//$temp = FALSE;
 

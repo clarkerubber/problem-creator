@@ -130,6 +130,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 			$parsedTally = $tally;
 
 			$changeThisTurn = abs( materialChange( $moveString.$move ) );
+			$isCheck = isCheck( $moveString.$move );
 
 			if ( $player == TRUE ) {
 				if ( $changeThisTurn > 1 ) {
@@ -143,9 +144,9 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 			}
 
 			if ( $player == TRUE ) {
-				printf("P: %5s -> %5s | %+6d | %5d | %+8d | %+2d\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn );
+				printf("P: %5s -> %5s | %+6d | %5d | %+8d | %+6d | %1s\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn, $isCheck? '+' : '-' );
 			} else {
-				printf("C: %5s -> %5s | %+6d | %5d | %+8d | %+2d\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn );
+				printf("C: %5s -> %5s | %+6d | %5d | %+8d | %+6d | %1s\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn, $isCheck? '+' : '-' );
 			}
 
 			if ( $player == TRUE ) {
@@ -399,7 +400,7 @@ function isCheck ( $moveString ) {
 	//Input: A string of moves in coordinate notation (e2e4)
 	//	And if to limit results to major cpatures (i.e. not pawn captures)
 	//Output: If the last move is a capture
-
+	//echo "help! I'm stuck!\n";
 	$moves = explode( ' ', $moveString );
 
 	$position = 
@@ -513,7 +514,9 @@ function isCheck ( $moveString ) {
 		$isCheck = FALSE;
 
 		foreach ( $position as $number => $column ) {
+			//echo "1\n";
 			foreach ( $column as $letter => $square ) {
+				//echo "2\n";
 				if ( $square !== 0 ) {
 					// Now to work out if the locus of each piece hits an opposite side king
 					if ( $square === 'q' ) {
@@ -524,7 +527,8 @@ function isCheck ( $moveString ) {
 						// straights
 
 						// +x
-						for ( $x = $number + 1; $x++; $x < 8 ) {
+						for ( $x = $number + 1; $x < 8; $x++ ) {
+							//echo "$x 3\n";
 							if ( $collided['+x'] === FALSE && $square[$x][$letter] === 'K' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['+x'] === FALSE && $square[$x][$letter] !== 0 ) {
@@ -533,7 +537,8 @@ function isCheck ( $moveString ) {
 						}
 
 						// -x
-						for ( $x = $number - 1; $x--; $x >= 0 ) {
+						for ( $x = $number - 1; $x >= 0; $x-- ) {
+							//echo "4\n";
 							if ( $collided['-x'] === FALSE && $square[$x][$letter] === 'K' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['-x'] === FALSE && $square[$x][$letter] !== 0 ) {
@@ -542,7 +547,8 @@ function isCheck ( $moveString ) {
 						}
 
 						// +y
-						for ( $x = $number + 1; $x++; $x < 8 ) {
+						for ( $x = $number + 1; $x < 8; $x++ ) {
+							//echo "5\n";
 							if ( $collided['+y'] === FALSE && $square[$number][$x] === 'K' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['+y'] === FALSE && $square[$number][$x] !== 0 ) {
@@ -551,7 +557,8 @@ function isCheck ( $moveString ) {
 						}
 
 						// -y
-						for ( $x = $number - 1; $x--; $x >= 0 ) {
+						for ( $x = $number - 1; $x >= 0; $x-- ) {
+							//echo "6\n";
 							if ( $collided['-y'] === FALSE && $square[$number][$x] === 'K' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['-y'] === FALSE && $square[$number][$x] !== 0 ) {
@@ -565,6 +572,7 @@ function isCheck ( $moveString ) {
 						$x = $letter + 1;
 						$y = $number + 1;
 						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "7\n";
 							if ( $collided['+x+y'] == FALSE && $square[$y][$x] === 'K' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['+x+y'] == FALSE && $square[$y][$x] !== 0 ) {
@@ -578,6 +586,7 @@ function isCheck ( $moveString ) {
 						$x = $letter + 1;
 						$y = $number - 1;
 						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "8\n";
 							if ( $collided['+x-y'] == FALSE && $square[$y][$x] === 'K' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['+x-y'] == FALSE && $square[$y][$x] !== 0 ) {
@@ -591,6 +600,7 @@ function isCheck ( $moveString ) {
 						$x = $letter - 1;
 						$y = $number + 1;
 						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "9\n";
 							if ( $collided['-x+y'] == FALSE && $square[$y][$x] === 'K' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['-x+y'] == FALSE && $square[$y][$x] !== 0 ) {
@@ -604,6 +614,7 @@ function isCheck ( $moveString ) {
 						$x = $letter - 1;
 						$y = $number - 1;
 						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "10\n";
 							if ( $collided['-x-y'] == FALSE && $square[$y][$x] === 'K' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['-x-y'] == FALSE && $square[$y][$x] !== 0 ) {
@@ -622,7 +633,8 @@ function isCheck ( $moveString ) {
 							// straights
 
 							// +x
-							for ( $x = $number + 1; $x++; $x < 8 ) {
+							for ( $x = $number + 1; $x < 8; $x++ ) {
+								//echo "11\n";
 								if ( $collided['+x'] === FALSE && $square[$x][$letter] === 'K' ) {
 									$isCheck = TRUE;
 								} else if ( $collided['+x'] === FALSE && $square[$x][$letter] !== 0 ) {
@@ -631,7 +643,8 @@ function isCheck ( $moveString ) {
 							}
 
 							// -x
-							for ( $x = $number - 1; $x--; $x >= 0 ) {
+							for ( $x = $number - 1; $x >= 0; $x-- ) {
+								//echo "12\n";
 								if ( $collided['-x'] === FALSE && $square[$x][$letter] === 'K' ) {
 									$isCheck = TRUE;
 								} else if ( $collided['-x'] === FALSE && $square[$x][$letter] !== 0 ) {
@@ -640,7 +653,8 @@ function isCheck ( $moveString ) {
 							}
 
 							// +y
-							for ( $x = $number + 1; $x++; $x < 8 ) {
+							for ( $x = $number + 1; $x < 8; $x++ ) {
+								//echo "13\n";
 								if ( $collided['+y'] === FALSE && $square[$number][$x] === 'K' ) {
 									$isCheck = TRUE;
 								} else if ( $collided['+y'] === FALSE && $square[$number][$x] !== 0 ) {
@@ -649,7 +663,8 @@ function isCheck ( $moveString ) {
 							}
 
 							// -y
-							for ( $x = $number - 1; $x--; $x >= 0 ) {
+							for ( $x = $number - 1; $x >= 0; $x-- ) {
+								//echo "14\n";
 								if ( $collided['-y'] === FALSE && $square[$number][$x] === 'K' ) {
 									$isCheck = TRUE;
 								} else if ( $collided['-y'] === FALSE && $square[$number][$x] !== 0 ) {
@@ -669,6 +684,7 @@ function isCheck ( $moveString ) {
 						$x = $letter + 1;
 						$y = $number + 1;
 						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "15\n";
 							if ( $collided['+x+y'] == FALSE && $square[$y][$x] === 'K' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['+x+y'] == FALSE && $square[$y][$x] !== 0 ) {
@@ -682,6 +698,7 @@ function isCheck ( $moveString ) {
 						$x = $letter + 1;
 						$y = $number - 1;
 						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "16\n";
 							if ( $collided['+x-y'] == FALSE && $square[$y][$x] === 'K' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['+x-y'] == FALSE && $square[$y][$x] !== 0 ) {
@@ -695,6 +712,7 @@ function isCheck ( $moveString ) {
 						$x = $letter - 1;
 						$y = $number + 1;
 						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "17\n";
 							if ( $collided['-x+y'] == FALSE && $square[$y][$x] === 'K' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['-x+y'] == FALSE && $square[$y][$x] !== 0 ) {
@@ -708,6 +726,7 @@ function isCheck ( $moveString ) {
 						$x = $letter - 1;
 						$y = $number - 1;
 						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "18\n";
 							if ( $collided['-x-y'] == FALSE && $square[$y][$x] === 'K' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['-x-y'] == FALSE && $square[$y][$x] !== 0 ) {
@@ -799,7 +818,8 @@ function isCheck ( $moveString ) {
 						// straights
 
 						// +x
-						for ( $x = $number + 1; $x++; $x < 8 ) {
+						for ( $x = $number + 1; $x < 8; $x++ ) {
+							//echo "19\n";
 							if ( $collided['+x'] === FALSE && $square[$x][$letter] === 'k' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['+x'] === FALSE && $square[$x][$letter] !== 0 ) {
@@ -808,7 +828,8 @@ function isCheck ( $moveString ) {
 						}
 
 						// -x
-						for ( $x = $number - 1; $x--; $x >= 0 ) {
+						for ( $x = $number - 1; $x >= 0; $x-- ) {
+							//echo "20\n";
 							if ( $collided['-x'] === FALSE && $square[$x][$letter] === 'k' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['-x'] === FALSE && $square[$x][$letter] !== 0 ) {
@@ -817,7 +838,8 @@ function isCheck ( $moveString ) {
 						}
 
 						// +y
-						for ( $x = $number + 1; $x++; $x < 8 ) {
+						for ( $x = $number + 1; $x < 8; $x++ ) {
+							//echo "21\n";
 							if ( $collided['+y'] === FALSE && $square[$number][$x] === 'k' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['+y'] === FALSE && $square[$number][$x] !== 0 ) {
@@ -826,7 +848,8 @@ function isCheck ( $moveString ) {
 						}
 
 						// -y
-						for ( $x = $number - 1; $x--; $x >= 0 ) {
+						for ( $x = $number - 1; $x >= 0 ;$x-- ) {
+							//echo "22\n";
 							if ( $collided['-y'] === FALSE && $square[$number][$x] === 'k' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['-y'] === FALSE && $square[$number][$x] !== 0 ) {
@@ -840,6 +863,7 @@ function isCheck ( $moveString ) {
 						$x = $letter + 1;
 						$y = $number + 1;
 						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "23\n";
 							if ( $collided['+x+y'] == FALSE && $square[$y][$x] === 'k' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['+x+y'] == FALSE && $square[$y][$x] !== 0 ) {
@@ -853,6 +877,7 @@ function isCheck ( $moveString ) {
 						$x = $letter + 1;
 						$y = $number - 1;
 						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "24\n";
 							if ( $collided['+x-y'] == FALSE && $square[$y][$x] === 'k' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['+x-y'] == FALSE && $square[$y][$x] !== 0 ) {
@@ -866,6 +891,7 @@ function isCheck ( $moveString ) {
 						$x = $letter - 1;
 						$y = $number + 1;
 						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "25\n";
 							if ( $collided['-x+y'] == FALSE && $square[$y][$x] === 'k' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['-x+y'] == FALSE && $square[$y][$x] !== 0 ) {
@@ -879,6 +905,7 @@ function isCheck ( $moveString ) {
 						$x = $letter - 1;
 						$y = $number - 1;
 						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "26\n";
 							if ( $collided['-x-y'] == FALSE && $square[$y][$x] === 'k' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['-x-y'] == FALSE && $square[$y][$x] !== 0 ) {
@@ -896,7 +923,8 @@ function isCheck ( $moveString ) {
 							// straights
 
 							// +x
-							for ( $x = $number + 1; $x++; $x < 8 ) {
+							for ( $x = $number + 1; $x < 8; $x++ ) {
+								//echo "27\n";
 								if ( $collided['+x'] === FALSE && $square[$x][$letter] === 'k' ) {
 									$isCheck = TRUE;
 								} else if ( $collided['+x'] === FALSE && $square[$x][$letter] !== 0 ) {
@@ -905,7 +933,8 @@ function isCheck ( $moveString ) {
 							}
 
 							// -x
-							for ( $x = $number - 1; $x--; $x >= 0 ) {
+							for ( $x = $number - 1; $x >= 0; $x-- ) {
+								//echo "28\n";
 								if ( $collided['-x'] === FALSE && $square[$x][$letter] === 'k' ) {
 									$isCheck = TRUE;
 								} else if ( $collided['-x'] === FALSE && $square[$x][$letter] !== 0 ) {
@@ -914,7 +943,8 @@ function isCheck ( $moveString ) {
 							}
 
 							// +y
-							for ( $x = $number + 1; $x++; $x < 8 ) {
+							for ( $x = $number + 1; $x < 8; $x++ ) {
+								//echo "29\n";
 								if ( $collided['+y'] === FALSE && $square[$number][$x] === 'k' ) {
 									$isCheck = TRUE;
 								} else if ( $collided['+y'] === FALSE && $square[$number][$x] !== 0 ) {
@@ -923,7 +953,8 @@ function isCheck ( $moveString ) {
 							}
 
 							// -y
-							for ( $x = $number - 1; $x--; $x >= 0 ) {
+							for ( $x = $number - 1; $x >= 0; $x-- ) {
+								//echo "30\n";
 								if ( $collided['-y'] === FALSE && $square[$number][$x] === 'k' ) {
 									$isCheck = TRUE;
 								} else if ( $collided['-y'] === FALSE && $square[$number][$x] !== 0 ) {
@@ -942,6 +973,7 @@ function isCheck ( $moveString ) {
 						$x = $letter + 1;
 						$y = $number + 1;
 						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "31\n";
 							if ( $collided['+x+y'] == FALSE && $square[$y][$x] === 'k' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['+x+y'] == FALSE && $square[$y][$x] !== 0 ) {
@@ -955,6 +987,7 @@ function isCheck ( $moveString ) {
 						$x = $letter + 1;
 						$y = $number - 1;
 						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "32\n";
 							if ( $collided['+x-y'] == FALSE && $square[$y][$x] === 'k' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['+x-y'] == FALSE && $square[$y][$x] !== 0 ) {
@@ -968,6 +1001,7 @@ function isCheck ( $moveString ) {
 						$x = $letter - 1;
 						$y = $number + 1;
 						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "33\n";
 							if ( $collided['-x+y'] == FALSE && $square[$y][$x] === 'k' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['-x+y'] == FALSE && $square[$y][$x] !== 0 ) {
@@ -981,6 +1015,7 @@ function isCheck ( $moveString ) {
 						$x = $letter - 1;
 						$y = $number - 1;
 						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "34\n";
 							if ( $collided['-x-y'] == FALSE && $square[$y][$x] === 'k' ) {
 								$isCheck = TRUE;
 							} else if ( $collided['-x-y'] == FALSE && $square[$y][$x] !== 0 ) {
@@ -1069,7 +1104,7 @@ function isCheck ( $moveString ) {
 			}
 		}
 	}
-
+	//echo "Just kidding!\n";
 	return $isCheck;
 }
 
