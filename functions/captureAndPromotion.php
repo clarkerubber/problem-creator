@@ -50,21 +50,7 @@ function buildCaptureTree ( $moveString ) {
 	$movesList = getMovesListFromPosition( $moveString, TRUE, 0, $MAJOR_MOVE_THRESHOLD );
 	$output = FALSE;
 
-	foreach ( $movesList as $key => $moveArray ) {
-
-		if ( $moveArray !== 'end' ) {
-
-			$empty = FALSE;
-
-		} else {
-
-			unset( $movesList[$key] );
-
-		}
-
-	}
-
-	if ( !empty( $movesList ) ) {
+	if ( !empty( $movesList ) && $movesList !== 'retry' ) {
 
 		$output = $movesList;
 
@@ -76,7 +62,7 @@ function buildCaptureTree ( $moveString ) {
 
 function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 
-	global $FIRST_PASS_TIME, $SECOND_PASS_TIME, $ALT_THRESHOLD, $MAJOR_MOVE_THRESHOLD;
+	global $FIRST_PASS_TIME, $SECOND_PASS_TIME, $ALT_THRESHOLD, $RETRY_THRESHOLD, $MAJOR_MOVE_THRESHOLD;
 	global $MINOR_MOVE_THRESHOLD, $MAX_CAPTURE_LINES;
 
 	if ( $player == TRUE ) {
@@ -147,45 +133,10 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 
 			if ( $player == TRUE ) {
 				$changeThisTurn = $changeThisTurn;
+				$parsedTally += $changeThisTurn;
 			} else {
 				$changeThisTurn = - $changeThisTurn;
-			}
-
-			$parsedPliesLeft = $pliesLeft;
-
-			if ( $player == TRUE ) {
-
-				if ( $changeThisTurn != 0 ) {
-					$parsedTally += $changeThisTurn;
-					if ( $parsedTally > 0 ) {
-						$parsedCompleteable = TRUE;
-					} else {
-						$parsedCompleteable = FALSE;
-					}
-					$parsedPliesLeft += 1;
-				} else {
-					if ( $parsedTally > 0 ) {
-						$parsedCompleteable = TRUE;
-					} else {
-						$parsedCompleteable = FALSE;
-					}
-					$parsedPliesLeft -= 1;
-				}
-
-			} else {
-
-				if ( $changeThisTurn != 0 ) {
-					$parsedTally += $changeThisTurn;
-					if ( $parsedTally > 0 ) {
-						$parsedCompleteable = TRUE;
-					} else {
-						$parsedCompleteable = FALSE;
-					}
-					$parsedPliesLeft += 1;
-				} else {
-					$parsedPliesLeft -= 1;
-					$parsedCompleteable = TRUE;
-				}
+				$parsedTally -= $changeThisTurn;
 			}
 
 			if ( $player == TRUE ) {
@@ -193,57 +144,51 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 			} else {
 				printf("C: %5s -> %5s | %+6d | %10d | %+8d | %+2d\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn );
 			}
-			
-			if ( $player == TRUE && $parsedPliesLeft > 0 && $parsedCompleteable == FALSE ) {
 
-				$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', FALSE, $parsedTally, $parsedPliesLeft );
+			if ( $player == TRUE ) {
 
-			} else if ( $player == FALSE && $parsedPliesLeft > 0 ) {
-
-				$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $parsedPliesLeft );
+				if ( $parsedTally > 2 ) {
+					$moveArray[$move] = 'win';
+				} else {
+					if ( $changeThisTurn > 0 ) {
+						$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', FALSE, $parsedTally, $pliesLeft );
+					} else if ( $pliesLeft - 1 > 0 ) {
+						$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', FALSE, $parsedTally, $pliesLeft - 1 );
+					} else {
+						$moveArray[$move] = 'retry';
+					}
+				}
 
 			} else {
 
-				$moveArray[$move] = 'end';
-
-			}
-
-			if ( $moveArray[$move] !== 'end' && $changeThisTurn < 1 && $parsedTally < 1 ) {
-
-				$empty = TRUE;
-
-				foreach ( $moveArray[$move] as $moveArrayValue ) {
-
-					if ( $moveArrayValue !== 'end' ) {
-
-						$empty = FALSE;
-
-					}
-
-				}
-
-				if ( $empty == TRUE ) {
-
-					$moveArray[$move] = 'end';
-
+				if ( $parsedTally <= 2 && $pliesLeft - 1 > 0 ) {
+					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $pliesLeft - 1 );
+				} else {
+					$moveArray[$move] = 'retry';
 				}
 			}
+		} else if ( abs( $candidateMovesEval[$key] - $topEval ) <= abs( $topEval * $RETRY_THRESHOLD ) && 
+			abs( $candidateMovesEval[$key] - $topEval ) > abs( $topEval * $ALT_THRESHOLD ) ) {
+			$moveArray[$move] = 'retry';
 		}
 	}
 
-	if ( count( $moveArray ) > 1 ) {
+	$empty = TRUE;
 
-		foreach ($moveArray as $key => $value) {
+	foreach ($moveArray as $key => $value) {
 
-			if ( $value === 'end' ) {
+		if ( $value == 'win' ) {
 
-				unset( $moveArray[$key] );
-
-			}
+			$empty = FALSE;
 
 		}
 
 	}
+
+	if ( $empty == TRUE ) {
+		$moveArray = 'retry';
+	}
+
 
 	return $moveArray;
 }
@@ -391,15 +336,15 @@ function materialChange ( $moveString ) {
 
 					$pieceCount += 1;
 
-				} else if ( $square == 'q' || $square == 'Q' ) {
+				} else if ( $square === 'q' || $square === 'Q' ) {
 
 					$pieceCount += 9;
 
-				} else if ( $square == 'r' || $square == 'R' ) {
+				} else if ( $square === 'r' || $square === 'R' ) {
 
 					$pieceCount += 5;
 
-				} else if ( $square == 'b' || $square == 'B' || $square == 'n' || $square == 'N' ) {
+				} else if ( $square === 'b' || $square === 'B' || $square === 'n' || $square === 'N' ) {
 
 					$pieceCount += 3;
 
@@ -411,7 +356,7 @@ function materialChange ( $moveString ) {
 
 		if ( $oldPieceCount - $pieceCount !== 0 ) {
 
-			$output = $pieceCount - $oldPieceCount;
+			$output = abs ( $pieceCount - $oldPieceCount );
 
 		} else {
 
@@ -421,6 +366,14 @@ function materialChange ( $moveString ) {
 
 		$oldPieceCount = $pieceCount;
 
+	}
+
+	if ( $output == 8 ) {
+		$output = 9;
+	} else if ( $output == 4 ) {
+		$output = 5;
+	} else if ( $output == 2 ) {
+		$output = 3;
 	}
 
 	return $output;
