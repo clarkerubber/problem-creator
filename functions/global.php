@@ -4,7 +4,7 @@ function createProblems ( $game ) {
 	//Input: A game that consists of a list of moves.
 	//Output: A list of problems
 
-	global $BALANCED, $UNBALANCED;
+	global $BALANCED, $UNBALANCED, $DIFFERENCE;
 
 	$lines = array();
 
@@ -29,12 +29,13 @@ function createProblems ( $game ) {
 
 		if ( isset( $move['eval'] ) && isset( $nextMoveEval ) ){
 
-			if ( ( $move['eval'] <= $BALANCED && $nextMoveEval >= $UNBALANCED ) 
-				|| ( $move['eval'] >= -$BALANCED && $nextMoveEval <= -$UNBALANCED ) ) {
+			if ( ( ( $move['eval'] <= $BALANCED && $nextMoveEval >= $UNBALANCED ) 
+				|| ( $move['eval'] >= -$BALANCED && $nextMoveEval <= -$UNBALANCED ) )
+				&& abs( $move['eval'] - $nextMoveEval ) >= $DIFFERENCE  ) {
 
 				//printf(" %5s -> %5s | Mate In %+6d \n", $lastMove, $move, -1 * $candidateMovesEval[$key] );
 				echo "  Parent -> Child | CP Adv | Plies | Material | Change\n";
-				echo "=======================================================\n";
+				echo "======================================================\n";
 				$temp = findCaptureLine( $game['uci'], $moveKey );
 				//$temp = FALSE;
 
