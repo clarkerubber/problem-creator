@@ -369,7 +369,7 @@ function isCheck ( $moveString ) {
 						}
 
 						// +y
-						for ( $x = $number + 1; $x < 8; $x++ ) {
+						for ( $x = $letter + 1; $x < 8; $x++ ) {
 							//echo "5\n";
 							if ( $collided['+y'] === FALSE && $position[$number][$x] === 'K' ) {
 								$isCheck = TRUE;
@@ -379,7 +379,7 @@ function isCheck ( $moveString ) {
 						}
 
 						// -y
-						for ( $x = $number - 1; $x >= 0; $x-- ) {
+						for ( $x = $letter - 1; $x >= 0; $x-- ) {
 							//echo "6\n";
 							if ( $collided['-y'] === FALSE && $position[$number][$x] === 'K' ) {
 								$isCheck = TRUE;
@@ -475,7 +475,7 @@ function isCheck ( $moveString ) {
 						}
 
 						// +y
-						for ( $x = $number + 1; $x < 8; $x++ ) {
+						for ( $x = $letter + 1; $x < 8; $x++ ) {
 							//echo "13\n";
 							if ( $collided['+y'] === FALSE && $position[$number][$x] === 'K' ) {
 								$isCheck = TRUE;
@@ -485,7 +485,7 @@ function isCheck ( $moveString ) {
 						}
 
 						// -y
-						for ( $x = $number - 1; $x >= 0; $x-- ) {
+						for ( $x = $letter - 1; $x >= 0; $x-- ) {
 							//echo "14\n";
 							if ( $collided['-y'] === FALSE && $position[$number][$x] === 'K' ) {
 								$isCheck = TRUE;
@@ -659,7 +659,7 @@ function isCheck ( $moveString ) {
 						}
 
 						// +y
-						for ( $x = $number + 1; $x < 8; $x++ ) {
+						for ( $x = $letter + 1; $x < 8; $x++ ) {
 							//echo "21\n";
 							if ( $collided['+y'] === FALSE && $position[$number][$x] === 'k' ) {
 								$isCheck = TRUE;
@@ -669,7 +669,7 @@ function isCheck ( $moveString ) {
 						}
 
 						// -y
-						for ( $x = $number - 1; $x >= 0 ;$x-- ) {
+						for ( $x = $letter - 1; $x >= 0 ;$x-- ) {
 							//echo "22\n";
 							if ( $collided['-y'] === FALSE && $position[$number][$x] === 'k' ) {
 								$isCheck = TRUE;
@@ -763,7 +763,7 @@ function isCheck ( $moveString ) {
 						}
 
 						// +y
-						for ( $x = $number + 1; $x < 8; $x++ ) {
+						for ( $x = $letter + 1; $x < 8; $x++ ) {
 							//echo "29\n";
 							if ( $collided['+y'] === FALSE && $position[$number][$x] === 'k' ) {
 								$isCheck = TRUE;
@@ -773,7 +773,7 @@ function isCheck ( $moveString ) {
 						}
 
 						// -y
-						for ( $x = $number - 1; $x >= 0; $x-- ) {
+						for ( $x = $letter - 1; $x >= 0; $x-- ) {
 							//echo "30\n";
 							if ( $collided['-y'] === FALSE && $position[$number][$x] === 'k' ) {
 								$isCheck = TRUE;
@@ -988,7 +988,7 @@ function isTension ( $moveString ) {
 						}
 
 						// +y
-						for ( $x = $number + 1; $x < 8; $x++ ) {
+						for ( $x = $letter + 1; $x < 8; $x++ ) {
 							//echo "5\n";
 							if ( $collided['+y'] === FALSE && $position[$number][$x] === 'Q' ) {
 								$isCheck = TRUE;
@@ -999,7 +999,7 @@ function isTension ( $moveString ) {
 						}
 
 						// -y
-						for ( $x = $number - 1; $x >= 0; $x-- ) {
+						for ( $x = $letter - 1; $x >= 0; $x-- ) {
 							//echo "6\n";
 							if ( $collided['-y'] === FALSE && $position[$number][$x] === 'Q' ) {
 								$isCheck = TRUE;
@@ -1101,7 +1101,7 @@ function isTension ( $moveString ) {
 						}
 
 						// +y
-						for ( $x = $number + 1; $x < 8; $x++ ) {
+						for ( $x = $letter + 1; $x < 8; $x++ ) {
 							//echo "13\n";
 							if ( $collided['+y'] === FALSE && $position[$number][$x] === 'Q' ) {
 								$isCheck = TRUE;
@@ -1112,7 +1112,7 @@ function isTension ( $moveString ) {
 						}
 
 						// -y
-						for ( $x = $number - 1; $x >= 0; $x-- ) {
+						for ( $x = $letter - 1; $x >= 0; $x-- ) {
 							//echo "14\n";
 							if ( $collided['-y'] === FALSE && $position[$number][$x] === 'Q' ) {
 								$isCheck = TRUE;
@@ -1298,7 +1298,7 @@ function isTension ( $moveString ) {
 						}
 
 						// +y
-						for ( $x = $number + 1; $x < 8; $x++ ) {
+						for ( $x = $letter + 1; $x < 8; $x++ ) {
 							//echo "21\n";
 							if ( $collided['+y'] === FALSE && $position[$number][$x] === 'q' ) {
 								$isCheck = TRUE;
@@ -1309,7 +1309,7 @@ function isTension ( $moveString ) {
 						}
 
 						// -y
-						for ( $x = $number - 1; $x >= 0 ;$x-- ) {
+						for ( $x = $letter - 1; $x >= 0 ;$x-- ) {
 							//echo "22\n";
 							if ( $collided['-y'] === FALSE && $position[$number][$x] === 'q' ) {
 								$isCheck = TRUE;
@@ -1410,7 +1410,7 @@ function isTension ( $moveString ) {
 						}
 
 						// +y
-						for ( $x = $number + 1; $x < 8; $x++ ) {
+						for ( $x = $letter + 1; $x < 8; $x++ ) {
 							//echo "29\n";
 							if ( $collided['+y'] === FALSE && $position[$number][$x] === 'q' ) {
 								$isCheck = TRUE;
@@ -1421,7 +1421,7 @@ function isTension ( $moveString ) {
 						}
 
 						// -y
-						for ( $x = $number - 1; $x >= 0; $x-- ) {
+						for ( $x = $letter - 1; $x >= 0; $x-- ) {
 							//echo "30\n";
 							if ( $collided['-y'] === FALSE && $position[$number][$x] === 'q' ) {
 								$isCheck = TRUE;
