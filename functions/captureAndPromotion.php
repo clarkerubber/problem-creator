@@ -181,7 +181,8 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft, $t
 				} else if ( $parsedTally <= 0 && $changeThisTurn === 0 && $isCheck === FALSE && $isTension === FALSE && $pliesLeft - 1 > 0 ) {
 					//Nothing has happened
 					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $pliesLeft - 1, $targetAdv );
-				} else if ( ( abs( $changeThisTurn ) > 1 || $isCheck === TRUE || $isTension === TRUE ) &&  $pliesLeft - 1 > 0 ) {
+				} else if ( ( abs( $changeThisTurn ) > 1 || $isCheck === TRUE || $isTension === TRUE || $isMateThreat === TRUE ) 
+					&&  $pliesLeft - 1 > 0 ) {
 					//Somthing has happened
 					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $MAJOR_MOVE_THRESHOLD, $targetAdv );
 				} else {
@@ -220,7 +221,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft, $t
 function isMateThreat ( $moveString ) {
 	// Given a position, if the next move is a passing move, is there a mate threat?
 	global $MATE_THREAT_WIDTH, $SECOND_PASS_TIME;
-	$uciOutput = getUci( $moveString, $FIRST_PASS_TIME, $MATE_THREAT_WIDTH );
+	$uciOutput = getUci( $moveString, $SECOND_PASS_TIME, $MATE_THREAT_WIDTH );
 
 	preg_match_all( "/info.*?mate (-?[0-9]+).*?([a-h][1-8][a-h][1-8][qrnb]?)/", $uciOutput, $matches );
 
