@@ -192,19 +192,25 @@ function getMateMovesFromPosition ( $moveString, $player, $findMate ) {
 		}
 	}
 
-	$empty = TRUE;
+	
 
-	foreach ( $moveArray as $key => $value ) {
+	if ( !empty( $moveArray ) ) {
+		$empty = TRUE;
+		foreach ( $moveArray as $key => $value ) {
 
-		if ( $value !== 'retry' ) {
+			if ( $value !== 'retry' ) {
 
-			$empty = FALSE;
+				$empty = FALSE;
+
+			}
 
 		}
 
-	}
-
-	if ( $empty == TRUE ) {
+		if ( $empty == TRUE ) {
+			$moveArray = 'retry';
+			echo "$lastMove -> NO WIN\n";
+		}
+	} else {
 		$moveArray = 'retry';
 		echo "$lastMove -> NO WIN\n";
 	}
