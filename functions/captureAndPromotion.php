@@ -161,6 +161,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft, $t
 						$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', FALSE, $parsedTally, $pliesLeft + 1, $targetAdv );
 						if ( $moveArray[$move] === 'retry' && $parsedTally > 0 ) {
 							$moveArray[$move] = 'win';
+							echo "$move -> WIN by advantage\n";
 						}
 					} else if ( $pliesLeft - 1 > 0 ) {
 						//Nothing happened
@@ -454,50 +455,49 @@ function isCheck ( $moveString ) {
 
 						$collided = array( '+x' => FALSE, '+y' => FALSE, '-x' => FALSE, '-y' => FALSE );
 
-						for ( $x = 0; $x++; $x < 8 ) {
-							// straights
+						
+						// straights
 
-							// +x
-							for ( $x = $number + 1; $x < 8; $x++ ) {
-								//echo "11\n";
-								if ( $collided['+x'] === FALSE && $position[$x][$letter] === 'K' ) {
-									$isCheck = TRUE;
-								} else if ( $collided['+x'] === FALSE && $position[$x][$letter] !== 0 ) {
-									$collided['+x'] = TRUE;
-								}
+						// +x
+						for ( $x = $number + 1; $x < 8; $x++ ) {
+							//echo "11\n";
+							if ( $collided['+x'] === FALSE && $position[$x][$letter] === 'K' ) {
+								$isCheck = TRUE;
+							} else if ( $collided['+x'] === FALSE && $position[$x][$letter] !== 0 ) {
+								$collided['+x'] = TRUE;
 							}
-
-							// -x
-							for ( $x = $number - 1; $x >= 0; $x-- ) {
-								//echo "12\n";
-								if ( $collided['-x'] === FALSE && $position[$x][$letter] === 'K' ) {
-									$isCheck = TRUE;
-								} else if ( $collided['-x'] === FALSE && $position[$x][$letter] !== 0 ) {
-									$collided['-x'] = TRUE;
-								}
-							}
-
-							// +y
-							for ( $x = $number + 1; $x < 8; $x++ ) {
-								//echo "13\n";
-								if ( $collided['+y'] === FALSE && $position[$number][$x] === 'K' ) {
-									$isCheck = TRUE;
-								} else if ( $collided['+y'] === FALSE && $position[$number][$x] !== 0 ) {
-									$collided['+y'] = TRUE;
-								}
-							}
-
-							// -y
-							for ( $x = $number - 1; $x >= 0; $x-- ) {
-								//echo "14\n";
-								if ( $collided['-y'] === FALSE && $position[$number][$x] === 'K' ) {
-									$isCheck = TRUE;
-								} else if ( $collided['-y'] === FALSE && $position[$number][$x] !== 0 ) {
-									$collided['-y'] = TRUE;
-								}
-							}
-
 						}
+
+						// -x
+						for ( $x = $number - 1; $x >= 0; $x-- ) {
+							//echo "12\n";
+							if ( $collided['-x'] === FALSE && $position[$x][$letter] === 'K' ) {
+								$isCheck = TRUE;
+							} else if ( $collided['-x'] === FALSE && $position[$x][$letter] !== 0 ) {
+								$collided['-x'] = TRUE;
+							}
+						}
+
+						// +y
+						for ( $x = $number + 1; $x < 8; $x++ ) {
+							//echo "13\n";
+							if ( $collided['+y'] === FALSE && $position[$number][$x] === 'K' ) {
+								$isCheck = TRUE;
+							} else if ( $collided['+y'] === FALSE && $position[$number][$x] !== 0 ) {
+								$collided['+y'] = TRUE;
+							}
+						}
+
+						// -y
+						for ( $x = $number - 1; $x >= 0; $x-- ) {
+							//echo "14\n";
+							if ( $collided['-y'] === FALSE && $position[$number][$x] === 'K' ) {
+								$isCheck = TRUE;
+							} else if ( $collided['-y'] === FALSE && $position[$number][$x] !== 0 ) {
+								$collided['-y'] = TRUE;
+							}
+						}
+
 
 					} else if ( $square === 'b' ) {
 
@@ -744,49 +744,46 @@ function isCheck ( $moveString ) {
 
 						$collided = array( '+x' => FALSE, '+y' => FALSE, '-x' => FALSE, '-y' => FALSE );
 
-						for ( $x = 0; $x++; $x < 8 ) {
-							// straights
+						// straights
 
-							// +x
-							for ( $x = $number + 1; $x < 8; $x++ ) {
-								//echo "27\n";
-								if ( $collided['+x'] === FALSE && $position[$x][$letter] === 'k' ) {
-									$isCheck = TRUE;
-								} else if ( $collided['+x'] === FALSE && $position[$x][$letter] !== 0 ) {
-									$collided['+x'] = TRUE;
-								}
+						// +x
+						for ( $x = $number + 1; $x < 8; $x++ ) {
+							//echo "27\n";
+							if ( $collided['+x'] === FALSE && $position[$x][$letter] === 'k' ) {
+								$isCheck = TRUE;
+							} else if ( $collided['+x'] === FALSE && $position[$x][$letter] !== 0 ) {
+								$collided['+x'] = TRUE;
 							}
+						}
 
-							// -x
-							for ( $x = $number - 1; $x >= 0; $x-- ) {
-								//echo "28\n";
-								if ( $collided['-x'] === FALSE && $position[$x][$letter] === 'k' ) {
-									$isCheck = TRUE;
-								} else if ( $collided['-x'] === FALSE && $position[$x][$letter] !== 0 ) {
-									$collided['-x'] = TRUE;
-								}
+						// -x
+						for ( $x = $number - 1; $x >= 0; $x-- ) {
+							//echo "28\n";
+							if ( $collided['-x'] === FALSE && $position[$x][$letter] === 'k' ) {
+								$isCheck = TRUE;
+							} else if ( $collided['-x'] === FALSE && $position[$x][$letter] !== 0 ) {
+								$collided['-x'] = TRUE;
 							}
+						}
 
-							// +y
-							for ( $x = $number + 1; $x < 8; $x++ ) {
-								//echo "29\n";
-								if ( $collided['+y'] === FALSE && $position[$number][$x] === 'k' ) {
-									$isCheck = TRUE;
-								} else if ( $collided['+y'] === FALSE && $position[$number][$x] !== 0 ) {
-									$collided['+y'] = TRUE;
-								}
+						// +y
+						for ( $x = $number + 1; $x < 8; $x++ ) {
+							//echo "29\n";
+							if ( $collided['+y'] === FALSE && $position[$number][$x] === 'k' ) {
+								$isCheck = TRUE;
+							} else if ( $collided['+y'] === FALSE && $position[$number][$x] !== 0 ) {
+								$collided['+y'] = TRUE;
 							}
+						}
 
-							// -y
-							for ( $x = $number - 1; $x >= 0; $x-- ) {
-								//echo "30\n";
-								if ( $collided['-y'] === FALSE && $position[$number][$x] === 'k' ) {
-									$isCheck = TRUE;
-								} else if ( $collided['-y'] === FALSE && $position[$number][$x] !== 0 ) {
-									$collided['-y'] = TRUE;
-								}
+						// -y
+						for ( $x = $number - 1; $x >= 0; $x-- ) {
+							//echo "30\n";
+							if ( $collided['-y'] === FALSE && $position[$number][$x] === 'k' ) {
+								$isCheck = TRUE;
+							} else if ( $collided['-y'] === FALSE && $position[$number][$x] !== 0 ) {
+								$collided['-y'] = TRUE;
 							}
-
 						}
 
 					} else if ( $square === 'B' ) {
@@ -1083,53 +1080,50 @@ function isTension ( $moveString ) {
 
 						$collided = array( '+x' => FALSE, '+y' => FALSE, '-x' => FALSE, '-y' => FALSE );
 
-						for ( $x = 0; $x++; $x < 8 ) {
-							// straights
+						// straights
 
-							// +x
-							for ( $x = $number + 1; $x < 8; $x++ ) {
-								//echo "11\n";
-								if ( $collided['+x'] === FALSE && $position[$x][$letter] === 'Q' ) {
-									$isCheck = TRUE;
-									$collided['+x'] = TRUE;
-								} else if ( $collided['+x'] === FALSE && $position[$x][$letter] !== 0 ) {
-									$collided['+x'] = TRUE;
-								}
+						// +x
+						for ( $x = $number + 1; $x < 8; $x++ ) {
+							//echo "11\n";
+							if ( $collided['+x'] === FALSE && $position[$x][$letter] === 'Q' ) {
+								$isCheck = TRUE;
+								$collided['+x'] = TRUE;
+							} else if ( $collided['+x'] === FALSE && $position[$x][$letter] !== 0 ) {
+								$collided['+x'] = TRUE;
 							}
+						}
 
-							// -x
-							for ( $x = $number - 1; $x >= 0; $x-- ) {
-								//echo "12\n";
-								if ( $collided['-x'] === FALSE && $position[$x][$letter] === 'Q' ) {
-									$isCheck = TRUE;
-									$collided['-x'] = TRUE;
-								} else if ( $collided['-x'] === FALSE && $position[$x][$letter] !== 0 ) {
-									$collided['-x'] = TRUE;
-								}
+						// -x
+						for ( $x = $number - 1; $x >= 0; $x-- ) {
+							//echo "12\n";
+							if ( $collided['-x'] === FALSE && $position[$x][$letter] === 'Q' ) {
+								$isCheck = TRUE;
+								$collided['-x'] = TRUE;
+							} else if ( $collided['-x'] === FALSE && $position[$x][$letter] !== 0 ) {
+								$collided['-x'] = TRUE;
 							}
+						}
 
-							// +y
-							for ( $x = $number + 1; $x < 8; $x++ ) {
-								//echo "13\n";
-								if ( $collided['+y'] === FALSE && $position[$number][$x] === 'Q' ) {
-									$isCheck = TRUE;
-									$collided['+y'] = TRUE;
-								} else if ( $collided['+y'] === FALSE && $position[$number][$x] !== 0 ) {
-									$collided['+y'] = TRUE;
-								}
+						// +y
+						for ( $x = $number + 1; $x < 8; $x++ ) {
+							//echo "13\n";
+							if ( $collided['+y'] === FALSE && $position[$number][$x] === 'Q' ) {
+								$isCheck = TRUE;
+								$collided['+y'] = TRUE;
+							} else if ( $collided['+y'] === FALSE && $position[$number][$x] !== 0 ) {
+								$collided['+y'] = TRUE;
 							}
+						}
 
-							// -y
-							for ( $x = $number - 1; $x >= 0; $x-- ) {
-								//echo "14\n";
-								if ( $collided['-y'] === FALSE && $position[$number][$x] === 'Q' ) {
-									$isCheck = TRUE;
-									$collided['-y'] = TRUE;
-								} else if ( $collided['-y'] === FALSE && $position[$number][$x] !== 0 ) {
-									$collided['-y'] = TRUE;
-								}
+						// -y
+						for ( $x = $number - 1; $x >= 0; $x-- ) {
+							//echo "14\n";
+							if ( $collided['-y'] === FALSE && $position[$number][$x] === 'Q' ) {
+								$isCheck = TRUE;
+								$collided['-y'] = TRUE;
+							} else if ( $collided['-y'] === FALSE && $position[$number][$x] !== 0 ) {
+								$collided['-y'] = TRUE;
 							}
-
 						}
 
 					} else if ( $square === 'b' ) {
@@ -1395,53 +1389,50 @@ function isTension ( $moveString ) {
 
 						$collided = array( '+x' => FALSE, '+y' => FALSE, '-x' => FALSE, '-y' => FALSE );
 
-						for ( $x = 0; $x++; $x < 8 ) {
-							// straights
+						// straights
 
-							// +x
-							for ( $x = $number + 1; $x < 8; $x++ ) {
-								//echo "27\n";
-								if ( $collided['+x'] === FALSE && $position[$x][$letter] === 'q' ) {
-									$isCheck = TRUE;
-									$collided['+x'] = TRUE;
-								} else if ( $collided['+x'] === FALSE && $position[$x][$letter] !== 0 ) {
-									$collided['+x'] = TRUE;
-								}
+						// +x
+						for ( $x = $number + 1; $x < 8; $x++ ) {
+							//echo "27\n";
+							if ( $collided['+x'] === FALSE && $position[$x][$letter] === 'q' ) {
+								$isCheck = TRUE;
+								$collided['+x'] = TRUE;
+							} else if ( $collided['+x'] === FALSE && $position[$x][$letter] !== 0 ) {
+								$collided['+x'] = TRUE;
 							}
+						}
 
-							// -x
-							for ( $x = $number - 1; $x >= 0; $x-- ) {
-								//echo "28\n";
-								if ( $collided['-x'] === FALSE && $position[$x][$letter] === 'q' ) {
-									$isCheck = TRUE;
-									$collided['-x'] = TRUE;
-								} else if ( $collided['-x'] === FALSE && $position[$x][$letter] !== 0 ) {
-									$collided['-x'] = TRUE;
-								}
+						// -x
+						for ( $x = $number - 1; $x >= 0; $x-- ) {
+							//echo "28\n";
+							if ( $collided['-x'] === FALSE && $position[$x][$letter] === 'q' ) {
+								$isCheck = TRUE;
+								$collided['-x'] = TRUE;
+							} else if ( $collided['-x'] === FALSE && $position[$x][$letter] !== 0 ) {
+								$collided['-x'] = TRUE;
 							}
+						}
 
-							// +y
-							for ( $x = $number + 1; $x < 8; $x++ ) {
-								//echo "29\n";
-								if ( $collided['+y'] === FALSE && $position[$number][$x] === 'q' ) {
-									$isCheck = TRUE;
-									$collided['+y'] = TRUE;
-								} else if ( $collided['+y'] === FALSE && $position[$number][$x] !== 0 ) {
-									$collided['+y'] = TRUE;
-								}
+						// +y
+						for ( $x = $number + 1; $x < 8; $x++ ) {
+							//echo "29\n";
+							if ( $collided['+y'] === FALSE && $position[$number][$x] === 'q' ) {
+								$isCheck = TRUE;
+								$collided['+y'] = TRUE;
+							} else if ( $collided['+y'] === FALSE && $position[$number][$x] !== 0 ) {
+								$collided['+y'] = TRUE;
 							}
+						}
 
-							// -y
-							for ( $x = $number - 1; $x >= 0; $x-- ) {
-								//echo "30\n";
-								if ( $collided['-y'] === FALSE && $position[$number][$x] === 'q' ) {
-									$isCheck = TRUE;
-									$collided['-y'] = TRUE;
-								} else if ( $collided['-y'] === FALSE && $position[$number][$x] !== 0 ) {
-									$collided['-y'] = TRUE;
-								}
+						// -y
+						for ( $x = $number - 1; $x >= 0; $x-- ) {
+							//echo "30\n";
+							if ( $collided['-y'] === FALSE && $position[$number][$x] === 'q' ) {
+								$isCheck = TRUE;
+								$collided['-y'] = TRUE;
+							} else if ( $collided['-y'] === FALSE && $position[$number][$x] !== 0 ) {
+								$collided['-y'] = TRUE;
 							}
-
 						}
 
 					} else if ( $square === 'B' ) {
