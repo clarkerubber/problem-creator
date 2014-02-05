@@ -132,11 +132,14 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft, $t
 			$changeThisTurn = abs( materialChange( $moveString.$move ) );
 			$isCheck = isCheck( $moveString.$move );
 			$isTension = isTension( $moveString.$move );
+			$nextMoveCapture = nextMoveCapture( $moveString.$move );
 
 			if ( $player === FALSE ) {
 				$isMateThreat = isMateThreat( $moveString.$move );
+				$nextMoveCapture = nextMoveCapture( $moveString.$move );
 			} else {
 				$isMateThreat = FALSE;
+				$nextMoveCapture = FALSE;
 			}
 
 			if ( $player == TRUE ) {
@@ -150,11 +153,18 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft, $t
 				}
 			}
 			//echo "  Parent -> Child | CP Adv | Plies | Adv | Var | + | T\n";
-			if ( $player == TRUE ) {
-				printf("P: %5s -> %5s | %+6d | %5d | %+3d | %+3d | %1s | %1s | %1s\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn, $isCheck? '+' : '-', $isTension? '+' : '-', $isMateThreat? '+' : '-' );
-			} else {
-				printf("C: %5s -> %5s | %+6d | %5d | %+3d | %+3d | %1s | %1s | %1s\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn, $isCheck? '+' : '-', $isTension? '+' : '-', $isMateThreat? '+' : '-' );
-			}
+			printf("%1s: %5s -> %5s | %+6d | %5d | %+3d | %+3d | %1s | %1s | %1s | %1s\n",
+				$player? 'P' : 'C', 
+				$lastMove, 
+				$move, 
+				-1 * $candidateMovesEval[$key], 
+				$pliesLeft, 
+				$parsedTally, 
+				$changeThisTurn, 
+				$isCheck? '+' : '-', 
+				$isTension? '+' : '-', 
+				$isMateThreat? '+' : '-', 
+				$nextMoveCapture? '+' : '-' );
 
 			if ( $player == TRUE ) {
 
@@ -216,6 +226,17 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft, $t
 
 
 	return $moveArray;
+}
+
+function nextMoveCapture ( $moveString ) {
+	global $SECOND_PASS_TIME;
+	$uciOutput = getUci( $moveString, $SECOND_PASS_TIME );
+
+	preg_match_all( "/bestmove ([a-h][1-8][a-h][1-8][rbnq]?)/", $uciOutput, $matches );
+
+	print_r($matches);
+
+	return TRUE;
 }
 
 function isMateThreat ( $moveString ) {
