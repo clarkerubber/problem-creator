@@ -250,7 +250,7 @@ function nextMoveCapture ( $moveString ) {
 		}
 	}
 
-	return TRUE;
+	return $output;
 }
 
 function isMateThreat ( $moveString ) {

@@ -8,8 +8,8 @@ $DIFFERENCE = 300;
 
 //-----engine settings
 $STOCKFISH_PATH = "/Users/clarkey/Documents/workspace/lichess/problem-creator/resources/stockfish-dd-mac/Mac/stockfish-dd-32"; // location of stockfish engine
-$STOCKFISH_THREADS = 1; // Amount of threads stockfish will run on
-$FIRST_PASS_TIME = 6000; // milliseconds to gather candidate moves
+$STOCKFISH_THREADS = 2; // Amount of threads stockfish will run on
+$FIRST_PASS_TIME = 5000; // milliseconds to gather candidate moves
 $SECOND_PASS_TIME = 2000; // milliseconds to consider each candidate move
 $ALT_THRESHOLD = 0.05; // Percentage of top eval for a move to be allowed
 $RETRY_THRESHOLD = 0.1;
