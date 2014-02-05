@@ -189,7 +189,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft, $t
 				}
 			}
 		} else if ( abs( $candidateMovesEval[$key] - $topEval ) <= abs( $topEval * $RETRY_THRESHOLD ) && 
-			abs( $candidateMovesEval[$key] - $topEval ) > abs( $topEval * $ALT_THRESHOLD ) ) {
+			abs( $candidateMovesEval[$key] - $topEval ) > abs( $topEval * $ALT_THRESHOLD ) && $player === TRUE ) {
 			$moveArray[$move] = 'retry';
 			echo "$move -> RETRY\n";
 		}
