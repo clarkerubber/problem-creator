@@ -188,10 +188,18 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft, $t
 				if ( $parsedTally > 0 && $isCheck === FALSE && $isTension === FALSE ) {
 					$moveArray[$move] = 'win';
 					echo "$move -> WIN\n";
-				} else if ( $parsedTally <= 0 && $changeThisTurn === 0 && $isCheck === FALSE && $isTension === FALSE && $pliesLeft - 1 > 0 ) {
+				} else if ( $parsedTally <= 0 
+					&& $changeThisTurn === 0 
+					&& $isCheck === FALSE 
+					&& $isTension === FALSE 
+					&& $pliesLeft - 1 > 0 ) {
 					//Nothing has happened
 					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $pliesLeft - 1, $targetAdv );
-				} else if ( ( abs( $changeThisTurn ) > 1 || $isCheck === TRUE || $isTension === TRUE || $isMateThreat === TRUE ) 
+				} else if ( ( abs( $changeThisTurn ) > 1 
+					|| $isCheck === TRUE 
+					|| $isTension === TRUE 
+					|| $isMateThreat === TRUE
+					|| $nextMoveCapture === TRUE ) 
 					&&  $pliesLeft - 1 > 0 ) {
 					//Somthing has happened
 					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $MAJOR_MOVE_THRESHOLD, $targetAdv );
@@ -234,7 +242,13 @@ function nextMoveCapture ( $moveString ) {
 
 	preg_match_all( "/bestmove ([a-h][1-8][a-h][1-8][rbnq]?)/", $uciOutput, $matches );
 
-	print_r($matches);
+	$output = FALSE;
+
+	if ( isset( $matches[1][0] ) ) {
+		if ( abs( materialChange( $moveString.$matches[1][0] ) ) > 1 ) {
+			$output = TRUE;
+		}
+	}
 
 	return TRUE;
 }

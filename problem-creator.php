@@ -61,6 +61,8 @@ function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/analysis"
 	}
 }
 
+echo "+ = Check, T = Tension between lower and higher value piece, M = Mate threat, C = Next best move capture\n\n";
+
 if ( isset( $argv[2] ) ) {
 
 	for ( $x = 0; $x < intval( $argv[2] ); $x++ ) {
