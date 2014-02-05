@@ -54,10 +54,9 @@ function buildMateTree ( $moveString, $isMate ) {
 	if ( is_array( $movesList ) ) {
 		foreach ( $movesList as $key => $value ) {
 
-			if ( $value !== FALSE ) {
+			if ( $value !== 'retry' ) {
 				$empty = FALSE;
 			}
-
 		}
 	}
 	
@@ -195,18 +194,19 @@ function getMateMovesFromPosition ( $moveString, $player, $findMate ) {
 
 	$empty = TRUE;
 
-	foreach ($moveArray as $key => $value) {
+	foreach ( $moveArray as $key => $value ) {
 
-		if ( $value !== FALSE ) {
+		if ( $value !== 'retry' ) {
+
 			$empty = FALSE;
+
 		}
 
 	}
 
 	if ( $empty == TRUE ) {
-		$output = FALSE;
-	} else {
-		$output = $moveArray;
+		$moveArray = 'retry';
+		echo "$lastMove -> NO WIN\n";
 	}
 
 	return $output;

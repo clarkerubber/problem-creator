@@ -176,7 +176,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft, $t
 				} else if ( ( $parsedTally <= 2 || $changeThisTurn < -1 || $isCheck === TRUE || $isTension === TRUE ) &&  $pliesLeft - 1 > 0 ) {
 					//Somthing has happened
 					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $MAJOR_MOVE_THRESHOLD, $targetAdv );
-				} else if ( $parsedTally > 2 ) {
+				} else if ( $parsedTally > 0 ) {
 					$moveArray[$move] = 'win';
 					echo "$move -> WIN\n";
 				} else {
