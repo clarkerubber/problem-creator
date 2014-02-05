@@ -131,6 +131,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft, $t
 
 			$changeThisTurn = abs( materialChange( $moveString.$move ) );
 			$isCheck = isCheck( $moveString.$move );
+			$isTension = isTension( $moveString.$move );
 
 			if ( $player == TRUE ) {
 				if ( $changeThisTurn > 1 ) {
@@ -142,11 +143,11 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft, $t
 					$parsedTally += $changeThisTurn;	
 				}
 			}
-
+			//echo "  Parent -> Child | CP Adv | Plies | Adv | Var | + | T\n";
 			if ( $player == TRUE ) {
-				printf("P: %5s -> %5s | %+6d | %5d | %+8d | %+6d | %1s\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn, $isCheck? '+' : '-' );
+				printf("P: %5s -> %5s | %+6d | %5d | %+3d | %+3d | %1s | %1s\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn, $isCheck? '+' : '-', $isTension? '+' : '-' );
 			} else {
-				printf("C: %5s -> %5s | %+6d | %5d | %+8d | %+6d | %1s\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn, $isCheck? '+' : '-' );
+				printf("C: %5s -> %5s | %+6d | %5d | %+3d | %+3d | %1s | %1s\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn, $isCheck? '+' : '-', $isTension? '+' : '-' );
 			}
 
 			if ( $player == TRUE ) {
@@ -250,102 +251,13 @@ function materialChange ( $moveString ) {
 			array(0,0,0,0,0,0,0,0),					// 3
 			array('P','P','P','P','P','P','P','P'),	// 2
 			array('R','N','B','Q','K','B','N','R'),	// 1
-			); // indexed [number][letter]
+		); // indexed [number][letter]
 
-	$reference = array(
-			'a' => 0,
-			'b' => 1,
-			'c' => 2,
-			'd' => 3,
-			'e' => 4,
-			'f' => 5,
-			'g' => 6,
-			'h' => 7,
-			'1' => 7,
-			'2' => 6,
-			'3' => 5,
-			'4' => 4,
-			'5' => 3,
-			'6' => 2,
-			'7' => 1,
-			'8' => 0
-		);
-	$captureArray = array();
 	$oldPieceCount = 48;
 
 	foreach ( $moves as $key => $move ) {
 
-		$moveSplit = str_split( $move );
-
-		if ( $move == 'e8c8' && $position[$reference['8']][$reference['e']] === 'k' ) {
-			//black long castle
-
-			$position[$reference['8']][$reference['c']] = 'k';
-			$position[$reference['8']][$reference['d']] = 'r';
-			$position[$reference['8']][$reference['e']] = 0;
-			$position[$reference['8']][$reference['a']] = 0;
-
-		} else if ( $move == 'e8g8' &&  $position[$reference['8']][$reference['e']] === 'k' ) {
-			//black short castle
-
-			$position[$reference['8']][$reference['g']] = 'k';
-			$position[$reference['8']][$reference['f']] = 'r';
-			$position[$reference['8']][$reference['e']] = 0;
-			$position[$reference['8']][$reference['h']] = 0;
-
-		} else if ( $move == 'e1c1' &&  $position[$reference['1']][$reference['e']] === 'K' ) {
-			//white long castle
-
-			$position[$reference['1']][$reference['c']] = 'K';
-			$position[$reference['1']][$reference['d']] = 'R';
-			$position[$reference['1']][$reference['e']] = 0;
-			$position[$reference['1']][$reference['a']] = 0;
-
-		} else if ( $move == 'e1g1' &&  $position[$reference['1']][$reference['e']] === 'K' ) {
-			//white short castle
-
-			$position[$reference['1']][$reference['g']] = 'K';
-			$position[$reference['1']][$reference['f']] = 'R';
-			$position[$reference['1']][$reference['e']] = 0;
-			$position[$reference['1']][$reference['h']] = 0;
-
-		} else if ( $position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] === 'P' 
-			&& $moveSplit[0] !== $moveSplit[2]
-			&& $position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] === 0 ) {
-			//White en passant
-
-			$position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] = 'P';
-			$position[$reference[$moveSplit[3]]+1][$reference[$moveSplit[2]]] = 0;
-			$position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] = 0;
-
-		} else if ( $position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] == 'p' 
-			&& $moveSplit[0] !== $moveSplit[2]
-			&& $position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] === 0 ) {
-			//Black en passant
-
-			$position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] = 'p';
-			$position[$reference[$moveSplit[3]]-1][$reference[$moveSplit[2]]] = 0;
-			$position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] = 0;
-			
-		} else if ( count( $moveSplit ) == 5 ) {
-			//promotion
-			if ( $position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] === 'P' ) {
-
-				$position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] = strtoupper( $moveSplit[4] );
-
-			} else {
-
-				$position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] = strtolower( $moveSplit[4] );
-
-			}
-
-			$position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] = 0;
-
-		} else if ( count( $moveSplit ) == 4 ) {
-			//Normal move
-			$position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] = $position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]];
-			$position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] = 0;
-		}
+		$position = updatePosition( $position, $move );
 
 		$pieceCount = 0;
 
@@ -418,102 +330,11 @@ function isCheck ( $moveString ) {
 			array(0,0,0,0,0,0,0,0),					// 3
 			array('P','P','P','P','P','P','P','P'),	// 2
 			array('R','N','B','Q','K','B','N','R'),	// 1
-			); // indexed [number][letter]
-
-	$reference = array(
-			'a' => 0,
-			'b' => 1,
-			'c' => 2,
-			'd' => 3,
-			'e' => 4,
-			'f' => 5,
-			'g' => 6,
-			'h' => 7,
-			'1' => 7,
-			'2' => 6,
-			'3' => 5,
-			'4' => 4,
-			'5' => 3,
-			'6' => 2,
-			'7' => 1,
-			'8' => 0
-		);
-	$captureArray = array();
-	$oldPieceCount = 48;
+		); // indexed [number][letter]
 
 	foreach ( $moves as $key => $move ) {
 
-		$moveSplit = str_split( $move );
-
-		if ( $move == 'e8c8' && $position[$reference['8']][$reference['e']] === 'k' ) {
-			//black long castle
-
-			$position[$reference['8']][$reference['c']] = 'k';
-			$position[$reference['8']][$reference['d']] = 'r';
-			$position[$reference['8']][$reference['e']] = 0;
-			$position[$reference['8']][$reference['a']] = 0;
-
-		} else if ( $move == 'e8g8' &&  $position[$reference['8']][$reference['e']] === 'k' ) {
-			//black short castle
-
-			$position[$reference['8']][$reference['g']] = 'k';
-			$position[$reference['8']][$reference['f']] = 'r';
-			$position[$reference['8']][$reference['e']] = 0;
-			$position[$reference['8']][$reference['h']] = 0;
-
-		} else if ( $move == 'e1c1' &&  $position[$reference['1']][$reference['e']] === 'K' ) {
-			//white long castle
-
-			$position[$reference['1']][$reference['c']] = 'K';
-			$position[$reference['1']][$reference['d']] = 'R';
-			$position[$reference['1']][$reference['e']] = 0;
-			$position[$reference['1']][$reference['a']] = 0;
-
-		} else if ( $move == 'e1g1' &&  $position[$reference['1']][$reference['e']] === 'K' ) {
-			//white short castle
-
-			$position[$reference['1']][$reference['g']] = 'K';
-			$position[$reference['1']][$reference['f']] = 'R';
-			$position[$reference['1']][$reference['e']] = 0;
-			$position[$reference['1']][$reference['h']] = 0;
-
-		} else if ( $position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] === 'P' 
-			&& $moveSplit[0] !== $moveSplit[2]
-			&& $position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] === 0 ) {
-			//White en passant
-
-			$position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] = 'P';
-			$position[$reference[$moveSplit[3]]+1][$reference[$moveSplit[2]]] = 0;
-			$position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] = 0;
-
-		} else if ( $position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] == 'p' 
-			&& $moveSplit[0] !== $moveSplit[2]
-			&& $position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] === 0 ) {
-			//Black en passant
-
-			$position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] = 'p';
-			$position[$reference[$moveSplit[3]]-1][$reference[$moveSplit[2]]] = 0;
-			$position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] = 0;
-			
-		} else if ( count( $moveSplit ) == 5 ) {
-			//promotion
-			if ( $position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] === 'P' ) {
-
-				$position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] = strtoupper( $moveSplit[4] );
-
-			} else {
-
-				$position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] = strtolower( $moveSplit[4] );
-
-			}
-
-			$position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] = 0;
-
-		} else if ( count( $moveSplit ) == 4 ) {
-			//Normal move
-			$position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] = $position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]];
-			$position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] = 0;
-		}
+		$position = updatePosition ( $position, $move );
 
 		$isCheck = FALSE;
 
@@ -1112,6 +933,764 @@ function isCheck ( $moveString ) {
 	return $isCheck;
 }
 
-function isTension () {
+function isTension ( $moveString ) {
 	//detect is a major piece is under attack
+		//Input: A string of moves in coordinate notation (e2e4)
+	//	And if to limit results to major cpatures (i.e. not pawn captures)
+
+	$moves = explode( ' ', $moveString );
+
+	$position = 
+		array(
+				// a,  b,  c,  d,  e,  f,  g,  h
+			array('r','n','b','q','k','b','n','r'),	// 8
+			array('p','p','p','p','p','p','p','p'),	// 7
+			array(0,0,0,0,0,0,0,0), 				// 6
+			array(0,0,0,0,0,0,0,0),					// 5
+			array(0,0,0,0,0,0,0,0),					// 4
+			array(0,0,0,0,0,0,0,0),					// 3
+			array('P','P','P','P','P','P','P','P'),	// 2
+			array('R','N','B','Q','K','B','N','R'),	// 1
+			); // indexed [number][letter]
+
+	foreach ( $moves as $key => $move ) {
+
+		$position = updatePosition ( $position, $move );
+
+		$isCheck = FALSE;
+
+		foreach ( $position as $number => $column ) {
+			//echo "1\n";
+			foreach ( $column as $letter => $square ) {
+				//echo "2\n";
+				if ( $square !== 0 ) {
+					// Now to work out if the locus of each piece hits an opposite side king
+					if ( $square === 'q' ) {
+
+						$collided = array( '+x' => FALSE, '+y' => FALSE, '-x' => FALSE, '-y' => FALSE,
+							'+x+y' => FALSE, '+x-y' => FALSE, '-x+y' => FALSE, '-x-y' => FALSE );
+
+						// straights
+
+						// +x
+						for ( $x = $number + 1; $x < 8; $x++ ) {
+							//echo "$x 3\n";
+							if ( $collided['+x'] === FALSE && $position[$x][$letter] === 'Q' ) {
+								$isCheck = TRUE;
+								$collided['+x'] = TRUE;
+							} else if ( $collided['+x'] === FALSE && $position[$x][$letter] !== 0 ) {
+								$collided['+x'] = TRUE;
+							}
+						}
+
+						// -x
+						for ( $x = $number - 1; $x >= 0; $x-- ) {
+							//echo "4\n";
+							if ( $collided['-x'] === FALSE && $position[$x][$letter] === 'Q' ) {
+								$isCheck = TRUE;
+								$collided['-x'] = TRUE;
+							} else if ( $collided['-x'] === FALSE && $position[$x][$letter] !== 0 ) {
+								$collided['-x'] = TRUE;
+							}
+						}
+
+						// +y
+						for ( $x = $number + 1; $x < 8; $x++ ) {
+							//echo "5\n";
+							if ( $collided['+y'] === FALSE && $position[$number][$x] === 'Q' ) {
+								$isCheck = TRUE;
+								$collided['+y'] = TRUE;
+							} else if ( $collided['+y'] === FALSE && $position[$number][$x] !== 0 ) {
+								$collided['+y'] = TRUE;
+							}
+						}
+
+						// -y
+						for ( $x = $number - 1; $x >= 0; $x-- ) {
+							//echo "6\n";
+							if ( $collided['-y'] === FALSE && $position[$number][$x] === 'Q' ) {
+								$isCheck = TRUE;
+								$collided['-y'] = TRUE;
+							} else if ( $collided['-y'] === FALSE && $position[$number][$x] !== 0 ) {
+								$collided['-y'] = TRUE;
+							}
+						}
+
+						// diagonals
+
+						// +x +y
+						$x = $letter + 1;
+						$y = $number + 1;
+						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "7\n";
+							if ( $collided['+x+y'] == FALSE && $position[$y][$x] === 'Q' ) {
+								$isCheck = TRUE;
+								$collided['+x+y'] = TRUE;
+							} else if ( $collided['+x+y'] == FALSE && $position[$y][$x] !== 0 ) {
+								$collided['+x+y'] = TRUE;
+							}
+							$x++;
+							$y++;
+						}
+
+						// +x -y
+						$x = $letter + 1;
+						$y = $number - 1;
+						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "8\n";
+							if ( $collided['+x-y'] == FALSE && $position[$y][$x] === 'Q' ) {
+								$isCheck = TRUE;
+								$collided['+x-y'] = TRUE;
+							} else if ( $collided['+x-y'] == FALSE && $position[$y][$x] !== 0 ) {
+								$collided['+x-y'] = TRUE;
+							}
+							$x++;
+							$y--;
+						}
+
+						// -x +y
+						$x = $letter - 1;
+						$y = $number + 1;
+						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "9\n";
+							if ( $collided['-x+y'] == FALSE && $position[$y][$x] === 'Q' ) {
+								$isCheck = TRUE;
+								$collided['-x+y'] = TRUE;
+							} else if ( $collided['-x+y'] == FALSE && $position[$y][$x] !== 0 ) {
+								$collided['-x+y'] = TRUE;
+							}
+							$x--;
+							$y++;
+						}
+
+						// -x -y
+						$x = $letter - 1;
+						$y = $number - 1;
+						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "10\n";
+							if ( $collided['-x-y'] == FALSE && $position[$y][$x] === 'Q' ) {
+								$isCheck = TRUE;
+								$collided['-x-y'] = TRUE;
+							} else if ( $collided['-x-y'] == FALSE && $position[$y][$x] !== 0 ) {
+								$collided['-x-y'] = TRUE;
+							}
+							$x--;
+							$y--;
+						}
+
+
+					} else if ( $square === 'r' ) {
+
+						$collided = array( '+x' => FALSE, '+y' => FALSE, '-x' => FALSE, '-y' => FALSE );
+
+						for ( $x = 0; $x++; $x < 8 ) {
+							// straights
+
+							// +x
+							for ( $x = $number + 1; $x < 8; $x++ ) {
+								//echo "11\n";
+								if ( $collided['+x'] === FALSE && $position[$x][$letter] === 'Q' ) {
+									$isCheck = TRUE;
+									$collided['+x'] = TRUE;
+								} else if ( $collided['+x'] === FALSE && $position[$x][$letter] !== 0 ) {
+									$collided['+x'] = TRUE;
+								}
+							}
+
+							// -x
+							for ( $x = $number - 1; $x >= 0; $x-- ) {
+								//echo "12\n";
+								if ( $collided['-x'] === FALSE && $position[$x][$letter] === 'Q' ) {
+									$isCheck = TRUE;
+									$collided['-x'] = TRUE;
+								} else if ( $collided['-x'] === FALSE && $position[$x][$letter] !== 0 ) {
+									$collided['-x'] = TRUE;
+								}
+							}
+
+							// +y
+							for ( $x = $number + 1; $x < 8; $x++ ) {
+								//echo "13\n";
+								if ( $collided['+y'] === FALSE && $position[$number][$x] === 'Q' ) {
+									$isCheck = TRUE;
+									$collided['+y'] = TRUE;
+								} else if ( $collided['+y'] === FALSE && $position[$number][$x] !== 0 ) {
+									$collided['+y'] = TRUE;
+								}
+							}
+
+							// -y
+							for ( $x = $number - 1; $x >= 0; $x-- ) {
+								//echo "14\n";
+								if ( $collided['-y'] === FALSE && $position[$number][$x] === 'Q' ) {
+									$isCheck = TRUE;
+									$collided['-y'] = TRUE;
+								} else if ( $collided['-y'] === FALSE && $position[$number][$x] !== 0 ) {
+									$collided['-y'] = TRUE;
+								}
+							}
+
+						}
+
+					} else if ( $square === 'b' ) {
+
+						$collided = array( '+x+y' => FALSE, '+x-y' => FALSE, '-x+y' => FALSE, '-x-y' => FALSE );
+
+						// diagonals
+
+						// +x +y
+						$x = $letter + 1;
+						$y = $number + 1;
+						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "15\n";
+							if ( $collided['+x+y'] == FALSE && ( $position[$y][$x] === 'Q' || $position[$y][$x] === 'R' ) ) {
+								$isCheck = TRUE;
+								$collided['+x+y'] = TRUE;
+							} else if ( $collided['+x+y'] == FALSE && $position[$y][$x] !== 0 ) {
+								$collided['+x+y'] = TRUE;
+							}
+							$x++;
+							$y++;
+						}
+
+						// +x -y
+						$x = $letter + 1;
+						$y = $number - 1;
+						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "16\n";
+							if ( $collided['+x-y'] == FALSE && ( $position[$y][$x] === 'Q' || $position[$y][$x] === 'R' ) ) {
+								$isCheck = TRUE;
+								$collided['+x-y'] = TRUE;
+							} else if ( $collided['+x-y'] == FALSE && $position[$y][$x] !== 0 ) {
+								$collided['+x-y'] = TRUE;
+							}
+							$x++;
+							$y--;
+						}
+
+						// -x +y
+						$x = $letter - 1;
+						$y = $number + 1;
+						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "17\n";
+							if ( $collided['-x+y'] == FALSE && ( $position[$y][$x] === 'Q' || $position[$y][$x] === 'R' ) ) {
+								$isCheck = TRUE;
+								$collided['-x+y'] = TRUE;
+							} else if ( $collided['-x+y'] == FALSE && $position[$y][$x] !== 0 ) {
+								$collided['-x+y'] = TRUE;
+							}
+							$x--;
+							$y++;
+						}
+
+						// -x -y
+						$x = $letter - 1;
+						$y = $number - 1;
+						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "18\n";
+							if ( $collided['-x-y'] == FALSE && ( $position[$y][$x] === 'Q' || $position[$y][$x] === 'R' ) ) {
+								$isCheck = TRUE;
+								$collided['-x-y'] = TRUE;
+							} else if ( $collided['-x-y'] == FALSE && $position[$y][$x] !== 0 ) {
+								$collided['-x-y'] = TRUE;
+							}
+							$x--;
+							$y--;
+						}
+
+					} else if ( $square === 'n' ) {
+						//L shapes
+
+						// ++x +y
+						if ( $letter + 2 < 8 && $number + 1 < 8 ) {
+							if ( $position[$number + 1][$letter + 2] === 'Q' || $position[$number + 1][$letter + 2] === 'R' ) {
+								$isCheck = TRUE;
+							}
+						}
+
+						// ++x -y
+						if ( $letter + 2 < 8 && $number - 1 >= 0 ) {
+							if ( $position[$number - 1][$letter + 2] === 'Q' || $position[$number - 1][$letter + 2] === 'R' ) {
+								$isCheck = TRUE;
+							}
+						}
+
+						// --x +y
+						if ( $letter - 2 >= 0 && $number + 1 < 8 ) {
+							if ( $position[$number + 1][$letter - 2] === 'Q' || $position[$number + 1][$letter - 2] === 'R' ) {
+								$isCheck = TRUE;
+							}
+						}
+
+						// --x -y
+						if ( $letter - 2 >= 0 && $number - 1 >= 0 ) {
+							if ( $position[$number - 1][$letter - 2] === 'Q' || $position[$number - 1][$letter - 2] === 'R' ) {
+								$isCheck = TRUE;
+							}
+						}
+
+						// ++y +x
+						if ( $letter + 1 < 8 && $number + 2 < 8 ) {
+							if ( $position[$number + 2][$letter + 1] === 'Q' || $position[$number + 2][$letter + 1] === 'R' ) {
+								$isCheck = TRUE;
+							}
+						}
+
+						// ++y -x
+						if ( $letter - 1 >= 0 && $number + 2 < 8 ) {
+							if ( $position[$number + 2][$letter - 1] === 'Q' || $position[$number + 2][$letter - 1] === 'R' ) {
+								$isCheck = TRUE;
+							}
+						}
+
+						// --y +x
+						if ( $letter + 1 < 8 && $number - 2 >= 0 ) {
+							if ( $position[$number - 2][$letter + 1] === 'Q' || $position[$number - 2][$letter + 1] === 'R' ) {
+								$isCheck = TRUE;
+							}
+						}
+
+						// --y -x
+						if ( $letter - 1 >= 0 && $number - 2 >= 0 ) {
+							if ( $position[$number - 2][$letter - 1] === 'Q' || $position[$number - 2][$letter - 1] === 'R' ) {
+								$isCheck = TRUE;
+							}
+						}
+
+					} else if ( $square === 'p' ) {
+						// +y -x
+						if ( $letter - 1 >= 0 && $number + 1 < 8 ) {
+							if ( $position[$number + 1][$letter - 1] === 'Q' 
+								|| $position[$number + 1][$letter - 1] === 'R' 
+								|| $position[$number + 1][$letter - 1] === 'N' 
+								|| $position[$number + 1][$letter - 1] === 'B' ) {
+								$isCheck = TRUE;
+							}
+						}
+
+						// +y +x
+						if ( $letter + 1 < 8 && $number + 1 < 8 ) {
+							if ( $position[$number + 1][$letter + 1] === 'Q' 
+								|| $position[$number + 1][$letter + 1] === 'R' 
+								|| $position[$number + 1][$letter + 1] === 'N' 
+								|| $position[$number + 1][$letter + 1] === 'B' ) {
+								$isCheck = TRUE;
+							}
+						}
+
+					} else if ( $square === 'Q' ) {
+
+						$collided = array( '+x' => FALSE, '+y' => FALSE, '-x' => FALSE, '-y' => FALSE,
+							'+x+y' => FALSE, '+x-y' => FALSE, '-x+y' => FALSE, '-x-y' => FALSE );
+
+						// straights
+
+						// +x
+						for ( $x = $number + 1; $x < 8; $x++ ) {
+							//echo "19\n";
+							if ( $collided['+x'] === FALSE && $position[$x][$letter] === 'q' ) {
+								$isCheck = TRUE;
+								$collided['+x'] = TRUE;
+							} else if ( $collided['+x'] === FALSE && $position[$x][$letter] !== 0 ) {
+								$collided['+x'] = TRUE;
+							}
+						}
+
+						// -x
+						for ( $x = $number - 1; $x >= 0; $x-- ) {
+							//echo "20\n";
+							if ( $collided['-x'] === FALSE && $position[$x][$letter] === 'q' ) {
+								$isCheck = TRUE;
+								$collided['-x'] = TRUE;
+							} else if ( $collided['-x'] === FALSE && $position[$x][$letter] !== 0 ) {
+								$collided['-x'] = TRUE;
+							}
+						}
+
+						// +y
+						for ( $x = $number + 1; $x < 8; $x++ ) {
+							//echo "21\n";
+							if ( $collided['+y'] === FALSE && $position[$number][$x] === 'q' ) {
+								$isCheck = TRUE;
+								$collided['+y'] = TRUE;
+							} else if ( $collided['+y'] === FALSE && $position[$number][$x] !== 0 ) {
+								$collided['+y'] = TRUE;
+							}
+						}
+
+						// -y
+						for ( $x = $number - 1; $x >= 0 ;$x-- ) {
+							//echo "22\n";
+							if ( $collided['-y'] === FALSE && $position[$number][$x] === 'q' ) {
+								$isCheck = TRUE;
+								$collided['-y'] = TRUE;
+							} else if ( $collided['-y'] === FALSE && $position[$number][$x] !== 0 ) {
+								$collided['-y'] = TRUE;
+							}
+						}
+
+						// diagonals
+
+						// +x +y
+						$x = $letter + 1;
+						$y = $number + 1;
+						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "23\n";
+							if ( $collided['+x+y'] == FALSE && $position[$y][$x] === 'q' ) {
+								$isCheck = TRUE;
+								$collided['+x+y'] = TRUE;
+							} else if ( $collided['+x+y'] == FALSE && $position[$y][$x] !== 0 ) {
+								$collided['+x+y'] = TRUE;
+							}
+							$x++;
+							$y++;
+						}
+
+						// +x -y
+						$x = $letter + 1;
+						$y = $number - 1;
+						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "24\n";
+							if ( $collided['+x-y'] == FALSE && $position[$y][$x] === 'q' ) {
+								$isCheck = TRUE;
+								$collided['+x-y'] = TRUE;
+							} else if ( $collided['+x-y'] == FALSE && $position[$y][$x] !== 0 ) {
+								$collided['+x-y'] = TRUE;
+							}
+							$x++;
+							$y--;
+						}
+
+						// -x +y
+						$x = $letter - 1;
+						$y = $number + 1;
+						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "25\n";
+							if ( $collided['-x+y'] == FALSE && $position[$y][$x] === 'q' ) {
+								$isCheck = TRUE;
+								$collided['-x+y'] = TRUE;
+							} else if ( $collided['-x+y'] == FALSE && $position[$y][$x] !== 0 ) {
+								$collided['-x+y'] = TRUE;
+							}
+							$x--;
+							$y++;
+						}
+
+						// -x -y
+						$x = $letter - 1;
+						$y = $number - 1;
+						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "26\n";
+							if ( $collided['-x-y'] == FALSE && $position[$y][$x] === 'q' ) {
+								$isCheck = TRUE;
+								$collided['-x-y'] = TRUE;
+							} else if ( $collided['-x-y'] == FALSE && $position[$y][$x] !== 0 ) {
+								$collided['-x-y'] = TRUE;
+							}
+							$x--;
+							$y--;
+						}
+
+					} else if ( $square === 'R' ) {
+
+						$collided = array( '+x' => FALSE, '+y' => FALSE, '-x' => FALSE, '-y' => FALSE );
+
+						for ( $x = 0; $x++; $x < 8 ) {
+							// straights
+
+							// +x
+							for ( $x = $number + 1; $x < 8; $x++ ) {
+								//echo "27\n";
+								if ( $collided['+x'] === FALSE && $position[$x][$letter] === 'q' ) {
+									$isCheck = TRUE;
+									$collided['+x'] = TRUE;
+								} else if ( $collided['+x'] === FALSE && $position[$x][$letter] !== 0 ) {
+									$collided['+x'] = TRUE;
+								}
+							}
+
+							// -x
+							for ( $x = $number - 1; $x >= 0; $x-- ) {
+								//echo "28\n";
+								if ( $collided['-x'] === FALSE && $position[$x][$letter] === 'q' ) {
+									$isCheck = TRUE;
+									$collided['-x'] = TRUE;
+								} else if ( $collided['-x'] === FALSE && $position[$x][$letter] !== 0 ) {
+									$collided['-x'] = TRUE;
+								}
+							}
+
+							// +y
+							for ( $x = $number + 1; $x < 8; $x++ ) {
+								//echo "29\n";
+								if ( $collided['+y'] === FALSE && $position[$number][$x] === 'q' ) {
+									$isCheck = TRUE;
+									$collided['+y'] = TRUE;
+								} else if ( $collided['+y'] === FALSE && $position[$number][$x] !== 0 ) {
+									$collided['+y'] = TRUE;
+								}
+							}
+
+							// -y
+							for ( $x = $number - 1; $x >= 0; $x-- ) {
+								//echo "30\n";
+								if ( $collided['-y'] === FALSE && $position[$number][$x] === 'q' ) {
+									$isCheck = TRUE;
+									$collided['-y'] = TRUE;
+								} else if ( $collided['-y'] === FALSE && $position[$number][$x] !== 0 ) {
+									$collided['-y'] = TRUE;
+								}
+							}
+
+						}
+
+					} else if ( $square === 'B' ) {
+						$collided = array( '+x+y' => FALSE, '+x-y' => FALSE, '-x+y' => FALSE, '-x-y' => FALSE );
+
+						// diagonals
+
+						// +x +y
+						$x = $letter + 1;
+						$y = $number + 1;
+						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "31\n";
+							if ( $collided['+x+y'] == FALSE && ( $position[$y][$x] === 'q' || $position[$y][$x] === 'r' ) ) {
+								$isCheck = TRUE;
+								$collided['+x+y'] = TRUE;
+							} else if ( $collided['+x+y'] == FALSE && $position[$y][$x] !== 0 ) {
+								$collided['+x+y'] = TRUE;
+							}
+							$x++;
+							$y++;
+						}
+
+						// +x -y
+						$x = $letter + 1;
+						$y = $number - 1;
+						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "32\n";
+							if ( $collided['+x-y'] == FALSE && ( $position[$y][$x] === 'q' || $position[$y][$x] === 'r' ) ) {
+								$isCheck = TRUE;
+								$collided['+x-y'] = TRUE;
+							} else if ( $collided['+x-y'] == FALSE && $position[$y][$x] !== 0 ) {
+								$collided['+x-y'] = TRUE;
+							}
+							$x++;
+							$y--;
+						}
+
+						// -x +y
+						$x = $letter - 1;
+						$y = $number + 1;
+						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "33\n";
+							if ( $collided['-x+y'] == FALSE && ( $position[$y][$x] === 'q' || $position[$y][$x] === 'r' ) ) {
+								$isCheck = TRUE;
+								$collided['-x+y'] = TRUE;
+							} else if ( $collided['-x+y'] == FALSE && $position[$y][$x] !== 0 ) {
+								$collided['-x+y'] = TRUE;
+							}
+							$x--;
+							$y++;
+						}
+
+						// -x -y
+						$x = $letter - 1;
+						$y = $number - 1;
+						while ( $x < 8 && $y < 8 && $x >= 0 && $y >= 0 ) {
+							//echo "34\n";
+							if ( $collided['-x-y'] == FALSE && ( $position[$y][$x] === 'q' || $position[$y][$x] === 'r' ) ) {
+								$isCheck = TRUE;
+								$collided['-x-y'] = TRUE;
+							} else if ( $collided['-x-y'] == FALSE && $position[$y][$x] !== 0 ) {
+								$collided['-x-y'] = TRUE;
+							}
+							$x--;
+							$y--;
+						}
+
+					} else if ( $square === 'N' ) {
+						//L shapes
+
+						// ++x +y
+						if ( $letter + 2 < 8 && $number + 1 < 8 ) {
+							if ( $position[$number + 1][$letter + 2] === 'q' || $position[$number + 1][$letter + 2] === 'r' ) {
+								$isCheck = TRUE;
+							}
+						}
+
+						// ++x -y
+						if ( $letter + 2 < 8 && $number - 1 >= 0 ) {
+							if ( $position[$number - 1][$letter + 2] === 'q' || $position[$number - 1][$letter + 2] === 'r' ) {
+								$isCheck = TRUE;
+							}
+						}
+
+						// --x +y
+						if ( $letter - 2 >= 0 && $number + 1 < 8 ) {
+							if ( $position[$number + 1][$letter - 2] === 'q' || $position[$number + 1][$letter - 2] === 'r' ) {
+								$isCheck = TRUE;
+							}
+						}
+
+						// --x -y
+						if ( $letter - 2 >= 0 && $number - 1 >= 0 ) {
+							if ( $position[$number - 1][$letter - 2] === 'q' || $position[$number - 1][$letter - 2] === 'r' ) {
+								$isCheck = TRUE;
+							}
+						}
+
+						// ++y +x
+						if ( $letter + 1 < 8 && $number + 2 < 8 ) {
+							if ( $position[$number + 2][$letter + 1] === 'q' || $position[$number + 2][$letter + 1] === 'r' ) {
+								$isCheck = TRUE;
+							}
+						}
+
+						// ++y -x
+						if ( $letter - 1 >= 0 && $number + 2 < 8 ) {
+							if ( $position[$number + 2][$letter - 1] === 'q' || $position[$number + 2][$letter - 1] === 'r' ) {
+								$isCheck = TRUE;
+							}
+						}
+
+						// --y +x
+						if ( $letter + 1 < 8 && $number - 2 >= 0 ) {
+							if ( $position[$number - 2][$letter + 1] === 'q' || $position[$number - 2][$letter + 1] === 'r' ) {
+								$isCheck = TRUE;
+							}
+						}
+
+						// --y -x
+						if ( $letter - 1 >= 0 && $number - 2 >= 0 ) {
+							if ( $position[$number - 2][$letter - 1] === 'q' || $position[$number - 2][$letter - 1] === 'r' ) {
+								$isCheck = TRUE;
+							}
+						}
+
+					} else if ( $square === 'P' ) {
+
+						// -y -x
+						if ( $letter - 1 >= 0 && $number - 1 >= 0 ) {
+							if ( $position[$number - 1][$letter - 1] === 'q' 
+								|| $position[$number - 1][$letter - 1] === 'r' 
+								|| $position[$number - 1][$letter - 1] === 'n' 
+								|| $position[$number - 1][$letter - 1] === 'b' ) {
+								$isCheck = TRUE;
+							}
+						}
+
+						// -y +x
+						if ( $letter + 1 < 8 && $number - 1 >= 0 ) {
+							if ( $position[$number - 1][$letter + 1] === 'q' 
+								|| $position[$number - 1][$letter + 1] === 'r' 
+								|| $position[$number - 1][$letter + 1] === 'n' 
+								|| $position[$number - 1][$letter + 1] === 'b' ) {
+								$isCheck = TRUE;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return $isCheck;
+}
+
+function updatePosition ( $position, $move ) {
+	//Take a position and a move and return the new board position
+
+	$reference = array(
+			'a' => 0,
+			'b' => 1,
+			'c' => 2,
+			'd' => 3,
+			'e' => 4,
+			'f' => 5,
+			'g' => 6,
+			'h' => 7,
+			'1' => 7,
+			'2' => 6,
+			'3' => 5,
+			'4' => 4,
+			'5' => 3,
+			'6' => 2,
+			'7' => 1,
+			'8' => 0
+		);
+
+	$moveSplit = str_split( $move );
+
+	if ( $move == 'e8c8' && $position[$reference['8']][$reference['e']] === 'k' ) {
+		//black long castle
+
+		$position[$reference['8']][$reference['c']] = 'k';
+		$position[$reference['8']][$reference['d']] = 'r';
+		$position[$reference['8']][$reference['e']] = 0;
+		$position[$reference['8']][$reference['a']] = 0;
+
+	} else if ( $move == 'e8g8' &&  $position[$reference['8']][$reference['e']] === 'k' ) {
+		//black short castle
+
+		$position[$reference['8']][$reference['g']] = 'k';
+		$position[$reference['8']][$reference['f']] = 'r';
+		$position[$reference['8']][$reference['e']] = 0;
+		$position[$reference['8']][$reference['h']] = 0;
+
+	} else if ( $move == 'e1c1' &&  $position[$reference['1']][$reference['e']] === 'K' ) {
+		//white long castle
+
+		$position[$reference['1']][$reference['c']] = 'K';
+		$position[$reference['1']][$reference['d']] = 'R';
+		$position[$reference['1']][$reference['e']] = 0;
+		$position[$reference['1']][$reference['a']] = 0;
+
+	} else if ( $move == 'e1g1' &&  $position[$reference['1']][$reference['e']] === 'K' ) {
+		//white short castle
+
+		$position[$reference['1']][$reference['g']] = 'K';
+		$position[$reference['1']][$reference['f']] = 'R';
+		$position[$reference['1']][$reference['e']] = 0;
+		$position[$reference['1']][$reference['h']] = 0;
+
+	} else if ( $position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] === 'P' 
+		&& $moveSplit[0] !== $moveSplit[2]
+		&& $position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] === 0 ) {
+		//White en passant
+
+		$position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] = 'P';
+		$position[$reference[$moveSplit[3]]+1][$reference[$moveSplit[2]]] = 0;
+		$position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] = 0;
+
+	} else if ( $position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] == 'p' 
+		&& $moveSplit[0] !== $moveSplit[2]
+		&& $position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] === 0 ) {
+		//Black en passant
+
+		$position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] = 'p';
+		$position[$reference[$moveSplit[3]]-1][$reference[$moveSplit[2]]] = 0;
+		$position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] = 0;
+		
+	} else if ( count( $moveSplit ) == 5 ) {
+		//promotion
+		if ( $position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] === 'P' ) {
+
+			$position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] = strtoupper( $moveSplit[4] );
+
+		} else {
+
+			$position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] = strtolower( $moveSplit[4] );
+
+		}
+
+		$position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] = 0;
+
+	} else if ( count( $moveSplit ) == 4 ) {
+		//Normal move
+		$position[$reference[$moveSplit[3]]][$reference[$moveSplit[2]]] = $position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]];
+		$position[$reference[$moveSplit[1]]][$reference[$moveSplit[0]]] = 0;
+	}
+
+	return $position;
 }
