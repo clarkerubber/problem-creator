@@ -19,3 +19,6 @@ $MAX_CAPTURE_LINES = 5; // maximum amonut of lines that can be used in capture l
 $MAJOR_MOVE_THRESHOLD = 4; // Amount of plys for a capture or promotion to take place
 
 $MAX_MATE_LINES = 50; // Maximum amount of ways to checkmate
+
+//-----Spin
+$MATE_THREAT_WIDTH = 10;

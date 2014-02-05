@@ -133,6 +133,12 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft, $t
 			$isCheck = isCheck( $moveString.$move );
 			$isTension = isTension( $moveString.$move );
 
+			if ( $player === FALSE ) {
+				$isMateThreat = isMateThreat( $moveString.$move );
+			} else {
+				$isMateThreat = FALSE;
+			}
+
 			if ( $player == TRUE ) {
 				if ( $changeThisTurn > 1 ) {
 					$parsedTally += $changeThisTurn;	
@@ -145,9 +151,9 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft, $t
 			}
 			//echo "  Parent -> Child | CP Adv | Plies | Adv | Var | + | T\n";
 			if ( $player == TRUE ) {
-				printf("P: %5s -> %5s | %+6d | %5d | %+3d | %+3d | %1s | %1s\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn, $isCheck? '+' : '-', $isTension? '+' : '-' );
+				printf("P: %5s -> %5s | %+6d | %5d | %+3d | %+3d | %1s | %1s | %1s\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn, $isCheck? '+' : '-', $isTension? '+' : '-', $isMateThreat? '+' : '-' );
 			} else {
-				printf("C: %5s -> %5s | %+6d | %5d | %+3d | %+3d | %1s | %1s\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn, $isCheck? '+' : '-', $isTension? '+' : '-' );
+				printf("C: %5s -> %5s | %+6d | %5d | %+3d | %+3d | %1s | %1s | %1s\n", $lastMove, $move, -1 * $candidateMovesEval[$key], $pliesLeft, $parsedTally, $changeThisTurn, $isCheck? '+' : '-', $isTension? '+' : '-', $isMateThreat? '+' : '-' );
 			}
 
 			if ( $player == TRUE ) {
@@ -209,6 +215,22 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft, $t
 
 
 	return $moveArray;
+}
+
+function isMateThreat ( $moveString ) {
+	// Given a position, if the next move is a passing move, is there a mate threat?
+	global $MATE_THREAT_WIDTH, $SECOND_PASS_TIME;
+	$uciOutput = getUci( $moveString, $FIRST_PASS_TIME, $MATE_THREAT_WIDTH );
+
+	preg_match_all( "/info.*?mate (-?[0-9]+).*?([a-h][1-8][a-h][1-8][qrnb]?)/", $uciOutput, $matches );
+
+	$output = FALSE;
+
+	if ( !empty( $matches[0] ) ) {
+		$output = TRUE;
+	}
+
+	return $output;
 }
 
 function getPositionEval ( $moveString, $moveTime ) {
@@ -306,11 +328,6 @@ function materialChange ( $moveString ) {
 	}
 
 	return $output;
-}
-
-function isMateThreat ( $moveString ) {
-	// Given a position, if the next move is a passing move, is there a mate threat?
-	
 }
 
 function isCheck ( $moveString ) {
