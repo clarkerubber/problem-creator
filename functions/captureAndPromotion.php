@@ -176,7 +176,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft, $t
 				if ( $parsedTally <= 2 && $changeThisTurn === 0 && $pliesLeft - 1 > 0 ) {
 					//Nothing has happened
 					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $pliesLeft - 1, $targetAdv );
-				} else if ( ( $parsedTally <= 2 && $changeThisTurn < 0 || $isCheck === TRUE ) &&  $pliesLeft - 1 > 0 ) {
+				} else if ( ( $parsedTally <= 2 && $changeThisTurn < 0 || $isCheck === TRUE || $isTension === TRUE ) &&  $pliesLeft - 1 > 0 ) {
 					//Somthing has happened
 					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $pliesLeft + 1, $targetAdv );
 				} else if ( $parsedTally > 2 ) {
@@ -185,6 +185,11 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft, $t
 				} else {
 					$moveArray[$move] = 'retry';
 					echo "$move -> RETRY\n";
+				}
+
+				if ( $moveArray[$move] === 'retry' && $parsedTally >= 1 ) {
+					$moveArray[$move] = 'win';
+					echo "$move -> WIN on reconsideration\n";
 				}
 			}
 		} else if ( abs( $candidateMovesEval[$key] - $topEval ) <= abs( $topEval * $RETRY_THRESHOLD ) && 
