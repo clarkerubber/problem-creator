@@ -308,6 +308,11 @@ function materialChange ( $moveString ) {
 	return $output;
 }
 
+function isMateThreat ( $moveString ) {
+	// Given a position, if the next move is a passing move, is there a mate threat?
+	
+}
+
 function isCheck ( $moveString ) {
 	//Input: A string of moves in coordinate notation (e2e4)
 	//	And if to limit results to major cpatures (i.e. not pawn captures)

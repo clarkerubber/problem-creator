@@ -89,7 +89,7 @@ function createProblems ( $game ) {
 
 function getUci ( $moveSequence, $moveTime, $multiPv = 1 ) {
 
-	global $STOCKFISH_PATH;
+	global $STOCKFISH_PATH, $STOCKFISH_THREADS;
 
 	$descriptorspec = array(
 		0 => array( "pipe", "r" ),  // stdin is a pipe that the child will read from
@@ -108,6 +108,9 @@ function getUci ( $moveSequence, $moveTime, $multiPv = 1 ) {
 		fwrite( $pipes[0], "ucinewgame\n" );
 		fwrite( $pipes[0], "isready\n" );
 		fwrite( $pipes[0], "setoption name MultiPV value $multiPv\n" );
+		if ( is_int( $STOCKFISH_THREADS ) && isset( $STOCKFISH_THREADS ) ) {
+			fwrite( $pipes[0], "setoption name Threads value $STOCKFISH_THREADS\n" );
+		}
 		fwrite( $pipes[0], "position startpos moves $moveSequence\n" );
 		fwrite( $pipes[0], "go movetime $moveTime\n" );
 		usleep( 1000 * $moveTime + 100 );
