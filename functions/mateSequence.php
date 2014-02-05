@@ -215,7 +215,7 @@ function getMateMovesFromPosition ( $moveString, $player, $findMate ) {
 		echo "$lastMove -> NO WIN\n";
 	}
 
-	return $output;
+	return $moveArray;
 }
 
 function getPositionMate ( $moveString, $moveTime ) {

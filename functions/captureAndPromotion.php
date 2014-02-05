@@ -152,7 +152,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft, $t
 
 			if ( $player == TRUE ) {
 
-				if ( $parsedTally > 2 && $pliesLeft == 1 ) {
+				if ( $parsedTally > 0 && $pliesLeft == 1 ) {
 					$moveArray[$move] = 'win';
 					echo "$move -> WIN\n";
 				} else {
@@ -170,10 +170,10 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft, $t
 
 			} else {
 
-				if ( $parsedTally <= 2 && $changeThisTurn === 0 && $pliesLeft - 1 > 0 ) {
+				if ( $parsedTally <= 0 && $changeThisTurn === 0 && $pliesLeft - 1 > 0 ) {
 					//Nothing has happened
 					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $pliesLeft - 1, $targetAdv );
-				} else if ( ( $parsedTally <= 2 || $changeThisTurn < -1 || $isCheck === TRUE || $isTension === TRUE ) &&  $pliesLeft - 1 > 0 ) {
+				} else if ( ( $parsedTally <= 0 || $changeThisTurn < -1 || $isCheck === TRUE || $isTension === TRUE ) &&  $pliesLeft - 1 > 0 ) {
 					//Somthing has happened
 					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $MAJOR_MOVE_THRESHOLD, $targetAdv );
 				} else if ( $parsedTally > 0 ) {
