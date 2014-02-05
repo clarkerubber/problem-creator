@@ -186,11 +186,6 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft, $t
 					$moveArray[$move] = 'retry';
 					echo "$move -> RETRY\n";
 				}
-
-				if ( $moveArray[$move] === 'retry' && $parsedTally >= 1 ) {
-					$moveArray[$move] = 'win';
-					echo "$move -> WIN on reconsideration\n";
-				}
 			}
 		} else if ( abs( $candidateMovesEval[$key] - $topEval ) <= abs( $topEval * $RETRY_THRESHOLD ) && 
 			abs( $candidateMovesEval[$key] - $topEval ) > abs( $topEval * $ALT_THRESHOLD ) ) {
