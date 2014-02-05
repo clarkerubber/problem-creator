@@ -159,10 +159,6 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft, $t
 					if ( $changeThisTurn > 1 ) {
 						//Something happened
 						$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', FALSE, $parsedTally, $MAJOR_MOVE_THRESHOLD, $targetAdv );
-						if ( $moveArray[$move] === 'retry' && $parsedTally > 0 ) {
-							$moveArray[$move] = 'win';
-							echo "$move -> WIN by advantage\n";
-						}
 					} else if ( $pliesLeft - 1 > 0 ) {
 						//Nothing happened
 						$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', FALSE, $parsedTally, $pliesLeft - 1, $targetAdv );
