@@ -3,16 +3,22 @@ problem-creator
 
 create chess problems for lichess
 
+### Installation
+
+Copy `config.php.dist` to `config.php`, then edit `config.php` to match your needs.
+
+The only settings you are required to change are `LICHESS_API_TOKEN` and `STOCKFISH_PATH`.
+
 ### problem-creator Command Line Interface:
 `user$ php problem-creator.php [ number of games per batch = 1, [number of batches = 1] ]`
 
 ### CLI Output:
 ```
 Batch 1 of 10
-Parent -> Child | Mate In 
+Parent -> Child | Mate In
 ==========================
-  d3g6 ->  a8a1 |  +0 
-  d3g6 ->  d4a1 |  +0 
+  d3g6 ->  a8a1 |  +0
+  d3g6 ->  d4a1 |  +0
 Array
 (
     [tags] => Array
@@ -21,7 +27,7 @@ Array
         )
 
     [color] => black
-    [position] => e2e4 c7c5 g1f3 e7e6 b1c3 b8c6 b2b3 f8e7 c1b2 e7f6 f1b5 g8e7 d1e2 a7a6 b5d3 e7g6 e1c1 d7d6 g2g3 e8g8 h2h4 c6b4 h4h5 g6e5 f3e5 f6e5 f2f4 e5c3 b2c3 b4a2 c1b2 a2c3 d2c3 b7b5 c3c4 c8b7 h5h6 g7g6 h1f1 d8a5 d1a1 a5b6 f4f5 b5b4 g3g4 a6a5 e4e5 a5a4 e5d6 b6d6 f5g6 d6d4 b2b1 h7g6 e2f2 a4b3 a1a8 b3c2 f2c2 f8a8 d3g6 
+    [position] => e2e4 c7c5 g1f3 e7e6 b1c3 b8c6 b2b3 f8e7 c1b2 e7f6 f1b5 g8e7 d1e2 a7a6 b5d3 e7g6 e1c1 d7d6 g2g3 e8g8 h2h4 c6b4 h4h5 g6e5 f3e5 f6e5 f2f4 e5c3 b2c3 b4a2 c1b2 a2c3 d2c3 b7b5 c3c4 c8b7 h5h6 g7g6 h1f1 d8a5 d1a1 a5b6 f4f5 b5b4 g3g4 a6a5 e4e5 a5a4 e5d6 b6d6 f5g6 d6d4 b2b1 h7g6 e2f2 a4b3 a1a8 b3c2 f2c2 f8a8 d3g6
     [solution] => Array
         (
             [a8a1] => end
