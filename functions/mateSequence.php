@@ -50,6 +50,7 @@ function buildMateTree ( $moveString, $isMate ) {
 	$output = FALSE;
 
 	$empty = TRUE;
+	$abort = FALSE;
 
 	if ( is_array( $movesList ) ) {
 		foreach ( $movesList as $key => $value ) {
@@ -57,11 +58,15 @@ function buildMateTree ( $moveString, $isMate ) {
 			if ( $value !== 'retry' ) {
 				$empty = FALSE;
 			}
+
+			if ( $value === 'abort' ) {
+				$abort = TRUE;
+			}
 		}
 	}
 	
 
-	if ( $empty == FALSE ) {
+	if ( $empty == FALSE && $abort == FALSE ) {
 
 		$output = $movesList;
 
@@ -192,10 +197,12 @@ function getMateMovesFromPosition ( $moveString, $player, $findMate ) {
 		}
 	}
 
-	
 
 	if ( !empty( $moveArray ) ) {
+
 		$empty = TRUE;
+		$abort = FALSE;
+
 		foreach ( $moveArray as $key => $value ) {
 
 			if ( $value !== 'retry' ) {
@@ -204,15 +211,20 @@ function getMateMovesFromPosition ( $moveString, $player, $findMate ) {
 
 			}
 
+			if ( $value === 'abort' ) {
+				$abort = TRUE;
+			}
+
 		}
 
-		if ( $empty == TRUE ) {
-			$moveArray = 'retry';
-			echo "$lastMove -> NO WIN\n";
+		if ( $empty == TRUE || $abort == TRUE ) {
+			$moveArray = 'abort';
+			echo "$lastMove -> ABORT!\n";
 		}
+
 	} else {
-		$moveArray = 'retry';
-		echo "$lastMove -> NO WIN\n";
+		$moveArray = 'abort';
+		echo "$lastMove -> ABORT!\n\n";
 	}
 
 	return $moveArray;
