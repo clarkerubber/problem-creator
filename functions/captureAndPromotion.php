@@ -134,9 +134,14 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 			$isTension = isTension( $moveString.$move );
 			$nextMoveCapture = nextMoveCapture( $moveString.$move );
 
+			$confirmTension = FALSE;
+
 			if ( $player === FALSE ) {
 				$isMateThreat = isMateThreat( $moveString.$move );
 				$nextMoveCapture = nextMoveCapture( $moveString.$move );
+				if ( $isTension === TRUE ) {
+					$confirmTension = confirmTension( $moveString.$move );
+				}
 			} else {
 				$isMateThreat = FALSE;
 				$nextMoveCapture = FALSE;
@@ -162,14 +167,14 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 				$parsedTally, 
 				$changeThisTurn, 
 				$isCheck? '+' : '-', 
-				$isTension? '+' : '-', 
+				$isTension? ( $confirmTension? '#' : '+' ) : '-',
 				$isMateThreat? '+' : '-', 
 				$nextMoveCapture? '+' : '-' );
-
+/*
 			if ( $player === FALSE ) {
 				$moveDecrement = ( $isCheck === TRUE || $isMateThreat === TRUE || $nextMoveCapture === TRUE )? 0 : 1;
 			}
-
+*/
 			if ( $player == TRUE ) {
 
 				if ( $parsedTally > 0 && $pliesLeft == 1 ) {
@@ -204,8 +209,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 					|| $isTension === TRUE 
 					|| $isMateThreat === TRUE
 					|| $nextMoveCapture === TRUE ) 
-					&&  $pliesLeft - $moveDecrement > 0 ) {
-					// ^ hack to allow checks and captures to go on
+					&&  $pliesLeft - 1 > 0 ) {
 					//Somthing has happened
 					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $MAJOR_MOVE_THRESHOLD );
 				} else {
@@ -239,6 +243,61 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 
 
 	return $moveArray;
+}
+
+function confirmTension ( $moveString ) {
+	// If the next player move is bad (i.e. passing/null) will they lose material?
+	global $FIND_BAD_MOVE_TIME, $TENSION_THREAT_WIDTH;
+	$uciOutput = getUci( $moveString, $FIND_BAD_MOVE_TIME, $TENSION_THREAT_WIDTH );
+
+	preg_match_all( "/info.*?cp (-?[0-9]+).*?([a-h][1-8][a-h][1-8][qrnb]?)/", $uciOutput, $matches );
+
+	$candidateMoves = array();
+	$candidateMovesEval = array();
+
+	foreach ( $matches[2] as $key => $match ) {
+
+		if ( !in_array( $match , $candidateMoves) ) {
+
+			$candidateMoves[] = $match;
+
+		}
+
+	}
+
+	foreach ( $candidateMoves as $key => $move ) {
+
+		$candidateMovesEval[] = getPositionEval( "$moveString$move ", $FIND_BAD_MOVE_TIME );
+
+	}
+
+	array_multisort( $candidateMovesEval, SORT_DESC, SORT_NUMERIC, $candidateMoves );
+	
+	if ( !empty( $candidateMovesEval ) ) {
+
+		while ( $candidateMovesEval[0] === FALSE ) {
+
+			array_shift( $candidateMovesEval );
+			array_shift( $candidateMoves );
+
+			if ( empty( $candidateMovesEval ) ) {
+				break;
+			}
+
+		}
+
+	}
+
+	$output = FALSE:
+
+	if ( !empty( $candidateMoves ) ) {
+		$worstMove = array_shift( $candidateMoves );
+		if ( nextMoveCapture( $moveString.' '.$worstMove ) === TRUE ) {
+			$output = TRUE;
+		}
+	}
+
+	return $output;
 }
 
 function nextMoveCapture ( $moveString ) {

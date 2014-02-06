@@ -22,3 +22,5 @@ $MAX_MATE_LINES = 50; // Maximum amount of ways to checkmate
 
 //-----Spin
 $MATE_THREAT_WIDTH = 10;
+$TENSION_THREAT_WIDTH = 10;
+$FIND_BAD_MOVE_TIME = 500;
