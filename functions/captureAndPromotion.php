@@ -263,7 +263,7 @@ function isMateThreat ( $moveString ) {
 	global $MATE_THREAT_WIDTH, $SECOND_PASS_TIME;
 	$uciOutput = getUci( $moveString, $SECOND_PASS_TIME, $MATE_THREAT_WIDTH );
 
-	preg_match_all( "/info.*?mate (-?[0-9]+).*?([a-h][1-8][a-h][1-8][qrnb]?)/", $uciOutput, $matches );
+	preg_match_all( "/info.*?mate (-[0-9]+).*?([a-h][1-8][a-h][1-8][qrnb]?)/", $uciOutput, $matches );
 
 	$output = FALSE;
 
