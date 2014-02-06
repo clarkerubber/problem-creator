@@ -200,7 +200,8 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 					|| $isTension === TRUE 
 					|| $isMateThreat === TRUE
 					|| $nextMoveCapture === TRUE ) 
-					&&  $pliesLeft - 1 > 0 ) {
+					&&  $pliesLeft - ( $isCheck === TRUE || $isMateThreat === TRUE || $nextMoveCapture === TRUE )? 0 : 1 > 0 ) {
+					// ^ hack to allow checks and captures to go on
 					//Somthing has happened
 					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $MAJOR_MOVE_THRESHOLD );
 				} else {
