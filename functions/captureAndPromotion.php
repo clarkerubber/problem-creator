@@ -201,7 +201,7 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 					&& $pliesLeft - 1 > 0 ) {
 					//Nothing has happened and we aren't complete
 					$moveArray[$move] = getMovesListFromPosition ( $moveString.$move.' ', TRUE, $parsedTally, $pliesLeft - 1 );
-				} else if ( ( abs( $changeThisTurn ) > 1 
+				} else if ( abs( $changeThisTurn ) > 1 
 					|| $isCheck === TRUE 
 					|| $confirmTension === TRUE 
 					|| $nextMoveCapture === TRUE ) {
