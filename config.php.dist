@@ -1,6 +1,6 @@
 <?php
 
-$LICHESS_API_TOKEN = "set me!" // Secret token to access lichess puzzle API
+$LICHESS_API_TOKEN = "set me!"; // Secret token to access lichess puzzle API
 
 //-----thresholds
 $BALANCED = 150; // +-centipawns for a position to be considered even
