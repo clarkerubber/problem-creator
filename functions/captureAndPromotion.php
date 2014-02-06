@@ -288,7 +288,7 @@ function confirmTension ( $moveString ) {
 
 	}
 
-	$output = FALSE:
+	$output = FALSE;
 
 	if ( !empty( $candidateMoves ) ) {
 		$worstMove = array_shift( $candidateMoves );
