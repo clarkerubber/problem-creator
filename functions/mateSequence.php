@@ -197,14 +197,15 @@ function getMateMovesFromPosition ( $moveString, $player, $findMate ) {
 
 			}
 
+			if ( $moveArray[$move] === 'abort' ) {
+				echo "$move -> ABORT! TIME OUT!\n";
+				return 'abort';
+			}
+
 		} else if ( $key < $maxLines && $candidateMovesEval[$key] = $topEval - 1 && $player == TRUE ) {
 			$moveArray[$move] = 'retry';
 		}
 
-		if ( $moveArray[$move] === 'abort' ) {
-			echo "$move -> ABORT! TIME OUT!\n";
-			return 'abort';
-		}
 	}
 
 
