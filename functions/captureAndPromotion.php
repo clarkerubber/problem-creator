@@ -50,7 +50,7 @@ function buildCaptureTree ( $moveString ) {
 	$movesList = getMovesListFromPosition( $moveString, TRUE, 0, $MAJOR_MOVE_THRESHOLD );
 	$output = FALSE;
 
-	if ( !empty( $movesList ) && $movesList !== 'retry' ) {
+	if ( !empty( $movesList ) && $movesList !== 'retry' && $movesList !== 'abort' ) {
 
 		$output = $movesList;
 
@@ -63,7 +63,12 @@ function buildCaptureTree ( $moveString ) {
 function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 
 	global $FIRST_PASS_TIME, $SECOND_PASS_TIME, $ALT_THRESHOLD, $RETRY_THRESHOLD, $MAJOR_MOVE_THRESHOLD;
-	global $MAX_CAPTURE_LINES;
+	global $MAX_CAPTURE_LINES, $SESSION_START, $SESSION_LENGTH;
+
+	if ( time() - $SESSION_START >= $SESSION_LENGTH ) {
+		echo "ABORT! TIME OUT!\n";
+		return 'abort';
+	}
 
 	if ( $player == TRUE ) {
 		$maxLines = $MAX_CAPTURE_LINES;
@@ -221,6 +226,11 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 			abs( $candidateMovesEval[$key] - $topEval ) > abs( $topEval * $ALT_THRESHOLD ) && $player === TRUE ) {
 			$moveArray[$move] = 'retry';
 			echo "$move -> RETRY\n";
+		}
+
+		if ( $moveArray[$move] === 'abort' ) {
+			echo "$move -> ABORT! TIME OUT!\n";
+			return 'abort';
 		}
 	}
 

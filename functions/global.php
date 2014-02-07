@@ -4,33 +4,36 @@ function createProblems ( $game ) {
 	//Input: A game that consists of a list of moves.
 	//Output: A list of problems
 
-	global $BALANCED, $UNBALANCED, $DIFFERENCE;
+	global $BALANCED, $UNBALANCED, $DIFFERENCE, $SESSION_START;
 
 	$lines = array();
 
 	foreach ( $game['analysis'] as $moveKey => $move ) {
 
+		$SESSION_START = time();
+
+		unset( $prevMoveEval );
 		unset( $nextMoveEval );
 		unset( $nextMoveMate );
 
-		if ( isset( $game['analysis'][$moveKey + 1]['eval'] ) ) {
+		if ( isset( $game['analysis'][$moveKey + 1]['eval'] ) 
+			&& isset( $game['analysis'][$moveKey - 1]['eval'] ) ) {
 
+			$prevMoveEval = $game['analysis'][$moveKey - 1]['eval'];
 			$nextMoveEval = $game['analysis'][$moveKey + 1]['eval'];
 
-		} else {
+		} else if ( isset( $game['analysis'][$moveKey + 1]['mate'] ) ) {
 
-			if ( isset( $game['analysis'][$moveKey + 1]['mate'] ) ) {
+			$nextMoveMate = $game['analysis'][$moveKey + 1]['mate'];
 
-				$nextMoveMate = $game['analysis'][$moveKey + 1]['mate'];
-
-			}
-			
 		}
 
-		if ( isset( $move['eval'] ) && isset( $nextMoveEval ) ){
+		if ( isset( $move['eval'] ) 
+			&& isset( $nextMoveEval ) 
+			&& isset( $prevMoveEval ) ){
 
-			if ( ( ( $move['eval'] <= $BALANCED && $nextMoveEval >= $UNBALANCED ) 
-				|| ( $move['eval'] >= -$BALANCED && $nextMoveEval <= -$UNBALANCED ) )
+			if ( ( ( $prevMoveEval <= $BALANCED && $move['eval'] <= $BALANCED && $nextMoveEval >= $UNBALANCED )
+				|| ( $prevMoveEval >= -$BALANCED && $move['eval'] >= -$BALANCED && $nextMoveEval <= -$UNBALANCED ) )
 				&& abs( $move['eval'] - $nextMoveEval ) >= $DIFFERENCE  ) {
 
 				//printf(" %5s -> %5s | Mate In %+6d \n", $lastMove, $move, -1 * $candidateMovesEval[$key] );

@@ -77,7 +77,12 @@ function buildMateTree ( $moveString, $isMate ) {
 
 function getMateMovesFromPosition ( $moveString, $player, $findMate ) {
 
-	global $FIRST_PASS_TIME, $SECOND_PASS_TIME, $MAX_MATE_LINES;
+	global $FIRST_PASS_TIME, $SECOND_PASS_TIME, $MAX_MATE_LINES, $SESSION_START, $SESSION_LENGTH;
+
+	if ( time() - $SESSION_START >= $SESSION_LENGTH ) {
+		echo "ABORT! TIME OUT!\n";
+		return 'abort';
+	}
 
 	if ( $player == TRUE ) {
 		$maxLines = $MAX_MATE_LINES;
@@ -194,6 +199,11 @@ function getMateMovesFromPosition ( $moveString, $player, $findMate ) {
 
 		} else if ( $key < $maxLines && $candidateMovesEval[$key] = $topEval - 1 && $player == TRUE ) {
 			$moveArray[$move] = 'retry';
+		}
+
+		if ( $moveArray[$move] === 'abort' ) {
+			echo "$move -> ABORT! TIME OUT!\n";
+			return 'abort';
 		}
 	}
 
