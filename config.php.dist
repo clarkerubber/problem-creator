@@ -26,3 +26,7 @@ $MAX_MATE_LINES = 50; // Maximum amount of ways to checkmate
 $MATE_THREAT_WIDTH = 10;
 $TENSION_THREAT_WIDTH = 10;
 $FIND_BAD_MOVE_TIME = 500;
+
+//----Session Information
+$SESSION_START = 0;
+$SESSION_LENGTH = 30 * 60; // 30 minutes
