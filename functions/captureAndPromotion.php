@@ -222,15 +222,15 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 					echo "$move -> RETRY\n";
 				}
 			}
+
+			if ( $moveArray[$move] === 'abort' ) {
+				echo "$move -> ABORT! TIME OUT!\n";
+				return 'abort';
+			}
 		} else if ( abs( $candidateMovesEval[$key] - $topEval ) <= abs( $topEval * $RETRY_THRESHOLD ) && 
 			abs( $candidateMovesEval[$key] - $topEval ) > abs( $topEval * $ALT_THRESHOLD ) && $player === TRUE ) {
 			$moveArray[$move] = 'retry';
 			echo "$move -> RETRY\n";
-		}
-
-		if ( $moveArray[$move] === 'abort' ) {
-			echo "$move -> ABORT! TIME OUT!\n";
-			return 'abort';
 		}
 	}
 
