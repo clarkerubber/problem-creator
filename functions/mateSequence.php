@@ -202,7 +202,7 @@ function getMateMovesFromPosition ( $moveString, $player, $findMate ) {
 				return 'abort';
 			}
 
-		} else if ( $key < $maxLines && $candidateMovesEval[$key] = $topEval - 1 && $player == TRUE ) {
+		} else if ( ( $candidateMovesEval[$key] = $topEval - 1 || $candidateMovesEval[$key] = $topEval - 2 ) && $player == TRUE ) {
 			$moveArray[$move] = 'retry';
 		}
 
