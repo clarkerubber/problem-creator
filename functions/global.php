@@ -4,7 +4,7 @@ function createProblems ( $game ) {
 	//Input: A game that consists of a list of moves.
 	//Output: A list of problems
 
-	global $BALANCED, $UNBALANCED, $DIFFERENCE, $SESSION_START;
+	global $BALANCED, $UNBALANCED, $DIFFERENCE, $SESSION_START, $MATE_EVAL_THRESHOLD;
 
 	$lines = array();
 
@@ -54,18 +54,23 @@ function createProblems ( $game ) {
 			}
 
 		} else if( isset( $move['eval'] ) && isset( $nextMoveMate ) ) {
+			if ( ( $move['eval'] <= $MATE_EVAL_THRESHOLD && $nextMoveMate > 0 ) ||
+				( $move['eval'] >= -$MATE_EVAL_THRESHOLD && $nextMoveMate < 0 ) ) {
+				
+				echo "Parent -> Child | Mate In \n";
+				echo "==========================\n";
+				$temp = findMateLine( $game['uci'], $moveKey, $nextMoveMate );
 
-			echo "Parent -> Child | Mate In \n";
-			echo "==========================\n";
-			$temp = findMateLine( $game['uci'], $moveKey, $nextMoveMate );
+				if ( $temp !== FALSE ) {
 
-			if ( $temp !== FALSE ) {
+					$temp['id'] = $game['game']['id'];
+					$lines[] = $temp;
+					print_r($temp);
 
-				$temp['id'] = $game['game']['id'];
-				$lines[] = $temp;
-				print_r($temp);
-
+				}
 			}
+
+			
 
 		} else if ( isset( $move['mate'] ) && isset( $nextMoveMate ) ) {
 
