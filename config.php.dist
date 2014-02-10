@@ -6,7 +6,7 @@ $LICHESS_API_TOKEN = "set me!"; // Secret token to access lichess puzzle API
 $BALANCED = 150; // +-centipawns for a position to be considered even
 $UNBALANCED = 400; // +-centipawns for a position to be considered greatly advantageous
 $DIFFERENCE = 300;
-
+$MATE_EVAL_THRESHOLD = 150; // +- centipawns
 
 //-----engine settings
 $STOCKFISH_PATH = "/path/to/stockfish"; // location of stockfish engine
