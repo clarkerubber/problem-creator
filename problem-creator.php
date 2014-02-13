@@ -62,19 +62,10 @@ function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/analysis"
 
 echo "+ = Check, T = Tension between lower and higher value piece, M = Mate threat, C = Next best move capture\n\n";
 
-if ( isset( $argv[2] ) ) {
+$nbPerBatch = isset($argv[1]) ? $argv[1] : 1;
+$nbBatches = isset($argv[2]) ? $argv[2] : 9999;
 
-	for ( $x = 0; $x < intval( $argv[2] ); $x++ ) {
-		printf( "Batch %10d of %10d\n", $x + 1, intval( $argv[2] ) );
-		echo problemGenerator( intval( $argv[1] ) )."\n";
-	}
-
-} else if ( isset( $argv[1] ) ) {
-
-	echo problemGenerator( intval( $argv[1] ) );
-
-} else {
-
-	echo problemGenerator();
-
+for ( $x = 0; $x < intval($nbBatches); $x++ ) {
+    printf( "Batch %10d of %10d\n", $x + 1, intval($nbBatches) );
+    echo problemGenerator( intval($nbPerBatch) )."\n";
 }
