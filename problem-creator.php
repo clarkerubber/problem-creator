@@ -4,7 +4,6 @@ include( "config.php" );
 include( "functions/global.php" );
 include( "functions/captureAndPromotion.php" );
 include( "functions/mateSequence.php" );
-include( "resources/keys.php" );
 
 function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/analysis" ) {
 	/*
