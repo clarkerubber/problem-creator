@@ -1,6 +1,11 @@
 <?php
 
+// REQUIRED CONFIG
+
 $LICHESS_API_TOKEN = "set me!"; // Secret token to access lichess puzzle API
+$STOCKFISH_PATH = "/path/to/stockfish"; // location of stockfish engine
+
+// OPTIONAL CONFIG
 
 //-----thresholds
 $BALANCED = 150; // +-centipawns for a position to be considered even
@@ -9,7 +14,6 @@ $DIFFERENCE = 300;
 $MATE_EVAL_THRESHOLD = 150; // +- centipawns
 
 //-----engine settings
-$STOCKFISH_PATH = "/path/to/stockfish"; // location of stockfish engine
 $STOCKFISH_THREADS = 2; // Amount of threads stockfish will run on
 $FIRST_PASS_TIME = 5000; // milliseconds to gather candidate moves
 $SECOND_PASS_TIME = 2000; // milliseconds to consider each candidate move
