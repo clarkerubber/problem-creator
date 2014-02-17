@@ -10,7 +10,7 @@ Copy `config.php.dist` to `config.php`, then edit `config.php` to match your nee
 The only settings you are required to change are `LICHESS_API_TOKEN` and `STOCKFISH_PATH`.
 
 ### problem-creator Command Line Interface:
-`user$ php problem-creator.php [ number of games per batch = 1, [number of batches = 9999] ]`
+`user$ php problem-creator.php [number of attempts = 9999]`
 
 ### CLI Output:
 ```
