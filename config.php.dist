@@ -11,7 +11,7 @@ $STOCKFISH_PATH = "/path/to/stockfish"; // location of stockfish engine
 $BALANCED = 150; // +-centipawns for a position to be considered even
 $UNBALANCED = 400; // +-centipawns for a position to be considered greatly advantageous
 $DIFFERENCE = 300;
-$MATE_EVAL_THRESHOLD = 150; // +- centipawns
+$MATE_EVAL_THRESHOLD = 0; // +- centipawns
 
 //-----engine settings
 $STOCKFISH_THREADS = 2; // Amount of threads stockfish will run on
