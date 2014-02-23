@@ -80,6 +80,23 @@ function getMovesListFromPosition ( $moveString, $player, $tally, $pliesLeft ) {
 
 	preg_match_all( "/info.*?cp (-?[0-9]+).*?([a-h][1-8][a-h][1-8][qrnb]?)/", $uciOutput, $matches );
 
+	//Abort puzzles that go from material advantage to mate in N
+	if ( $player === TRUE ) {
+		preg_match_all( "/info.*?mate (-[0-9]+).*?([a-h][1-8][a-h][1-8][qrnb]?)/", $uciOutput, $mate_matches );
+
+		if ( !empty( $mate_matches[0] ) ) {
+			echo "POSITION CHANGED TO MATE!\n";
+			return 'abort';
+		}
+	} else {
+		preg_match_all( "/info.*?mate ([0-9]+).*?([a-h][1-8][a-h][1-8][qrnb]?)/", $uciOutput, $mate_matches );
+
+		if ( !empty( $mate_matches[0] ) ) {
+			echo "POSITION CHANGED TO MATE!\n";
+			return 'abort';
+		}
+	}
+
 	$candidateMoves = array();
 	$candidateMovesEval = array();
 
