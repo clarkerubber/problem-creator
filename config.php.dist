@@ -8,7 +8,7 @@ $STOCKFISH_PATH = "/path/to/stockfish"; // location of stockfish engine
 // OPTIONAL CONFIG
 
 //-----thresholds
-$BALANCED = 150; // +-centipawns for a position to be considered even
+$BALANCED = 0; // +-centipawns for a position to be considered even
 $UNBALANCED = 400; // +-centipawns for a position to be considered greatly advantageous
 $DIFFERENCE = 300;
 $MATE_EVAL_THRESHOLD = 0; // +- centipawns
