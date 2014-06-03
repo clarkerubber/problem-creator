@@ -12,7 +12,7 @@ function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/analysis"
 	*/
 	global $LICHESS_API_TOKEN;
 
-	if ( ( $games = json_decode( file_get_contents( "$url?nb=$nb" ), TRUE ) ) !== FALSE ) {
+	if ( ( $games = json_decode( file_get_contents( "$url?token=$LICHESS_API_TOKEN&nb=$nb" ), TRUE ) ) !== FALSE ) {
 		$problems = array();
 
 		foreach ( $games['list'] as $gameKey => $game ) {
