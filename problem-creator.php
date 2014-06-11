@@ -5,14 +5,14 @@ include( "functions/global.php" );
 include( "functions/captureAndPromotion.php" );
 include( "functions/mateSequence.php" );
 
-function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/analysis" ) {
+function problemGenerator ( $nb = 1, $url = "http://en.lichess.org/api/game" ) {
 	/*
 	Input: Amount of games to scan for tactical lines
 	Output: Problems that can be played
 	*/
 	global $LICHESS_API_TOKEN;
 
-	if ( ( $games = json_decode( file_get_contents( "$url?token=$LICHESS_API_TOKEN&nb=$nb" ), TRUE ) ) !== FALSE ) {
+	if ( ( $games = json_decode( file_get_contents( "$url?token=$LICHESS_API_TOKEN&nb=$nb&analysed=1&with_analysis=1" ), TRUE ) ) !== FALSE ) {
 		$problems = array();
 
 		foreach ( $games['list'] as $gameKey => $game ) {
